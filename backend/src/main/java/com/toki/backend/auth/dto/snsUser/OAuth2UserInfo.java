@@ -1,4 +1,4 @@
-package com.toki.backend.dto.snsUser;
+package com.toki.backend.auth.dto.snsUser;
 
 /**
  * 소셜로그인 유저 정보 기본 인터페이스

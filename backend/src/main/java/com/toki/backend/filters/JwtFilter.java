@@ -1,7 +1,7 @@
 package com.toki.backend.filters;
 
-import com.toki.backend.db.entity.RefreshToekn;
-import com.toki.backend.db.repository.RefreshTokenRepository;
+import com.toki.backend.auth.entity.RefreshToekn;
+import com.toki.backend.auth.repository.RefreshTokenRepository;
 import com.toki.backend.utils.TokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

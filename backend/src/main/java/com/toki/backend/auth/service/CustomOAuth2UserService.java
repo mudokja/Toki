@@ -1,11 +1,11 @@
 package com.toki.backend.auth.service;
 
-import com.toki.backend.db.entity.User;
-import com.toki.backend.db.repository.UserRepository;
-import com.toki.backend.dto.Role;
-import com.toki.backend.dto.snsUser.KakaoUserInfo;
-import com.toki.backend.dto.snsUser.NaverUserInfo;
-import com.toki.backend.dto.snsUser.OAuth2UserInfo;
+import com.toki.backend.auth.entity.User;
+import com.toki.backend.auth.repository.UserRepository;
+import com.toki.backend.auth.dto.Role;
+import com.toki.backend.auth.dto.snsUser.KakaoUserInfo;
+import com.toki.backend.auth.dto.snsUser.NaverUserInfo;
+import com.toki.backend.auth.dto.snsUser.OAuth2UserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

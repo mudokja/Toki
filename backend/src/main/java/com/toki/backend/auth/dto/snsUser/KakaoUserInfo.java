@@ -1,4 +1,4 @@
-package com.toki.backend.dto.snsUser;
+package com.toki.backend.auth.dto.snsUser;
 
 import java.util.Map;
 

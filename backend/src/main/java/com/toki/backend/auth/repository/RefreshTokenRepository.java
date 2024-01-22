@@ -1,6 +1,6 @@
-package com.toki.backend.db.repository;
+package com.toki.backend.auth.repository;
 
-import com.toki.backend.db.entity.RefreshToekn;
+import com.toki.backend.auth.entity.RefreshToekn;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

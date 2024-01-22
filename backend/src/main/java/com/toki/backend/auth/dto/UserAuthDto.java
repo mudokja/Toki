@@ -1,4 +1,4 @@
-package com.toki.backend.dto;
+package com.toki.backend.auth.dto;
 
 import java.util.ArrayList;
 import java.util.Collection;

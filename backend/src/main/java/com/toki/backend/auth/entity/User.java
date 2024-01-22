@@ -1,6 +1,6 @@
-package com.toki.backend.db.entity;
+package com.toki.backend.auth.entity;
 
-import com.toki.backend.dto.Role;
+import com.toki.backend.auth.dto.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;

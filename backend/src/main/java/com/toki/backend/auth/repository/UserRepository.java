@@ -1,6 +1,6 @@
-package com.toki.backend.db.repository;
+package com.toki.backend.auth.repository;
 
-import com.toki.backend.db.entity.User;
+import com.toki.backend.auth.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

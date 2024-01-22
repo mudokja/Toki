@@ -1,7 +1,5 @@
 package com.toki.backend.auth;
 
-import com.toki.backend.auth.service.CustomOAuth2User;
-import com.toki.backend.db.entity.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
