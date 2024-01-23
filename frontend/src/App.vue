@@ -1,14 +1,43 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import BaseButton from './components/base/BaseButton.vue';
+import BlackButton from './components/buttons/BlackButton.vue';
+import GrayButton from './components/buttons/GrayButton.vue';
+import ImageButton from './components/buttons/ImageButton.vue';
+import BaseModal from './components/base/BaseModal.vue';
+import { click } from './js/Click';
+import { onMounted, ref } from 'vue';
+
+const change =ref(false);
+const clickChange=()=>{
+click(change
+)
+console.log("dsjbjkg",change.value);}
+
 </script>
 
 <template>
   <header>
+    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
+    <div class="wrapper">
+      <HelloWorld msg="You did it!" />
+
+      <nav>
+        <RouterLink to="/"><BlackButton type="Home"/></RouterLink>
+        <RouterLink to="/room"><GrayButton type="Room"/></RouterLink>
+        <RouterLink to="/profile"><ImageButton type="Profile" /></RouterLink>
+        <GrayButton type="로그인" v-on:click="clickChange()"></GrayButton>
+        
+      
+      </nav>
+    </div>
+    <div v-if="change==true">모달눌림<BaseModal  v-on:state="change" v-on:clickchange="clickChange" /></div>
   </header>
 
   <RouterView />
 </template>
+
 
 <style scoped>
 header {
