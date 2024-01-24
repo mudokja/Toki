@@ -1,4 +1,5 @@
-package com.toki.backend.auth.entity;
+package com.toki.backend.banner.entity;
+
 
 import jakarta.persistence.*;
 import lombok.*;
