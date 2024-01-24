@@ -31,7 +31,7 @@ public class FriendController {
 //        return ResponseEntity.ok().body(friendService.findFriendList(friendRequest));
     }
 
-
+//dasdf
     // 친구 추가
     @PostMapping
     public ResponseEntity<?> findFriendListByMemerId(@RequestBody FriendRequestDto friendRequest) {
