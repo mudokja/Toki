@@ -1,8 +1,14 @@
 package com.toki.backend.friend.api;
 
 
+import com.toki.backend.auth.entity.User;
+import com.toki.backend.friend.dto.FriendRequest;
+import com.toki.backend.friend.service.FriendService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -13,7 +19,9 @@ public class FriendController {
 
     // 내 친구 전체 목록 보기
     @GetMapping("/api/v1/friends")
-    public
+    public ResponseEntity<List<User>> findFriendListByMemberId(@RequestBody FriendRequest friendRequest) {
+        return friendService.findFriendListByMemberId(
+    }
 
 
     // 친구 추가
