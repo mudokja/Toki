@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import BaseButton from './components/base/BaseButton.vue';
 import BlackButton from './components/buttons/BlackButton.vue';
@@ -27,7 +27,7 @@ console.log("dsjbjkg",change.value);}
         <RouterLink to="/"><BlackButton type="Home"/></RouterLink>
         <RouterLink to="/room"><GrayButton type="Room"/></RouterLink>
         <RouterLink to="/profile"><ImageButton type="Profile" /></RouterLink>
-        <GrayButton type="로그인" v-on:click="clickChange()"></GrayButton>
+        <GrayButton type="로그아웃" v-on:click="clickChange()"></GrayButton>
         
       
       </nav>
@@ -100,5 +100,30 @@ nav a:first-of-type {
     padding: 1rem 0;
     margin-top: 1rem;
   }
+}
+</style> -->
+
+
+
+
+
+<script setup>
+import { useCounterStore } from '@/stores/counter';
+import HeaderView from '@/views/HeaderView.vue';
+import FooterView from '@/views/FooterView.vue';
+import SideVarView from './views/SideVarView.vue';
+import SideVarButton from '@/components/buttons/SideVarButton.vue'
+
+
+
+</script>
+
+<template>
+    <RouterView />      
+</template>
+
+<style scoped>
+.content {
+  margin-top: 80px;
 }
 </style>

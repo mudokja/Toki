@@ -11,6 +11,7 @@ const props = defineProps({
 
 <template>
         <v-btn >{{ props.type }}</v-btn>
+        
 </template>
 
 <style scoped>
