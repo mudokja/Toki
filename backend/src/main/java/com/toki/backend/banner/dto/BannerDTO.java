@@ -4,7 +4,7 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString ///1111
+@ToString ///11
 @NoArgsConstructor
 public class BannerDTO {
 
