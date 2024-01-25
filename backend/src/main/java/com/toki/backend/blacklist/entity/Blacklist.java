@@ -2,9 +2,7 @@ package com.toki.backend.blacklist.entity;
 
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -15,6 +13,8 @@ import java.time.LocalDateTime;
 @Setter
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Blacklist {
 
     @Id
