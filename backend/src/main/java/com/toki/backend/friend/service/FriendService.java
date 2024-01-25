@@ -21,11 +21,9 @@ public class FriendService {
     private final UserRepository userRepository;
 
     // 친구 목록 조회
-    public List<Friend> findFriendList(FriendRequestDto friendRequestDto) {
+    public List<Friend> findFriendList(String fromUserId) {
 
-        // fromUserId 로 검색
-        // 검색 결과 중에 isFriend 가 1인 결과는 내 친구 목록
-        return friendRepository.findAllByFromUserIdAndIsFriend(friendRequestDto.getFromUserId(), true);
+        return friendRepository.findAllByFromUserIdAndIsFriend(fromUserId, true);
     }
 
 
@@ -43,6 +41,7 @@ public class FriendService {
 
         Boolean isFriend = false;
 
+        // 토큰에서 fromUserPk를 찾는다.
         User fromUser = userRepository.findByUserId(friendRequestDto.getFromUserId()).orElseThrow(Exception::new);
         User toUser = userRepository.findByUserId(friendRequestDto.getToUserId()).orElseThrow(Exception::new);
 
@@ -85,6 +84,7 @@ public class FriendService {
 
 
     // 친구 거절
+    @Transactional
     public void rejectFriend(FriendRequestDto friendRequestDto) throws Exception{
 
         // fromUserId, toUserId 로 검색한 뒤에 데이터 삭제
@@ -103,6 +103,7 @@ public class FriendService {
     }
 
     // 친구 삭제
+    @Transactional
     public void deleteFriend(FriendRequestDto friendRequestDto) throws Exception {
 
         // fromUserId, toUserId 로 검색한 뒤에 데이터 삭제
