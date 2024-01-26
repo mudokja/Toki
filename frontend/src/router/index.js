@@ -49,9 +49,9 @@ router.beforeEach((to, from, next) => {
   const { resultCode, token } = to.query
 
   if (resultCode && token) {
-    if (resultCode === '200') {      
+    if (resultCode === '200') {
       authStore.setToken(token)
-      
+
       next('/')
       // router.go(0)
     } else {
