@@ -9,7 +9,6 @@ import java.util.Optional;
 /**
  * member 테이블 관련 Jpa 인터페이스
  */
-@Repository
 public interface UserRepository extends JpaRepository<User, String> {
 
 	Optional<User> findByUserId(String user);
