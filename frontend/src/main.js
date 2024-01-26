@@ -36,7 +36,7 @@ const handleExternalUrl = () => {
         if (token) {
             if(resultCode === '200') {
                 const counterStore = useCounterStore()
-                counterStore.setToken(token)                
+                counterStore.setToken(token)
                 router.push('/success')
             }   else {
                 router.push('/')
@@ -50,5 +50,5 @@ app.use(router)
 app.use(pinia)
 app.use(vuetify)
 app.mount('#app', () => {
-    handleExternalUrl()    
+    handleExternalUrl()
 })

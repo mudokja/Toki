@@ -1,12 +1,12 @@
-<script setup>
-
-</script>
-
 <template>
-    <div>
-        프로파일 화면
-    </div>
+  <div>
+    <ProfileComponent/>  
+  </div>
 </template>
+
+<script setup>
+import ProfileComponent from '@/components/profile_components/ProfileComponent.vue'
+</script>
 
 <style scoped>
 
