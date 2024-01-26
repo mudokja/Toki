@@ -1,5 +1,6 @@
 package com.toki.backend.friend.entity;
 
+import com.toki.backend.auth.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -20,10 +21,14 @@ public class Friend {
     private Long idx;
 
     @Column(nullable = false)
-    private String fromUserId;
+    @OneToMany
+    @JoinColumn(name = "fromUserId")
+    private User fromUserId;
 
     @Column(nullable = false)
-    private String toUserId;
+    @OneToMany
+    @JoinColumn(name = "toUserId")
+    private User toUserId;
 
     @Column(nullable = false)
     private Boolean isFriend;

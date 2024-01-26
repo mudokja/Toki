@@ -21,17 +21,15 @@ public class FriendService {
     private final UserRepository userRepository;
 
     // 친구 목록 조회
-    public List<Friend> findFriendList(String fromUserId) {
+    public List<Friend> getFriendList(String fromUserId) {
 
         return friendRepository.findAllByFromUserIdAndIsFriend(fromUserId, true);
     }
 
 
     // 나에게 온 친구 요청 조회
-    public List<Friend> findFriendRequest(FriendRequestDto friendRequestDto) {
+    public List<Friend> getFriendRequestList(FriendRequestDto friendRequestDto) {
 
-        // toUserId 로 검색
-        // 검색 결과 중에 isFriend 가 0인 결과는 친구 요청이 온 것
         return friendRepository.findAllByToUserIdAndIsFriend(friendRequestDto.getToUserId(), false);
     }
 
