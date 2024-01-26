@@ -3,7 +3,7 @@
 
         <v-btn
             color="primary"
-            @click.stop="drawer = !drawer"
+            @click.stop="oepnSideVar"
         
         >
         Toggle

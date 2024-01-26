@@ -23,12 +23,15 @@
   
 <style scoped>
 .footer {
-  height: 200px; /* 고정된 높이 값을 설정 */
   background-image: url('@/assets/profile_assets/Footer.png');
   background-size: cover;
   background-position: center bottom;
   background-repeat: no-repeat;
   z-index: 0; 
+  position: absolute;
+
+
+
 }
 
 .footer-content {
@@ -37,19 +40,20 @@
   align-items: flex-start;
 }
 
-/* 화면 크기에 상관없이 푸터를 하단에 고정시키기 */
+
 html {
   position: relative;
   min-height: 100%;
 }
 
 body {
-  margin-bottom: 200px; /* 푸터 높이만큼 여백을 추가 */
+  margin-bottom: 200px; 
 }
 
 .footer {
   position: absolute;
   bottom: 0;
-  width: 100%; /* 뷰포트의 전체 너비를 차지하도록 설정 */
+  width: 100%;
 }
+
 </style>

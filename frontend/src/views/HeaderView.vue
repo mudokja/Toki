@@ -3,6 +3,8 @@ import { ref } from 'vue';
 import SideVarView from '@/views/SideVarView.vue';
 import LoginButton from '@/components/buttons/LoginButton.vue';
 import SideVarButton from '@/components/buttons/SideVarButton.vue';
+import BroadcastButton from '@/components/buttons/BroadcastButton.vue';
+
 
 const isLoggedIn = ref(true)
 
@@ -11,20 +13,46 @@ const isLoggedIn = ref(true)
 <template>
   <div>
     <div class="menu">
-      <router-link :to="{ name: 'home'}"><img src="@/assets/profile_assets/토키 로고.png" alt="로고 이미지"></router-link>
-      <span id="menu_font">토키</span>
-      <input id="menu_search">
-      <img src="@/assets/profile_assets/비디오 만들기.png" alt="비디오 만들기">
+      <v-col
+      cols="1"
+      offset="1">
+      
+
+        <router-link :to="{ name: 'home'}"><img src="@/assets/profile_assets/토키 로고.png" alt="로고 이미지"></router-link>
+      </v-col>
+      <v-col
+        cols="1"
+      >
+
+        <span id="menu_font">토키</span>
+      </v-col>
+      <v-col
+      offset="1"
+        cols="3"
+      >
+
+        <input id="menu_search">
+      </v-col>
+      
+      <!-- <img src="@/assets/profile_assets/비디오 만들기.png" alt="비디오 만들기"> -->
+      <v-app>
+
+        <BroadcastButton/>
+      </v-app>
       <!-- <router-link :to="{ name: 'profile', params: { userId: userId }}"><img src="@/assets/profile_assets/프로필.png" alt="프로필 사진"></router-link> -->
-      <div v-if="isLoggedIn">
+      <v-col v-if="isLoggedIn">
         <LoginButton />
-      </div>
+      </v-col>
+        <v-col v-else>
+          
+          <v-btn id="menu_btn_logout" @click="isLoggedIn = !isLoggedIn">logout</v-btn>
+        </v-col>
+        
 
-      <v-btn v-else id="menu_btn_logout" @click="isLoggedIn = !isLoggedIn">logout</v-btn>
-      
+      <v-col>
 
-      
-      <SideVarButton/>
+        <SideVarButton/>
+      </v-col>
     </div>
     <!-- <v-app>
 
@@ -88,6 +116,18 @@ img {
   margin-top: 10px;
   height: 30px;
   border-radius: 5px;
+  /* box-sizing: border-box; */
+
+/* position: absolute; */
+/* left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+width: 500px;
+height: 40px;
+background: #FFFFFF;
+border: 2px solid #36BEF1;
+border-radius: 10px; */
 }
 #menu_btn_logout {
   background-color: rgb(235, 235, 235);
@@ -97,4 +137,6 @@ img {
   width: 60px;
   border-radius: 5px;
 }
+
+
 </style>

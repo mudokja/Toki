@@ -92,6 +92,6 @@ const category = ['게임', '공부', '스포츠', '잡담', '음악', '자유(�
 
 <style scoped>
 .v-navigation-drawer {
-  z-index: 2400; /* 기본값보다 높게 설정 */
+  z-index: 2400; 
 }
 </style>
