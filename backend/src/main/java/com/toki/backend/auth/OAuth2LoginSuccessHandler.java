@@ -22,7 +22,7 @@ import java.util.Collection;
 
 /**
  * Oauth2 로그인 성공시 처리 핸들러 사용자 정의 구현
- * @author mudokja@gmail.com
+ * mudokja@gmail.com
  */
 @Slf4j
 @Component
@@ -42,7 +42,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             log.debug(oAuth2User.toString());
             loginSuccess(response, oAuth2User,authentication.getAuthorities()); // 로그인에 성공한 경우 access, refresh 토큰 생성
         } catch (Exception e) {
-            throw e;
+
+            log.debug("로그인 에러: {}",e.getMessage());
         }
         log.info("로그인 절차 완료!");
 

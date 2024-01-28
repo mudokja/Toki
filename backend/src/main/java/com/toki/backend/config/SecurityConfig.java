@@ -1,5 +1,6 @@
 package com.toki.backend.config;
 
+import com.toki.backend.auth.OAuth2LoginFailHandler;
 import com.toki.backend.auth.OAuth2LoginSuccessHandler;
 import com.toki.backend.auth.service.CustomOAuth2UserService;
 import com.toki.backend.filters.JwtFilter;
@@ -27,6 +28,7 @@ public class SecurityConfig  {
 
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final OAuth2LoginFailHandler oAuth2LoginFailHandler;
     private final TokenProvider tokenProvider;
     private final CorsConfig corsConfig;
     private static final String[] PERMIT_PATTERNS=List.of(
@@ -48,14 +50,13 @@ public class SecurityConfig  {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PERMIT_PATTERNS).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/v1/auth/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/room")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
                         .anyRequest().authenticated())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .oauth2Login((oauth2)->oauth2
                         .successHandler(oAuth2LoginSuccessHandler)
-                        .failureHandler(((request, response, exception) -> {
-                            log.debug("실패 : {}",exception.toString());
-                            response.sendRedirect("http://localhost:5173/");
-                        }))
+                        .failureHandler(oAuth2LoginFailHandler)
                         .userInfoEndpoint((userInfoEndpoint)->
                                 userInfoEndpoint.userService(customOAuth2UserService))
 
