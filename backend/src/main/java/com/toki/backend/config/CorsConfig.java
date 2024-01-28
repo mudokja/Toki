@@ -14,8 +14,6 @@ public class CorsConfig {
 
         config.setAllowCredentials(true);
         config.addAllowedOriginPattern("http://localhost:5173");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
         config.addExposedHeader(TokenProvider.AUTHORIZATION_HEADER);
         config.addExposedHeader("Content-Disposition");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

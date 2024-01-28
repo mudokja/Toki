@@ -1,5 +1,5 @@
 FROM azul/zulu-openjdk-alpine:17
-LABEL authors="mudokja@gmail.com"
+MAINTAINER "mudokja@gmail.com"
 
 ARG DEFAULT_PORT=8081
 ARG JAR_FILE=build/libs/*.jar
