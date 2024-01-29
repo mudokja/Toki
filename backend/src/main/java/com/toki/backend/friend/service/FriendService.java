@@ -21,33 +21,27 @@ public class FriendService {
     private final UserRepository userRepository;
 
     // 친구 목록 조회
-    public List<Friend> getFriendList(String fromUserId) {
+    public List<Friend> getFriendList(FriendRequestDto requestDto) {
 
-        return friendRepository.findAllByFromUserIdAndIsFriend(fromUserId, true);
+        return friendRepository.findAllByFromUserAndIsFriend(requestDto.getFromUser(), true);
     }
 
 
     // 나에게 온 친구 요청 조회
-    public List<Friend> getFriendRequestList(FriendRequestDto friendRequestDto) {
+    public List<Friend> getFriendRequestList(FriendRequestDto requestDto) {
 
-        return friendRepository.findAllByToUserIdAndIsFriend(friendRequestDto.getToUserId(), false);
+        return friendRepository.findAllByToUserAndIsFriend(requestDto.getToUser(), false);
     }
 
 
     // 친구 추가
-    public void addFriend(FriendRequestDto friendRequestDto) throws Exception {
-
-        Boolean isFriend = false;
-
-        // 토큰에서 fromUserPk를 찾는다.
-        User fromUser = userRepository.findByUserId(friendRequestDto.getFromUserId()).orElseThrow(Exception::new);
-        User toUser = userRepository.findByUserId(friendRequestDto.getToUserId()).orElseThrow(Exception::new);
+    public void addFriend(FriendRequestDto requestDto) {
 
         friendRepository.save(
                 Friend.builder()
-                        .fromUserId(fromUser.getUserPk())
-                        .toUserId(toUser.getUserPk())
-                        .isFriend(isFriend)
+                        .fromUser(requestDto.getFromUser())
+                        .toUser(requestDto.getToUser())
+                        .isFriend(false)
                         .build()
         );
     }
@@ -55,26 +49,20 @@ public class FriendService {
 
     // 친구 수락
     @Transactional
-    public void acceptFriend(FriendRequestDto friendRequestDto) throws Exception {
+    public void acceptFriend(FriendRequestDto requestDto) throws Exception {
 
         // fromUserId, toUserId 로 검색한 뒤에 isFriend 1로 수정
         // 둘이 바꾸고 isFriend 가 1인 값으로 새로 생성
 
-        User fromUser = userRepository.findByUserId(friendRequestDto.getFromUserId()).orElseThrow(Exception::new);
-        User toUser = userRepository.findByUserId(friendRequestDto.getToUserId()).orElseThrow(Exception::new);
-
-        String fromUserId = fromUser.getUserPk();
-        String toUserId = toUser.getUserPk();
-
         // 수정 작업
-        Friend friend = friendRepository.findByFromUserIdAndToUserId(fromUserId, toUserId);
+        Friend friend = friendRepository.findByFromUserAndToUser(requestDto.getFromUser(), requestDto.getToUser())
         friend.setIsFriend(true);
 
         // 생성 작업
         friendRepository.save(
                 Friend.builder()
-                        .fromUserId(toUserId)
-                        .toUserId(fromUserId)
+                        .fromUserId(requestDto.getToUser())
+                        .toUserId(requestDto.getFromUser())
                         .isFriend(true)
                         .build()
         );
@@ -83,41 +71,30 @@ public class FriendService {
 
     // 친구 거절
     @Transactional
-    public void rejectFriend(FriendRequestDto friendRequestDto) throws Exception{
+    public void rejectFriend(FriendRequestDto requestDto) {
 
         // fromUserId, toUserId 로 검색한 뒤에 데이터 삭제
         // 성공했다고 반환
 
-        User fromUser = userRepository.findByUserId(friendRequestDto.getFromUserId()).orElseThrow(Exception::new);
-        User toUser = userRepository.findByUserId(friendRequestDto.getToUserId()).orElseThrow(Exception::new);
-
-        String fromUserId = fromUser.getUserPk();
-        String toUserId = toUser.getUserPk();
-
         // 삭제 작업
-        Friend friend = friendRepository.findByFromUserIdAndToUserId(fromUserId, toUserId);
+        Friend friend = friendRepository.findByFromUserAndToUser(requestDto.getFromUser(), requestDto.getToUser());
         friendRepository.delete(friend);
 
     }
 
     // 친구 삭제
     @Transactional
-    public void deleteFriend(FriendRequestDto friendRequestDto) throws Exception {
+    public void deleteFriend(FriendRequestDto requestDto) {
 
         // fromUserId, toUserId 로 검색한 뒤에 데이터 삭제
         // Id 값을 바꾼 값도 데이터 삭제
-        User fromUser = userRepository.findByUserId(friendRequestDto.getFromUserId()).orElseThrow(Exception::new);
-        User toUser = userRepository.findByUserId(friendRequestDto.getToUserId()).orElseThrow(Exception::new);
-
-        String fromUserId = fromUser.getUserPk();
-        String toUserId = toUser.getUserPk();
 
         // 삭제 작업
-        Friend fromFriend = friendRepository.findByFromUserIdAndToUserId(fromUserId, toUserId);
+        Friend fromFriend = friendRepository.findByFromUserAndToUser(requestDto.getFromUser(), requestDto.getToUser());
         friendRepository.delete(fromFriend);
 
         //친구도 삭제
-        Friend toFriend = friendRepository.findByFromUserIdAndToUserId(toUserId, fromUserId);
+        Friend toFriend = friendRepository.findByFromUserAndToUser(requestDto.getToUser(), requestDto.getFromUser());
         friendRepository.delete(toFriend);
 
     }

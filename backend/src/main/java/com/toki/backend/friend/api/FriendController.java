@@ -27,24 +27,22 @@ public class FriendController {
     @GetMapping("")
     public ResponseEntity<List<Friend>> findFriendList(@AuthenticationPrincipal CustomOAuth2User userPrincipal) {
 
-        // 접근 유저 pk 조회
-        String userPk = userPrincipal.getPk();
-
+        String userPk = userPrincipal.getName();
         List<Friend> friendList= friendService.getFriendList(userPk);
-
         return ResponseEntity.ok().body(friendList);
     }
 
 
     // 친구 요청
     @PostMapping
-    public ResponseEntity<?> requestFriend(@RequestBody FriendRequestDto request) {
+    public ResponseEntity<?> requestFriend(@RequestBody FriendRequestDto requestDto,
+                                           @AuthenticationPrincipal CustomOAuth2User userPrincipal) {
 
-        // 토큰에서 유저의 pk 값을 찾는다.
-        String userPk;
+        String userPk = userPrincipal.getName();
+        requestDto.setFromUserId(userPk);
 
         try {
-            friendService.addFriend(request);
+            friendService.addFriend(requestDto);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -54,7 +52,8 @@ public class FriendController {
 
     // 친구 요청 수락 또는 거절
     @PostMapping("/{friendPk}")
-    public ResponseEntity<?> requestFriendProcess(@PathVariable String friendPk, @RequestBody FriendRequestDto friendRequestDto) {
+    public ResponseEntity<?> requestFriendProcess(@PathVariable String friendPk,
+                                                  @RequestBody FriendRequestDto requestDto) {
 
         try {
             friendService.acceptFriend(friendRequestDto);

@@ -1,5 +1,6 @@
 package com.toki.backend.friend.repository;
 
+import com.toki.backend.auth.entity.User;
 import com.toki.backend.friend.entity.Friend;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,10 +10,10 @@ import java.util.List;
 
 public interface FriendRepository extends JpaRepository<Friend, Long> {
 
-    List<Friend> findAllByFromUserIdAndIsFriend(String fromUserId, Boolean isFriend);
+    List<Friend> findAllByFromUserAndIsFriend(User fromUser, Boolean isFriend);
 
-    List<Friend> findAllByToUserIdAndIsFriend(String toUserId, Boolean isFriend);
+    List<Friend> findAllByToUserAndIsFriend(User toUser, Boolean isFriend);
 
-    Friend findByFromUserIdAndToUserId(String fromUserId, String toUserId);
+    Friend findByFromUserAndToUser(User fromUser, User toUser);
 
 }

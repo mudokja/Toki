@@ -1,8 +1,6 @@
 package com.toki.backend.friend.dto;
 
-import com.toki.backend.friend.entity.Friend;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
+import com.toki.backend.auth.entity.User;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,7 +8,7 @@ import lombok.Data;
 @Builder
 public class FriendRequestDto {
 
-    private String toUserId;
-    private String fromUserId;
+    private User fromUser;
+    private User toUser;
 
 }

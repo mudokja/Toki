@@ -21,14 +21,12 @@ public class Friend {
     private Long idx;
 
     @Column(nullable = false)
-    @OneToMany
-    @JoinColumn(name = "fromUserId")
-    private User fromUserId;
+    @ManyToOne
+    private User fromUser;
 
     @Column(nullable = false)
-    @OneToMany
-    @JoinColumn(name = "toUserId")
-    private User toUserId;
+    @ManyToOne
+    private User toUser;
 
     @Column(nullable = false)
     private Boolean isFriend;
