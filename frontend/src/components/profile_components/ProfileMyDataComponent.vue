@@ -1,3 +1,7 @@
+<script setup>
+
+</script>
+
 <template>
   <v-container fluid>
     <v-row>
@@ -47,9 +51,7 @@
   </v-container>
 </template>
 
-<script setup>
 
-</script>
 
 <style scoped>
 #profile_my_data {

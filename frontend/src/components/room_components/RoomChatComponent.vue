@@ -1,3 +1,31 @@
+<script setup>
+import { ref } from 'vue'
+
+const items = ref([
+    { 'name': '토키1', 'content': 'good day' },
+    { 'name': '토키2', 'content': 'bed day' },
+])
+
+const message = ref('')
+
+// 보내는 이미지 클릭
+const sendMessage = function(msg){
+    if (msg.length < 100) {
+        items.value.push({ 'name': '토키3', 'content': msg})
+        clearMessage()
+    } else {
+        // 메세지 길이 100자 이상
+        clearMessage()
+    }
+}
+
+// x 아이콘 이미지 클릭
+const clearMessage = function(){
+    message.value = ''
+}
+
+</script>
+
 <template>
   <v-card class="mx-auto h-100" max-width="500">
     <v-virtual-scroll :items="items" item-height="48" class="h-75">
@@ -37,33 +65,7 @@
   </v-card>
 </template>
   
-<script setup>
-import { ref } from 'vue'
 
-const items = ref([
-    { 'name': '토키1', 'content': 'good day' },
-    { 'name': '토키2', 'content': 'bed day' },
-])
-
-const message = ref('')
-
-// 보내는 이미지 클릭
-const sendMessage = function(msg){
-    if (msg.length < 100) {
-        items.value.push({ 'name': '토키3', 'content': msg})
-        clearMessage()
-    } else {
-        // 메세지 길이 100자 이상
-        clearMessage()
-    }
-}
-
-// x 아이콘 이미지 클릭
-const clearMessage = function(){
-    message.value = ''
-}
-
-</script>
 
 <style scoped>
 </style>

@@ -1,25 +1,3 @@
-<template>
-  <v-container class="mt-3" fluid>
-    <v-row>
-      <v-col offset="3" cols="6">
-        <v-card class="mx-auto">
-          <div class="mt-7 mb-4 mr-10">
-            <ProfileFiendsCreateModal/>
-          </div>
-          <v-list :items="items" item-props lines="three">
-            <template v-slot:subtitle="{ subtitle }">
-              <div class="d-flex justify-space-between">
-                <div v-html="subtitle"></div>
-                <v-btn class="ma-1 ml-7" color="blue-lighten-5">친구 삭제</v-btn>
-              </div>
-            </template>
-          </v-list>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
-</template>
-
 <script setup>
 import { ref } from 'vue'
 import ProfileFiendsCreateModal from '@/components/modal/ProfileFiendsCreateModal.vue';
@@ -60,6 +38,30 @@ const items = ref([
   },
 ])
 </script>
+
+<template>
+  <v-container class="mt-3" fluid>
+    <v-row>
+      <v-col offset="3" cols="6">
+        <v-card class="mx-auto">
+          <div class="mt-7 mb-4 mr-10">
+            <ProfileFiendsCreateModal/>
+          </div>
+          <v-list :items="items" item-props lines="three">
+            <template v-slot:subtitle="{ subtitle }">
+              <div class="d-flex justify-space-between">
+                <div v-html="subtitle"></div>
+                <v-btn class="ma-1 ml-7" color="blue-lighten-5">친구 삭제</v-btn>
+              </div>
+            </template>
+          </v-list>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+
 
 <style scoped>
 
