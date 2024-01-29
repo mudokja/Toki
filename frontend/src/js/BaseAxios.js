@@ -3,7 +3,7 @@ const { VITE_VUE_API_URL, VITE_ELECTRIC_CHARGING_STATION_URL } = import.meta.env
 
 function localaxios(){
 const instance = axios.create({
-    baseURL:VUE_API_URL,
+    baseURL:VITE_VUE_API_URL,
     params:{
         apiKey:"",
     },

@@ -13,7 +13,7 @@
     </v-img>
 
     <v-card-subtitle class="pt-4">
-      Number 10
+      Number {{ item }}
     </v-card-subtitle>
 
     <v-card-text>
@@ -36,6 +36,14 @@
 </template>
 
 <script setup>
+defineProps({
+  item: {
+    type: [Number, Object],
+    required: true,
+  },
+  index: Number
+})
+
 
 </script>
 

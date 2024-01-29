@@ -4,23 +4,27 @@ import HeaderView from '@/views/HeaderView.vue';
 import FooterView from '@/views/FooterView.vue';
 import MyCard from '@/components/MyCard.vue';
 
-const items = ([])
-const loading = ref(false);
+const items = ref(Array.from({ length: 48}, (_, v) => v + 1))
 
-const loadMoreItems = () => {
-  if (loading.value) return;
-  loading.value = true;
 
-  loading.value = false;
+const api = async () => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const lastItem = items.value.length ? items.value[items.value.length - 1] : 0;
+      resolve(Array.from({ length: 12 }, (_, v) => v + lastItem + 1));
+    }, 1000);
+  });
+};
+
+const load = async ({ done }) => {
+  const res = await api();
+  items.value.push(...res);
+  done('ok');
 };
 
 onMounted(() => {
-  window.addEventListener('scroll', () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-      loadMoreItems();
-    }
-  });
-});
+  console.log(items)
+})
 
 </script>
 
@@ -28,15 +32,30 @@ onMounted(() => {
   <v-app>
     <HeaderView/>
 
-    <v-container fluid style="margin-top: 80px; padding-top: 60px; margin-bottom: 200px;">
-      <v-row>
-        <v-col 
-          v-for="n in 12"
-          :key="n" 
-          cols="12" sm="6" md="4" lg="3">
-          <my-card></my-card>
-        </v-col>
-      </v-row>
+    <v-container 
+      fluid 
+      style="margin-top: 80px; padding-top: 60px; margin-bottom: 200px;"
+    >
+      <v-infinite-scroll
+        :items="items"
+        :onLoad="load"
+      >
+        <v-row>
+
+          <v-col 
+            v-for="(item, index) in items"
+            :key="item" 
+            cols="12" sm="6" md="4" lg="3">
+            <my-card 
+              :item="item"
+              :index="index"
+              >
+            </my-card>
+            
+          </v-col>
+        </v-row>
+        
+      </v-infinite-scroll>
     </v-container>
 
 
