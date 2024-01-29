@@ -2,6 +2,8 @@
 server:
   port: ${PORT}
 spring:
+  cache:
+    type: redis
   config:
     activate:
       on-profile: prod
