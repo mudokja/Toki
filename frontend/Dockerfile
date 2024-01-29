@@ -1,6 +1,6 @@
 
 
-FROM node:20 AS install
+FROM node:20-alpine AS install
 
 LABEL project_name="toki-front"
 MAINTAINER "mudokja@gmail.com"
@@ -9,27 +9,19 @@ WORKDIR /usr/src/modules
 COPY ./package*.json ./
 RUN npm install
 
-FROM node:20 as build
+FROM node:20-alpine as build
 
 COPY --from=install /usr/src/modules /usr/src/build
 WORKDIR /usr/src/build
 COPY ./ ./
 
-CMD ["npm","build"]
-
-FROM node:20-alpine as release
-
-COPY --from=build /usr/src/build/dist /usr/src/app
-
-CMD ["rm","-rf","/usr/src/modules"]
-WORKDIR /usr/src/app
-
+RUN npm run build
 
 
 FROM nginx:alpine
-RUN rm -rf /etc/nginx/conf.d/default.conf
-RUN rm -rf /usr/share/nginx/html/*
-COPY --from=release /usr/src/app /usr/shard/nginx/html
+
+RUN rm -rf /usr/share/nginx/html/* /etc/nginx/conf.d/default.conf
+COPY --from=build /usr/src/build/dist /usr/shard/nginx/html
 
 ARG DEFAULT_PORT=80
 ARG DEFAULT_BACKEND_BASEURL=http://localhost:8081
@@ -37,7 +29,7 @@ ARG DEFAULT_BACKEND_BASEURL=http://localhost:8081
 ENV PORT ${DEFAULT_PORT}
 ENV BACKEND_BASEURL ${DEFAULT_BACKEND_BASEURL}
 
-EXPOSE $PORT
+EXPOSE $80
 COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 
 
