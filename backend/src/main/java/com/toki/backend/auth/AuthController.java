@@ -1,6 +1,8 @@
 package com.toki.backend.auth;
 
 import com.toki.backend.auth.repository.UserRepository;
+import com.toki.backend.common.dto.response.CommonResponseDto;
+import com.toki.backend.common.dto.response.TestResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -8,8 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api/v1/auth")
@@ -22,6 +25,15 @@ public class AuthController {
         log.warn("요청되돌아옴");
         System.out.println("요청돌아옴");
 
+//        CommonResponseDto<Object> result=CommonResponseDto.builder()
+//                .resultCode(200)
+//                .resultMessage("aaabfdrdf")
+//                .data(TestResponseDto.builder()
+//                        .aaa("10000")
+//                        .bbb("10000")
+//                        .build())
+//                .build();
+//        log.debug(result.toString());
 
         return ResponseEntity.created(URI.create("localhost:5173/"))
                 .build();
