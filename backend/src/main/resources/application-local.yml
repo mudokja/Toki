@@ -24,6 +24,11 @@ spring:
       enabled: true           # H2 Console 활성화여부
       path: /h2-console       # H2 Console 주소
 
+toki:
+  config:
+    cors:
+      allowed-origins: ${CORS-ALLOWED-ORIGINS-LOCAL}
+
   # JPA 설정
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect

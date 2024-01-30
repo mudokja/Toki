@@ -1,12 +1,15 @@
 
 # -Dspring.profiles.active=
 
+
+
 spring:
   profiles:
     group:
       local: local
       dev: dev
       prod: prod
+    default: local
   config:
     import: "application-secret.yml"
 

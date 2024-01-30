@@ -1,6 +1,7 @@
 package com.toki.backend.config;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,7 @@ import java.time.Duration;
 @Configuration
 @EnableConfigurationProperties({RedisProperties.class})
 @RequiredArgsConstructor
+@Slf4j
 public class RedisConfig {
 
     private final RedisProperties redisProperties;
@@ -28,6 +30,7 @@ public class RedisConfig {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
+        log.debug("host :{}, port: {}",redisProperties.host(),redisProperties.port());
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(redisProperties.host(), redisProperties.port());
         redisStandaloneConfiguration.setPassword(RedisPassword.of(redisProperties.password()));
         return new LettuceConnectionFactory(redisStandaloneConfiguration);

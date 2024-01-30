@@ -17,7 +17,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: 'jdbc:mysql://${MYSQLDB-URL}/${MYSQLDB-NAME-DEV}?useUnicode=true&serverTimezone=Asia/Seoul'
-    username: ${MYSQLDB-NAME-DEV}
+    username: ${MYSQLDB-USERNAME-DEV}
     password: ${MYSQLDB-PASSWORD-DEV}
 
   # JPA 설정
@@ -30,7 +30,10 @@ spring:
         format_sql: true      #
         show_sql: true        #
 
-
+toki:
+  config:
+    cors:
+      allowed-origins: ${CORS-ALLOWED-ORIGINS-DEV}
 
 logging:
   level:
