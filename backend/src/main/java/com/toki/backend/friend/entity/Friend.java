@@ -22,11 +22,11 @@ public class Friend {
 
     @Column(nullable = false)
     @ManyToOne
-    private User fromUser;
+    private User fromUserPk;
 
     @Column(nullable = false)
     @ManyToOne
-    private User toUser;
+    private User toUserPk;
 
     @Column(nullable = false)
     private Boolean isFriend;

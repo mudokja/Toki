@@ -20,27 +20,39 @@ public class FriendService {
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
 
-    // 친구 목록 조회
-    public List<Friend> getFriendList(FriendRequestDto requestDto) {
+    public List<Friend> getFriendListByFromUserAndIsFriend(FriendRequestDto requestDto) {
 
-        return friendRepository.findAllByFromUserAndIsFriend(requestDto.getFromUser(), true);
+        User fromUser = User.builder()
+                .userPk(requestDto.getFromUserPk())
+                .build();
+
+        return friendRepository.findAllByFromUserAndIsFriend(fromUser, true);
+    }
+
+    public List<Friend> getFriendListByToUserAndNotIsFriend(FriendRequestDto requestDto) {
+
+        User toUser = User.builder()
+                .userPk(requestDto.getToUserPk())
+                .build();
+
+        return friendRepository.findAllByToUserAndIsFriend(toUser, false);
     }
 
 
-    // 나에게 온 친구 요청 조회
-    public List<Friend> getFriendRequestList(FriendRequestDto requestDto) {
+    public void saveFriendByNotIsFriend(FriendRequestDto requestDto) {
 
-        return friendRepository.findAllByToUserAndIsFriend(requestDto.getToUser(), false);
-    }
+        User fromUserPk = User.builder()
+                        .userPk(requestDto.getFromUserPk())
+                        .build();
+        User toUserPk = User.builder()
+                        .userPk(requestDto.getToUserPk())
+                        .build();
 
-
-    // 친구 추가
-    public void addFriend(FriendRequestDto requestDto) {
 
         friendRepository.save(
                 Friend.builder()
-                        .fromUser(requestDto.getFromUser())
-                        .toUser(requestDto.getToUser())
+                        .fromUserPk(fromUserPk)
+                        .toUserPk(toUserPk)
                         .isFriend(false)
                         .build()
         );

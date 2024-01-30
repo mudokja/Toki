@@ -4,7 +4,9 @@ package com.toki.backend.friend.api;
 import com.toki.backend.auth.dto.snsUser.OAuth2UserInfo;
 import com.toki.backend.auth.entity.User;
 import com.toki.backend.auth.service.CustomOAuth2User;
+import com.toki.backend.common.dto.response.CommonResponseDto;
 import com.toki.backend.friend.dto.FriendRequestDto;
+import com.toki.backend.friend.dto.FriendRequestProcessDto;
 import com.toki.backend.friend.entity.Friend;
 import com.toki.backend.friend.service.FriendService;
 import lombok.RequiredArgsConstructor;
@@ -23,44 +25,67 @@ public class FriendController {
 
     private final FriendService friendService;
 
-    // 친구 목록 조회
-    @GetMapping("")
-    public ResponseEntity<List<Friend>> findFriendList(@AuthenticationPrincipal CustomOAuth2User userPrincipal) {
+    // 친구 목록 조회 | 받은 친구 요청 조회
+    @GetMapping("/")
+    public ResponseEntity<CommonResponseDto<Object>> findFriends(@AuthenticationPrincipal CustomOAuth2User userPrincipal,
+                                                    @RequestParam Boolean isFriend) {
+        List<Friend> data;
 
-        String userPk = userPrincipal.getName();
-        List<Friend> friendList= friendService.getFriendList(userPk);
-        return ResponseEntity.ok().body(friendList);
+        if (isFriend) {
+            FriendRequestDto requestDto = FriendRequestDto.builder()
+                    .fromUserPk(userPrincipal.getName())
+                    .build();
+            data = friendService.getFriendListByFromUserAndIsFriend(requestDto);
+        }
+        else {
+            FriendRequestDto requestDto = FriendRequestDto.builder()
+                    .toUserPk(userPrincipal.getName())
+                    .build();
+            data = friendService.getFriendListByToUserAndNotIsFriend(requestDto);
+        }
+
+        CommonResponseDto<Object> responseDto = CommonResponseDto.builder()
+                .resultCode(200)
+                .resultMessage("조회에 성공했습니다.")
+                .data(data)
+                .build();
+        return ResponseEntity.ok(responseDto);
     }
 
 
     // 친구 요청
-    @PostMapping
-    public ResponseEntity<?> requestFriend(@RequestBody FriendRequestDto requestDto,
+    @PostMapping("/")
+    public ResponseEntity<CommonResponseDto<Object>> requestFriend(@RequestBody FriendRequestDto requestDto,
                                            @AuthenticationPrincipal CustomOAuth2User userPrincipal) {
 
-        String userPk = userPrincipal.getName();
-        requestDto.setFromUserId(userPk);
+        requestDto.setFromUserPk(userPrincipal.getName());
+        friendService.saveFriendByNotIsFriend(requestDto);
 
-        try {
-            friendService.addFriend(requestDto);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        return ResponseEntity.ok().build();
+        CommonResponseDto<Object> responseDto = CommonResponseDto.builder()
+                .resultCode(200)
+                .resultMessage("친구 요청에 성공했습니다.")
+                .build();
+        return ResponseEntity.ok(responseDto);
     }
 
-    // 친구 요청 수락 또는 거절
-    @PostMapping("/{friendPk}")
-    public ResponseEntity<?> requestFriendProcess(@PathVariable String friendPk,
-                                                  @RequestBody FriendRequestDto requestDto) {
 
-        try {
-            friendService.acceptFriend(friendRequestDto);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    // 친구 요청 수락 또는 거절
+    @PutMapping("/")
+    public ResponseEntity<CommonResponseDto<Object>> requestFriendProcess(@RequestBody FriendRequestProcessDto requestDto) {
+
+        if (requestDto.getAcceptFriend()) {
+            friendService.updateFriendByIsFriend();
+            friendService.saveFriendByIsFriend();
         }
 
+        else {
+            friendService.deleteFriend();
+        }
+
+
+
+
+        friendService.updatetFriend(requestDto);
         return ResponseEntity.ok().build();
 
     }
