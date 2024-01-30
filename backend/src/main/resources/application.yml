@@ -10,6 +10,7 @@ spring:
       dev: dev
       prod: prod
     default: local
+    active: ${TOKI-BACKEND-ACTIVE:local}
   config:
     import: "application-secret.yml"
 
