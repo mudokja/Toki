@@ -1,3 +1,21 @@
+<script setup>
+import { ref } from 'vue'
+import SvgIcon from '@jamescoyle/vue-icon'
+import { mdiMicrophone, mdiVideo, mdiMonitorShare, mdiRadioboxMarked, mdiEmoticonOutline, mdiCog, mdiChatProcessingOutline } from '@mdi/js'
+
+import RoomChatComponent from '@/components/room_components/RoomChatComponent.vue'
+// 아이콘 변수
+const pathMicrophone = ref(mdiMicrophone )
+const pathVideo = ref(mdiVideo)
+const pathMonitorShare = ref(mdiMonitorShare)
+const pathRadioboxMarked = ref(mdiRadioboxMarked)
+const pathEmoticonOutline = ref(mdiEmoticonOutline)
+const pathCog = ref(mdiCog)
+const pathChatProcessingOutline  = ref(mdiChatProcessingOutline)
+
+// 채팅 확장
+const chatBox = ref(false)
+</script>
 <template>
   <v-container id="enter" class="h-100">
     <v-row class="h-100">
@@ -184,24 +202,7 @@
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiMicrophone, mdiVideo, mdiMonitorShare, mdiRadioboxMarked, mdiEmoticonOutline, mdiCog, mdiChatProcessingOutline } from '@mdi/js'
 
-import RoomChatComponent from '@/components/room_components/RoomChatComponent.vue'
-// 아이콘 변수
-const pathMicrophone = ref(mdiMicrophone )
-const pathVideo = ref(mdiVideo)
-const pathMonitorShare = ref(mdiMonitorShare)
-const pathRadioboxMarked = ref(mdiRadioboxMarked)
-const pathEmoticonOutline = ref(mdiEmoticonOutline)
-const pathCog = ref(mdiCog)
-const pathChatProcessingOutline  = ref(mdiChatProcessingOutline)
-
-// 채팅 확장
-const chatBox = ref(false)
-</script>
 
 <style scoped>
 #main-screen {
