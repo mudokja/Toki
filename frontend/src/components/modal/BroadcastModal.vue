@@ -1,61 +1,119 @@
 <script setup>
-import { ref, inject } from 'vue';
+import { ref, inject, watch } from 'vue'
+import { commonaxios, postaxios } from '@/js/CommonAxios';
 
+// 상태 주입
 const broadcastDialog = inject('broadcastState')
 
-
-const ageLimit = ref('')
-
-const category = ['hello', 'hi', 'good']
-
-const gender = ['남자', '여자']
+// 반응형 참조 변수들
+const ageLimit = ref(null)
 const genderDisabled = ref(true)
 const genderCatch = ref('')
+const show = ref(false)
+const hashTag = ref([])
+const newHashtag = ref('')
+const btn2 = ref(false)
+const btn3 = ref(false)
+const btn4 = ref(false)
+
+const testing = ref({
+    name: '안녕하세요',
+    age: '33',
+})
+
+const test = ref('1111')
+const test1 = ref({
+    testing
+})
+
+
+const cllick = () => {
+  commonaxios(({ data }) => {
+    test.value = data
+    console.log(test.value)
+  },
+  (error) => {
+    console.log(error)
+  })
+  
+}
+
+const pclick = () => {
+    postaxios(
+        test1.value,
+    (response) => {
+        console.log(response)
+    },
+    (error) => {
+        console.log(error)
+    }
+    )
+}
+
+// 상수
+const category = ['hello', 'hi', 'good']
+const gender = ['남자', '여자']
+
+// 나이 제한 검증
+const validateAge = () => {
+    if (ageLimit.value > 100) {
+        ageLimit.value = 100
+    }
+}
+
+// 성별 토글
 const genderToggle = () => {
     genderDisabled.value = !genderDisabled.value
     genderCatch.value = ''
 }
 
-
-const btn1 = ref(false)
-const btn2 = ref(false)
-const btn3 = ref(false)
-
-const show = ref(false)
-
-const hashTag = ref([]);
-
-const newHashtag = ref('');
-
+// 해시태그 추가
 const addHashtag = (newTag) => {
     if (newTag.trim() && !hashTag.value.includes(newTag) && hashTag.value.length < 10) {
-        hashTag.value.push(newTag);
-        newHashtag.value = ''
-    } else {
-        newHashtag.value = ''
+        hashTag.value.push(newTag)
     }
+    newHashtag.value = ''
 }
 
+// 해시태그 제거
 const removeHashtag = (removeTag) => {
-    hashTag.value = hashTag.value.filter(tag => tag !== removeTag);
+    hashTag.value = hashTag.value.filter(tag => tag !== removeTag)
 }
 
-
-
-
-
+// Dialog 상태 변경 감시
+watch(broadcastDialog, (newValue) => {
+    if (!newValue) {
+        ageLimit.value = null
+        hashTag.value = []
+        newHashtag.value = ''
+        genderCatch.value = ''
+        btn2.value = false
+        btn3.value = false
+        btn4.value = false
+    }
+})
 </script>
 
 <template>
     <div>
-        <v-dialog v-model="broadcastDialog" width="auto">
-            <v-card width="800" height="800" justify="center">
+        <v-dialog 
+            v-model="broadcastDialog" 
+            width="auto"
+        >
+            <v-card 
+                width="800" 
+                height="800" 
+                justify="center"
+            >
                 <v-sheet>
-                    <v-container class="d-flex align-center" style="margin-top: 50px">
+                    <v-container 
+                        class="d-flex align-center" 
+                        style="margin-top: 50px"
+                    >
                         <v-col 
                             cols="2"
                             offset="1"
-                            >
+                        >
                             <img 
                                 src="@/assets/profile_assets/토키 로고.png" 
                                 alt="로고 이미지" 
@@ -75,7 +133,7 @@ const removeHashtag = (removeTag) => {
                 </v-sheet>
                 
                 <v-container 
-                    style="width: 80%;"
+                    style="width: 80%"
                 >
                     <v-text-field
                         label="제목"
@@ -91,7 +149,7 @@ const removeHashtag = (removeTag) => {
                 </v-container>
                 <v-container
                     class="d-flex"
-                    style="width: 90%;"
+                    style="width: 90%"
                 >
                     <v-col>
                         <v-combobox
@@ -137,7 +195,7 @@ const removeHashtag = (removeTag) => {
                     </v-col>                 
                 </v-container>
 
-                <div style="margin-left: 10%;">
+                <div style="margin-left: 10%">
                     <v-chip
                         variant="outlined"
                         color="light-blue-lighten-1"
@@ -156,7 +214,7 @@ const removeHashtag = (removeTag) => {
 
                 <v-container 
                     class="d-flex justify-end" 
-                    style="margin-left: -3%;"
+                    style="margin-left: -3%"
                     >
                     
                         <v-btn 
@@ -164,8 +222,8 @@ const removeHashtag = (removeTag) => {
                             stacked                            
                             variant="text"
                             color="primary"
-                            @click="active = !actiive"
-                            
+                            :active="btn2"
+                            @click="btn2 = !btn2"                            
                         >
                           뱃지 착용
                         </v-btn>
@@ -173,7 +231,8 @@ const removeHashtag = (removeTag) => {
                         <v-btn 
                             class="mx-5"
                             stacked
-                            
+                            :active="btn3"
+                            @click="pclick"                           
                         >
                             악성 유저
                         </v-btn>
@@ -181,8 +240,8 @@ const removeHashtag = (removeTag) => {
                         <v-btn 
                             class="mx-5"
                             stacked
-                            
-                            
+                            :active="btn4"
+                            @click="btn4 = !btn4"                                                        
                         >
                             캠 on
                         </v-btn>
@@ -191,7 +250,7 @@ const removeHashtag = (removeTag) => {
 
                 <v-container
                     class="d-flex"
-                    style="width: 90%;"
+                    style="width: 90%"
                 >
                     <v-col
                         cols="5"
@@ -225,6 +284,7 @@ const removeHashtag = (removeTag) => {
                             min="0"
                             max="100"                            
                             v-model.number="ageLimit"
+                            @input="validateAge"
                         >
 
                         </v-text-field>            
@@ -259,6 +319,27 @@ const removeHashtag = (removeTag) => {
                     
                 </v-container>
 
+                <v-containter
+                    class="d-flex justify-end" 
+                    style="width: 95%;"
+                >
+                    <v-btn
+                        class="mx-3 text-white"
+                        color="light-blue-lighten-1"
+                        :button-font-size="100"
+                        font-coloe="light-blue-lighten-1"
+                        @click="cllick()"
+                    >
+                        토키 생성
+                    </v-btn>
+
+                    <v-btn
+                        class="mx-5"
+                        @click="broadcastDialog = !broadcastDialog"
+                    >
+                        취소
+                    </v-btn>
+                </v-containter>
             </v-card>
         </v-dialog>
     </div>

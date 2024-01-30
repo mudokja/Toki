@@ -11,7 +11,7 @@ const isLoggedIn = ref(true)
 </script>
 
 <template>
-  <div>
+  <v-row>
     <div class="menu">
       <v-col
       cols="1"
@@ -27,18 +27,34 @@ const isLoggedIn = ref(true)
         <span id="menu_font">토키</span>
       </v-col>
       <v-col
-      offset="1"
+        offset="1"
         cols="3"
       >
 
-        <input id="menu_search">
+      <v-text-field
+        style="margin-bottom: 5px;"
+        v-model="search"
+        prepend-inner-icon="mdi-magnify"
+        density="compact"
+        label="Search"
+        base-color="light-blue-lighten-1"
+        single-line
+        flat
+        hide-details
+        variant="plain"
+      ></v-text-field>
       </v-col>
       
       <!-- <img src="@/assets/profile_assets/비디오 만들기.png" alt="비디오 만들기"> -->
-      <v-app>
+      
+      <v-col
+        offset="1"
+        cols="1"
+      >
 
         <BroadcastButton/>
-      </v-app>
+      </v-col>
+      
       <!-- <router-link :to="{ name: 'profile', params: { userId: userId }}"><img src="@/assets/profile_assets/프로필.png" alt="프로필 사진"></router-link> -->
       <v-col v-if="isLoggedIn">
         <LoginButton />
@@ -59,7 +75,7 @@ const isLoggedIn = ref(true)
       <FooterComponent/>
     </v-app> -->
     
-  </div>
+  </v-row>
 </template>
 
 <style scoped>
