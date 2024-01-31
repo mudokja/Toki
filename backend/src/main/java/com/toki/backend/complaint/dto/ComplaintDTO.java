@@ -16,6 +16,6 @@ public class ComplaintDTO {
     private String fromUserPk;
     private String toUserPk;
     private String description;
-    private LocalDateTime createdAt;
+    private LocalDateTime creatAt;
 
 }

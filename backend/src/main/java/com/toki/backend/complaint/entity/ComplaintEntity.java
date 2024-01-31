@@ -29,5 +29,10 @@ public class ComplaintEntity {
     private String description;
 
     @Column
-    private LocalDateTime createdAt;
+    private LocalDateTime creatAt;
+
+    @PrePersist
+    protected void onCreate() { //creatAt에 자동으로 현재 시간이 등록
+        creatAt = LocalDateTime.now();
+    }
 }
