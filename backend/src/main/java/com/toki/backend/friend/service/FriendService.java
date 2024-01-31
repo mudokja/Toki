@@ -2,12 +2,14 @@ package com.toki.backend.friend.service;
 
 import com.toki.backend.auth.entity.User;
 import com.toki.backend.auth.repository.UserRepository;
-import com.toki.backend.friend.dto.FriendRequestDto;
-import com.toki.backend.friend.dto.FriendResponseDto;
+import com.toki.backend.auth.service.CustomOAuth2User;
+import com.toki.backend.friend.dto.request.CommonFriendDto;
+import com.toki.backend.friend.dto.request.FriendRequestDto;
+import com.toki.backend.friend.dto.request.FriendRequestProcessDto;
 import com.toki.backend.friend.entity.Friend;
 import com.toki.backend.friend.repository.FriendRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,56 +60,51 @@ public class FriendService {
         );
     }
 
+    public void updateFriendByIsFriend(CommonFriendDto requestDto) {
 
-    // 친구 수락
-    @Transactional
-    public void acceptFriend(FriendRequestDto requestDto) throws Exception {
+        User fromUserPk = User.builder()
+                .userPk(requestDto.getFromUserPk())
+                .build();
+        User toUserPk = User.builder()
+                .userPk(requestDto.getToUserPk())
+                .build();
 
-        // fromUserId, toUserId 로 검색한 뒤에 isFriend 1로 수정
-        // 둘이 바꾸고 isFriend 가 1인 값으로 새로 생성
+        Friend friend = friendRepository.findByFromUserAndToUser(fromUserPk, toUserPk);
 
-        // 수정 작업
-        Friend friend = friendRepository.findByFromUserAndToUser(requestDto.getFromUser(), requestDto.getToUser())
         friend.setIsFriend(true);
+    }
 
-        // 생성 작업
+
+    public void saveFriendByIsFriend(CommonFriendDto requestDto) {
+
+        User fromUserPk = User.builder()
+                .userPk(requestDto.getFromUserPk())
+                .build();
+        User toUserPk = User.builder()
+                .userPk(requestDto.getToUserPk())
+                .build();
+
         friendRepository.save(
                 Friend.builder()
-                        .fromUserId(requestDto.getToUser())
-                        .toUserId(requestDto.getFromUser())
+                        .fromUserPk(fromUserPk)
+                        .toUserPk(toUserPk)
                         .isFriend(true)
                         .build()
         );
     }
 
+    public void deleteFriend(CommonFriendDto requestDto) {
 
-    // 친구 거절
-    @Transactional
-    public void rejectFriend(FriendRequestDto requestDto) {
+        User fromUserPk = User.builder()
+                .userPk(requestDto.getFromUserPk())
+                .build();
+        User toUserPk = User.builder()
+                .userPk(requestDto.getToUserPk())
+                .build();
 
-        // fromUserId, toUserId 로 검색한 뒤에 데이터 삭제
-        // 성공했다고 반환
+        Friend friend = friendRepository.findByFromUserAndToUser(fromUserPk, toUserPk);
 
-        // 삭제 작업
-        Friend friend = friendRepository.findByFromUserAndToUser(requestDto.getFromUser(), requestDto.getToUser());
         friendRepository.delete(friend);
-
-    }
-
-    // 친구 삭제
-    @Transactional
-    public void deleteFriend(FriendRequestDto requestDto) {
-
-        // fromUserId, toUserId 로 검색한 뒤에 데이터 삭제
-        // Id 값을 바꾼 값도 데이터 삭제
-
-        // 삭제 작업
-        Friend fromFriend = friendRepository.findByFromUserAndToUser(requestDto.getFromUser(), requestDto.getToUser());
-        friendRepository.delete(fromFriend);
-
-        //친구도 삭제
-        Friend toFriend = friendRepository.findByFromUserAndToUser(requestDto.getToUser(), requestDto.getFromUser());
-        friendRepository.delete(toFriend);
 
     }
 

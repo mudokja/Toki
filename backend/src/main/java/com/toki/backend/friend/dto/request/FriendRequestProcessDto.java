@@ -1,4 +1,4 @@
-package com.toki.backend.friend.dto;
+package com.toki.backend.friend.dto.request;
 
 import lombok.Builder;
 import lombok.Data;

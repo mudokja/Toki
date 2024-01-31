@@ -1,4 +1,4 @@
-package com.toki.backend.friend.dto;
+package com.toki.backend.friend.dto.response;
 
 
 import lombok.AllArgsConstructor;
