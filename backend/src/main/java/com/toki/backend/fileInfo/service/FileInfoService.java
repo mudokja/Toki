@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class FileInfoService {
 
     private final FileInfoRepository fileInfoRepository;
-
+g
     // 모든 파일 정보 조회
     public List<FileInfoDTO> getAllFiles() {
         List<FileInfoEntity> fileInfoEntities = fileInfoRepository.findAll();
@@ -28,8 +28,9 @@ public class FileInfoService {
 
     // 파일 ID로 파일 정보 조회
     public Optional<FileInfoDTO> getFileById(Long fileId) {
+        System.out.println("정보조회");
         return fileInfoRepository.findById(fileId)
-                .map(this::convertEntityToDTO);
+                .map(this::convertEntityToDTO); 
     }
 
     // 파일 저장
