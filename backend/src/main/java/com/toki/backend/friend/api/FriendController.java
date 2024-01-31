@@ -25,7 +25,7 @@ public class FriendController {
     private final FriendService friendService;
 
     // 친구 목록 조회 | 받은 친구 요청 조회
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<CommonResponseDto<Object>> findFriends(@AuthenticationPrincipal CustomOAuth2User userPrincipal,
                                                     @RequestParam Boolean isFriend) {
         List<Friend> data;
