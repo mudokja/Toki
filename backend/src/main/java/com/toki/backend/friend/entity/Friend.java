@@ -20,11 +20,9 @@ public class Friend {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
 
-    @Column(nullable = false)
     @ManyToOne
     private User fromUserPk;
 
-    @Column(nullable = false)
     @ManyToOne
     private User toUserPk;
 

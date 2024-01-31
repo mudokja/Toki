@@ -10,10 +10,10 @@ import java.util.List;
 
 public interface FriendRepository extends JpaRepository<Friend, Long> {
 
-    List<Friend> findAllByFromUserAndIsFriend(User fromUser, Boolean isFriend);
+    List<Friend> findAllByFromUserPkAndIsFriend(User fromUserPk, Boolean isFriend);
 
-    List<Friend> findAllByToUserAndIsFriend(User toUser, Boolean isFriend);
+    List<Friend> findAllByToUserPkAndIsFriend(User toUserPk, Boolean isFriend);
 
-    Friend findByFromUserAndToUser(User fromUser, User toUser);
+    Friend findByFromUserPkAndToUserPk(User fromUserPk, User toUserPk);
 
 }

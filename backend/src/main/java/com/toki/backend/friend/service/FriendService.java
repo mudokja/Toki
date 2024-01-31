@@ -28,7 +28,7 @@ public class FriendService {
                 .userPk(requestDto.getFromUserPk())
                 .build();
 
-        return friendRepository.findAllByFromUserAndIsFriend(fromUser, true);
+        return friendRepository.findAllByFromUserPkAndIsFriend(fromUser, true);
     }
 
     public List<Friend> getFriendListByToUserAndNotIsFriend(FriendRequestDto requestDto) {
@@ -37,7 +37,7 @@ public class FriendService {
                 .userPk(requestDto.getToUserPk())
                 .build();
 
-        return friendRepository.findAllByToUserAndIsFriend(toUser, false);
+        return friendRepository.findAllByToUserPkAndIsFriend(toUser, false);
     }
 
 
@@ -69,7 +69,7 @@ public class FriendService {
                 .userPk(requestDto.getToUserPk())
                 .build();
 
-        Friend friend = friendRepository.findByFromUserAndToUser(fromUserPk, toUserPk);
+        Friend friend = friendRepository.findByFromUserPkAndToUserPk(fromUserPk, toUserPk);
 
         friend.setIsFriend(true);
     }
@@ -102,7 +102,7 @@ public class FriendService {
                 .userPk(requestDto.getToUserPk())
                 .build();
 
-        Friend friend = friendRepository.findByFromUserAndToUser(fromUserPk, toUserPk);
+        Friend friend = friendRepository.findByFromUserPkAndToUserPk(fromUserPk, toUserPk);
 
         friendRepository.delete(friend);
 
