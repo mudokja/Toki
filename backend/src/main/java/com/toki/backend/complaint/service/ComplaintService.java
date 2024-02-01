@@ -5,7 +5,6 @@ import com.toki.backend.complaint.dto.ComplaintDTO;
 import com.toki.backend.complaint.entity.ComplaintEntity;
 import com.toki.backend.complaint.repository.ComplaintRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

@@ -4,7 +4,7 @@ import com.toki.backend.auth.OAuth2LoginFailHandler;
 import com.toki.backend.auth.OAuth2LoginSuccessHandler;
 import com.toki.backend.auth.service.CustomOAuth2UserService;
 import com.toki.backend.filters.JwtFilter;
-import com.toki.backend.utils.TokenProvider;
+import com.toki.backend.common.utils.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package com.toki.backend.utils;
+package com.toki.backend.common.utils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
 
 import com.toki.backend.auth.service.CustomOAuth2User;
-import com.toki.backend.auth.entity.RefreshToekn;
+import com.toki.backend.auth.entity.RefreshToken;
 import com.toki.backend.auth.entity.User;
 import com.toki.backend.auth.repository.RefreshTokenRepository;
 import com.toki.backend.auth.repository.UserRepository;
@@ -220,7 +220,7 @@ public class TokenProvider {
                 .compact();
 
 
-        tokenRepository.save(RefreshToekn.builder()
+        tokenRepository.save(RefreshToken.builder()
                 .userPk(oAuth2User.getUserPk())
                         .refreshToken(refreshToekn)
                         .snsType(oAuth2User.getSnsType())

@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
-public class RefreshToekn {
+public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idx;
@@ -32,7 +32,7 @@ public class RefreshToekn {
     String userPk;
 
     @Builder
-    public RefreshToekn(String refreshToken, LocalDateTime expireTime, Integer snsType, Role role, String userPk) {
+    public RefreshToken(String refreshToken, LocalDateTime expireTime, Integer snsType, Role role, String userPk) {
         this.refreshToken = refreshToken;
         this.expireTime = expireTime;
         this.snsType = snsType;

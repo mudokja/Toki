@@ -3,20 +3,12 @@ package com.toki.backend.banner;
 
 
 import com.toki.backend.banner.dto.BannerDTO;
-import com.toki.backend.banner.entity.Banner;
-import com.toki.backend.banner.repository.BannerRepository;
 import com.toki.backend.banner.service.BannerService;
 import com.toki.backend.common.dto.response.CommonResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-
 
 
 @RestController

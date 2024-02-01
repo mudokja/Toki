@@ -4,8 +4,6 @@ import com.toki.backend.common.dto.response.CommonResponseDto;
 import com.toki.backend.complaint.dto.ComplaintDTO;
 import com.toki.backend.complaint.service.ComplaintService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 

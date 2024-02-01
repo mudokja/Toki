@@ -1,16 +1,12 @@
 package com.toki.backend.auth;
 
 import com.toki.backend.auth.repository.UserRepository;
-import com.toki.backend.common.dto.response.CommonResponseDto;
-import com.toki.backend.common.dto.response.TestResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

@@ -1,6 +1,6 @@
 package com.toki.backend.config;
 
-import com.toki.backend.utils.TokenProvider;
+import com.toki.backend.common.utils.TokenProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
