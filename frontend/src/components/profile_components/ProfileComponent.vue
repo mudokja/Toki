@@ -4,6 +4,8 @@ import ProfileMyDataComponent from '@/components/profile_components/ProfileMyDat
 import ProfileMyFriendsComponent from '@/components/profile_components/ProfileMyFriendsComponent.vue'
 import ProfileMyBlacklistComponent from '@/components/profile_components/ProfileMyBlacklistComponent.vue'
 import { commonaxios,postaxios } from '@/js/CommonAxios'
+
+// css 정보-친구-블랙리스트 탭
 const tab = ref(null);
 const test =ref("");
 const test1 =ref({
@@ -44,6 +46,7 @@ const pclick=()=>{
 }
 
 
+// 프로필 level 게이지 막대
 const gaze = ref(25);
 </script>
 
@@ -95,3 +98,9 @@ const gaze = ref(25);
   
   
 </template>
+    
+
+
+<style scoped>
+
+</style>

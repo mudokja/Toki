@@ -108,14 +108,18 @@ nav a:first-of-type {
 
 
 <script setup>
+import { ref } from 'vue';
 import { useCounterStore } from '@/stores/counter';
 import HeaderView from '@/views/HeaderView.vue';
 import FooterView from '@/views/FooterView.vue';
 import SideVarView from './views/SideVarView.vue';
 import SideVarButton from '@/components/buttons/SideVarButton.vue'
+import BlackButton from '@/components/buttons/BlackButton.vue'
+import GrayButton from '@/components/buttons/GrayButton.vue'
+import BaseModal from '@/components/base/BaseModal.vue'
+import ImageButton from '@/components/buttons/ImageButton.vue'
 
-
-
+const change = ref(false)
 </script>
 
 <template>
