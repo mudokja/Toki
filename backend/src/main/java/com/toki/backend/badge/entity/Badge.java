@@ -5,6 +5,9 @@ import com.toki.backend.member.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -26,11 +29,6 @@ public class Badge {
     @Column(length = 512)
     private String imageUrl;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private User user;
-
-    private String memberUserPk;
-
-
+    @OneToMany(mappedBy = "badge")
+    private List<MemberBadge> memberBadges = new ArrayList<>();
 }
