@@ -25,15 +25,13 @@ public class HashTagService {
                 .collect(Collectors.toList());
     }
 
+    private HashTagDTO convertEntityToDto(HashTag tag) {
+        return null;
+    }
+
     // 태그 추가
     public HashTagDTO addHashTag(HashTagDTO hashTagDTO) {
-        HashTag newTag = new HashTag(
-
-                hashTagDTO.getTagName(),
-                hashTagDTO.getCreatedAt(),
-                hashTagDTO.getScore(),
-                hashTagDTO.getLastUsedAt()
-        );
+        HashTag newTag = HashTag.builder().build();
         HashTag savedTag = hashTagRepository.save(newTag);
         return convertEntityToDto(savedTag);
     }

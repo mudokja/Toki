@@ -1,6 +1,7 @@
 package com.toki.backend.fileInfo;
 
 
+import com.toki.backend.common.dto.response.CommonResponseDto;
 import com.toki.backend.fileInfo.dto.FileInfoDTO;
 import com.toki.backend.fileInfo.service.FileInfoService;
 import lombok.RequiredArgsConstructor;
@@ -37,15 +38,24 @@ public class FIleInfoController {
 
     // 파일 저장
     @PostMapping("/upload")
-    public ResponseEntity<FileInfoDTO> saveFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<CommonResponseDto<Object>> saveFile(@RequestParam("file") MultipartFile file) {
         try {
             // 파일 저장 로직
             FileInfoDTO savedFile = fileInfoService.saveFile(file);
             System.out.println("파일이 저장되었습니다.");
-            return ResponseEntity.ok(savedFile);
+            return ResponseEntity.ok(CommonResponseDto.builder()
+                    .resultCode(200)
+                    .resultMessage("파일 저장 성공")
+                    .data(savedFile)
+                    .referenceUri(null)
+                    .build());
         } catch (IOException e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 저장에 실패하였습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(CommonResponseDto.builder()
+                            .resultCode(400)
+                            .resultMessage("파일 저장에 실패하였습니다.")
+                            .build());
         }
     }
 

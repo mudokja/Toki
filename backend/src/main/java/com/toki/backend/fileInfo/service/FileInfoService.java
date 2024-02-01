@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class FileInfoService {
 
     private final FileInfoRepository fileInfoRepository;
-g
+
     // 모든 파일 정보 조회
     public List<FileInfoDTO> getAllFiles() {
         List<FileInfoEntity> fileInfoEntities = fileInfoRepository.findAll();
@@ -35,7 +35,7 @@ g
 
     // 파일 저장
     public FileInfoDTO saveFile(MultipartFile file) throws IOException {
-        FileInfoDTO fileInfoDTO = convertMultipartFileToDTO(file);
+        FileInfoDTO fileInfoDTO = null;// convertMultipartFileToDTO(file);
         FileInfoEntity fileInfoEntity = convertDTOToEntity(fileInfoDTO);
         FileInfoEntity savedFileInfo = fileInfoRepository.save(fileInfoEntity);
         return convertEntityToDTO(savedFileInfo);
