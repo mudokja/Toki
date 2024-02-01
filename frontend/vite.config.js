@@ -11,5 +11,11 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },devServer:{
+    Proxy:{
+      '/gruopcall':{
+        target:'http://192.168.31.190'
+      }
+    }
   }
 })
