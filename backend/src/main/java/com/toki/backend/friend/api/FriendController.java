@@ -42,7 +42,7 @@ public class FriendController {
         }
 
         CommonResponseDto<Object> responseDto = CommonResponseDto.builder()
-                .resultCode(200)
+                .resultCode(200)//success
                 .resultMessage("조회에 성공했습니다.")
                 .data(data)
                 .build();
