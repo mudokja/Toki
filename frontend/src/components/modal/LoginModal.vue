@@ -1,9 +1,12 @@
 <script setup>
-import { ref, inject } from 'vue';
+import { useCounterStore } from '@/stores/counter';
+import axios from 'axios';
+import { ref, inject, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute()
 
 const dialogState = inject('dialogState')
-
-
 
 const closeDialog = () => {
     dialogState.value = !dialogState.value
@@ -11,9 +14,11 @@ const closeDialog = () => {
 }
 
 
+
 const dialog2 = ref(false);
 const username = ref(null);
 const password = ref(null);
+const store = useCounterStore()
 
 const login = () => {
     const store = useCounterStore()
@@ -34,13 +39,21 @@ const loginWithKakao = () => {
 }
 
 const loginWithNaver = () => {
-    // const clientID = import.meta.env.VITE_NAVER_CLIENT_ID
-    // const redirectURI = import.meta.env.VITE_NAVER_REDIRECT_URI
+    const clientID = import.meta.env.VITE_NAVER_CLIENT_ID
+    const redirectURI = import.meta.env.VITE_NAVER_REDIRECT_URI
     const loginURL = `https://i10b205.p.ssafy.io/oauth2/authorization/naver`;
+    // const loginURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientID}&redirect_uri=${redirectURI}&state=1234`
+    // localStorage.setItem()
     console.log(loginURL)
-
+    
     window.location.href = loginURL
 }
+
+// onMounted(() => {
+//     const accessToken = route.params.atk
+//     const refreshToken = route.params.rtk
+
+// })
 </script>
 
 <template>

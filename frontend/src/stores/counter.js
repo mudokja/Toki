@@ -11,5 +11,16 @@ export const useCounterStore = defineStore('counter', () => {
     count.value++
   }
 
-  return { count, doubleCount, increment }
+  const token = ref(null)
+
+  const setToken = (newToken) => {
+    token.value = newToken
+    localStorage.setItem('accessToken', newToken)
+  }
+
+  const clearToken = () => {
+    token.value = null
+  }
+
+  return { count, doubleCount, increment, token, setToken, clearToken }
 }, { persist: true })

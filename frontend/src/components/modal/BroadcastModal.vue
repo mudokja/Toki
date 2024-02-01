@@ -1,20 +1,24 @@
 <script setup>
-import { ref, inject, watch } from 'vue'
 import { commonaxios, postaxios } from '@/js/CommonAxios';
 
 // 상태 주입
 const broadcastDialog = inject('broadcastState')
 
 // 반응형 참조 변수들
+const roomName = ref(null)
 const ageLimit = ref(null)
+const rooomPassword = ref(null)
 const genderDisabled = ref(true)
 const genderCatch = ref('')
+const categoryCatch = ref('')
 const show = ref(false)
-const hashTag = ref([])
+const tags = ref([])
 const newHashtag = ref('')
+const isPrivate = ref(false)
 const btn2 = ref(false)
 const btn3 = ref(false)
 const btn4 = ref(false)
+
 
 const testing = ref({
     name: '안녕하세요',
@@ -51,7 +55,7 @@ const pclick = () => {
 }
 
 // 상수
-const category = ['hello', 'hi', 'good']
+const category = ['게임', '공부', '스포츠', '음악', '잡담', '정보', '자유(기타)', ]
 const gender = ['남자', '여자']
 
 // 나이 제한 검증
@@ -69,29 +73,33 @@ const genderToggle = () => {
 
 // 해시태그 추가
 const addHashtag = (newTag) => {
-    if (newTag.trim() && !hashTag.value.includes(newTag) && hashTag.value.length < 10) {
-        hashTag.value.push(newTag)
+    if (newTag.trim() && !tags.value.includes(newTag) && tags.value.length < 10) {
+        tags.value.push(newTag)
     }
     newHashtag.value = ''
 }
 
 // 해시태그 제거
 const removeHashtag = (removeTag) => {
-    hashTag.value = hashTag.value.filter(tag => tag !== removeTag)
+    tags.value = tags.value.filter(tag => tag !== removeTag)
 }
 
 // Dialog 상태 변경 감시
 watch(broadcastDialog, (newValue) => {
     if (!newValue) {
+        roomName.value = null
         ageLimit.value = null
-        hashTag.value = []
+        rooomPassword.value = null
+        tags.value = []
         newHashtag.value = ''
         genderCatch.value = ''
+        categoryCatch.value = ''
         btn2.value = false
         btn3.value = false
         btn4.value = false
     }
 })
+
 </script>
 
 <template>
@@ -136,6 +144,7 @@ watch(broadcastDialog, (newValue) => {
                     style="width: 80%"
                 >
                     <v-text-field
+                        v-model="roomName"
                         label="제목"
                         placeholder="Tom & Toms"
                         class="text-black"
@@ -161,6 +170,7 @@ watch(broadcastDialog, (newValue) => {
                             rounded="lg"
                             base-color="blue"
                             color="light-blue-lighten-1"
+                            v-model.trim="categoryCatch"
                         >
         
                         </v-combobox>
@@ -201,7 +211,7 @@ watch(broadcastDialog, (newValue) => {
                         color="light-blue-lighten-1"
                         closable
                         label
-                        v-for="tag in hashTag"
+                        v-for="tag in tags"
                         :key="tag"
                         class="ma-2"
                         
@@ -216,7 +226,16 @@ watch(broadcastDialog, (newValue) => {
                     class="d-flex justify-end" 
                     style="margin-left: -3%"
                     >
-                    
+
+                        <v-btn 
+                            class="mx-5 font-weight-bold"
+                            stacked
+                            :active="isPrivate"
+                            @click="isPrivate = !isPrivate"                            
+                        >
+                          비밀 방
+                        </v-btn>
+
                         <v-btn 
                             class="mx-5 font-weight-bold"
                             stacked                            
@@ -265,6 +284,7 @@ watch(broadcastDialog, (newValue) => {
                             maxlength="20"
                             :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                             :type="show ? 'text' : 'password'"
+                            v-model="rooomPassword"
                             @click:append-inner="show = !show"
                         >
                         </v-text-field>

@@ -11,11 +11,8 @@
     "serve": "vite --host"
   },
   "dependencies": {
-<<<<<<< Updated upstream
-=======
     "@jamescoyle/vue-icon": "^0.1.2",
     "@mdi/js": "^7.4.47",
->>>>>>> Stashed changes
     "axios": "^1.6.5",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",

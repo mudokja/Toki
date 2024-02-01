@@ -19,7 +19,27 @@ const router = createRouter({
       name: 'profile',
       component: () => import('../views/ProfileView.vue')
     },
+    {
+      path: '/success',
+      name: 'success',
+      component: () => import('../views/SuccessView.vue')
+    },
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  console.log(to.query)
+  const { resultCode, token } = to.query
+  if (resultCode && token) {
+    if (resultCode === '200') {
+      localStorage.setItem('accessToken', token)
+      next('/success')
+    } else {
+      next('/')
+    }
+  } else {
+    next()
+  }
 })
 
 export default router
