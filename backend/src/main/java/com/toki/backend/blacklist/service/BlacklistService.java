@@ -3,7 +3,7 @@ package com.toki.backend.blacklist.service;
 
 import com.toki.backend.auth.entity.User;
 import com.toki.backend.auth.repository.UserRepository;
-import com.toki.backend.blacklist.dto.BlacklistRequestDto;
+import com.toki.backend.blacklist.dto.request.BlacklistRequestDto;
 import com.toki.backend.blacklist.entity.Blacklist;
 import com.toki.backend.blacklist.repository.BlacklistRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,35 +18,42 @@ public class BlacklistService {
     private final BlacklistRepository blacklistRepository;
     private final UserRepository userRepository;
 
-    // 블랙리스트 목록 조회
-    public List<Blacklist> findBlacklist(String fromUserId) {
+    public List<Blacklist> getBlacklistByFromUserPk(BlacklistRequestDto requestDto) {
 
-        return blacklistRepository.findAllByFromUserPk(fromUserId);
+        User fromUserPk = User.builder()
+                .userPk(requestDto.getFromUserPk())
+                .build();
+
+        return blacklistRepository.findAllByFromUserPk(fromUserPk);
     }
 
-    // 블랙리스트에 유저 추가
-    public void addBlacklist(BlacklistRequestDto blacklistRequestDto) throws Exception {
-        User fromUser = userRepository.findByUserId(blacklistRequestDto.getFromUserId()).orElseThrow(Exception::new);
-        User toUser = userRepository.findByUserId(blacklistRequestDto.getToUserId()).orElseThrow(Exception::new);
-
+    public void saveBlacklist(BlacklistRequestDto requestDto) {
+        User fromUserPk = User.builder()
+                .userPk(requestDto.getFromUserPk())
+                .build();
+        User toUserPk = User.builder()
+                .userPk(requestDto.getToUserPk())
+                .build();
         blacklistRepository.save(
                 Blacklist.builder()
-                        .fromUserId(fromUser.getUserPk())
-                        .toUserId(toUser.getUserPk())
+                        .fromUserPk(fromUserPk)
+                        .toUserPk(toUserPk)
                         .build()
         );
     }
 
-    // 블랙리스트에서 유저 삭제
-    public void deleteBlacklist(BlacklistRequestDto blacklistRequestDto) throws Exception {
-        User fromUser = userRepository.findByUserId(blacklistRequestDto.getFromUserId()).orElseThrow(Exception::new);
-        User toUser = userRepository.findByUserId(blacklistRequestDto.getToUserId()).orElseThrow(Exception::new);
-
-        String fromUserId = fromUser.getUserPk();
-        String toUserId = toUser.getUserPk();
-
-        Blacklist blacklist = blacklistRepository.findByFromUserIdAndToUserId(fromUserId, toUserId);
-
-        blacklistRepository.delete(blacklist);
+    public void deleteBlacklist(BlacklistRequestDto requestDto) {
+        User fromUserPk = User.builder()
+                .userPk(requestDto.getFromUserPk())
+                .build();
+        User toUserPk = User.builder()
+                .userPk(requestDto.getToUserPk())
+                .build();
+        blacklistRepository.save(
+                Blacklist.builder()
+                        .fromUserPk(fromUserPk)
+                        .toUserPk(toUserPk)
+                        .build()
+        );
     }
 }

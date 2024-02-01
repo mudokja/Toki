@@ -1,6 +1,7 @@
 package com.toki.backend.blacklist.entity;
 
 
+import com.toki.backend.auth.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -21,11 +22,11 @@ public class Blacklist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
 
-    @Column(nullable = false)
-    private String fromUserId;
+    @ManyToOne
+    private User fromUserPk;
 
-    @Column(nullable = false)
-    private String toUserId;
+    @ManyToOne
+    private User toUserPk;
 
     @CreatedDate
     private LocalDateTime createAt;
