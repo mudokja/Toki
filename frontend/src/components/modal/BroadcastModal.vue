@@ -1,8 +1,8 @@
 <script setup>
 import { commonaxios, postaxios } from '@/js/CommonAxios';
-
+import { ref,watch } from 'vue';
 // 상태 주입
-const broadcastDialog = inject('broadcastState')
+//const broadcastDialog = inject('broadcastState')
 
 // 반응형 참조 변수들
 const roomName = ref(null)
@@ -83,22 +83,22 @@ const addHashtag = (newTag) => {
 const removeHashtag = (removeTag) => {
     tags.value = tags.value.filter(tag => tag !== removeTag)
 }
-
+//----------------------오류때문에주석처리함---------------------------------
 // Dialog 상태 변경 감시
-watch(broadcastDialog, (newValue) => {
-    if (!newValue) {
-        roomName.value = null
-        ageLimit.value = null
-        rooomPassword.value = null
-        tags.value = []
-        newHashtag.value = ''
-        genderCatch.value = ''
-        categoryCatch.value = ''
-        btn2.value = false
-        btn3.value = false
-        btn4.value = false
-    }
-})
+// watch(broadcastDialog, (newValue) => {
+//     if (!newValue) {
+//         roomName.value = null
+//         ageLimit.value = null
+//         rooomPassword.value = null
+//         tags.value = []
+//         newHashtag.value = ''
+//         genderCatch.value = ''
+//         categoryCatch.value = ''
+//         btn2.value = false
+//         btn3.value = false
+//         btn4.value = false
+//     }
+// })
 
 </script>
 
