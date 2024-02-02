@@ -18,6 +18,8 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 
 /**
@@ -50,17 +52,19 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     }
 
-    private void loginSuccess(HttpServletResponse response, User oAuth2User, Collection<? extends GrantedAuthority> authorities) throws IOException {
+    private void loginSuccess(HttpServletResponse response, User oAuth2User, Collection<? extends GrantedAuthority> authorities) throws IOException, URISyntaxException {
         String accessToken = tokenProvider.createAccessToken(oAuth2User.getUserPk(), authorities, oAuth2User.getSnsType());
         String refreshToken = tokenProvider.createAndSaveRefreshToken(oAuth2User);
         response.addHeader(TokenProvider.AUTHORIZATION_HEADER, "Bearer " + accessToken);
+
+        URI cookieDomain=new URI(frontendBaseurl);
 
         Cookie cookie = new Cookie("refresh_token", refreshToken);
         cookie.setHttpOnly(true);
         cookie.setMaxAge(TokenProvider.getRefreshTokenExpiredTime());
         cookie.setPath("/");
         cookie.setDomain("localhost");
-//        cookie.setSecure(true); // https가 아니므로 아직 안됨
+        cookie.setSecure(true);
         response.addCookie(cookie);
         Cookie deleteJSI=new Cookie("JSESSIONID","");
         deleteJSI.setMaxAge(1);
