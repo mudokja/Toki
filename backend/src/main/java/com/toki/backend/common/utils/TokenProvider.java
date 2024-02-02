@@ -49,6 +49,8 @@ public class TokenProvider {
     private String secretKey;
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static String JwtType="Bearer ";
+    @Value("${JWT-TIME-ZONE:Asia/Seoul}")
+    private String TIME_ZONE;
 
     private static long accessTokenExipredTime=60*30L;
     private static long refreshTokenExpiredTime=60*60*24*3L;
@@ -92,26 +94,26 @@ public class TokenProvider {
         String authoritiesString = authorities.stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-        LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        LocalDateTime now = LocalDateTime.now(ZoneId.of(TIME_ZONE));
         return Jwts.builder()
                 .subject("access_token")
                 .claim("userId",userId)
-                .issuedAt(Date.from(now.atZone(ZoneId.of("Asia/Seoul")).toInstant()))
+                .issuedAt(Date.from(now.atZone(ZoneId.of(TIME_ZONE)).toInstant()))
                 .claim("hasGrade", authoritiesString)
                 .claim("snsType",snsType)
-                .expiration(Date.from(now.plusSeconds(accessTokenExipredTime).atZone(ZoneId.of("Asia/Seoul")).toInstant())) // set Expire Time
+                .expiration(Date.from(now.plusSeconds(accessTokenExipredTime).atZone(ZoneId.of(TIME_ZONE)).toInstant())) // set Expire Time
                 .signWith(key)
                 .compact();
     }
 
     public String createRefreshToken(String userId) {
 
-        LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        LocalDateTime now = LocalDateTime.now(ZoneId.of(TIME_ZONE));
         return Jwts.builder()
                 .subject("refreshToken")
                 .claim("userId",userId)
-                .issuedAt(Date.from(now.atZone(ZoneId.of("Asia/Seoul")).toInstant()))
-                .expiration(Date.from(now.plusSeconds(refreshTokenExpiredTime).atZone(ZoneId.of("Asia/Seoul")).toInstant())) // set Expire Time
+                .issuedAt(Date.from(now.atZone(ZoneId.of(TIME_ZONE)).toInstant()))
+                .expiration(Date.from(now.plusSeconds(refreshTokenExpiredTime).atZone(ZoneId.of(TIME_ZONE)).toInstant())) // set Expire Time
                 .signWith(key)
                 .compact();
     }
@@ -141,14 +143,14 @@ public class TokenProvider {
                 )
                 .build();
 
-        return new OAuth2AuthenticationToken(principal, authorities, claims.get("snsType", String.class));
+        return new OAuth2AuthenticationToken(principal, authorities, claims.get("snsType").toString());
     }
 
     public boolean validateAccessToken(String token) {
         try {
-            LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+            LocalDateTime now = LocalDateTime.now(ZoneId.of(TIME_ZONE));
             Claims claims = parseClaims(token);
-            return !claims.getExpiration().before(Date.from(now.plusSeconds(accessTokenExipredTime).atZone(ZoneId.of("Asia/Seoul")).toInstant()));
+            return claims.getExpiration().before(Date.from(now.plusSeconds(accessTokenExipredTime).atZone(ZoneId.of(TIME_ZONE)).toInstant()));
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
 
             log.info("잘못된 JWT 서명입니다.");
@@ -169,9 +171,9 @@ public class TokenProvider {
 
     public boolean validateRefreshToken(String token) {
         try {
-            LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+            LocalDateTime now = LocalDateTime.now(ZoneId.of(TIME_ZONE));
             Claims claims = parseClaims(token);
-            return !claims.getExpiration().before(Date.from(now.plusSeconds(refreshTokenExpiredTime).atZone(ZoneId.of("Asia/Seoul")).toInstant()));
+            return claims.getExpiration().before(Date.from(now.plusSeconds(refreshTokenExpiredTime).atZone(ZoneId.of(TIME_ZONE)).toInstant()));
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
 
             log.info("잘못된 JWT 서명입니다.");
@@ -209,13 +211,13 @@ public class TokenProvider {
 
 
     public String createAndSaveRefreshToken(User oAuth2User) {
-        LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        LocalDateTime now = LocalDateTime.now(ZoneId.of(TIME_ZONE));
         LocalDateTime expireTime=now.plusSeconds(refreshTokenExpiredTime);
         String refreshToekn= Jwts.builder()
                 .subject("refreshToken")
                 .claim("userId",oAuth2User.getUserPk())
-                .issuedAt(Date.from(now.atZone(ZoneId.of("Asia/Seoul")).toInstant()))
-                .expiration(Date.from(expireTime.atZone(ZoneId.of("Asia/Seoul")).toInstant())) // set Expire Time
+                .issuedAt(Date.from(now.atZone(ZoneId.of(TIME_ZONE)).toInstant()))
+                .expiration(Date.from(expireTime.atZone(ZoneId.of(TIME_ZONE)).toInstant())) // set Expire Time
                 .signWith(key)
                 .compact();
 
