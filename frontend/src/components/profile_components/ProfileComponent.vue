@@ -72,7 +72,7 @@ const gaze = ref(25);
                 <div class="pb-10 bg-indigo-lighten-5 rounded-pill" style="position: relative; z-index: 1;">
                   <div v-bind:class="`pb-10 bg-light-green-accent-3 rounded-pill w-${gaze}`" style="position: absolute;"></div>
                 </div>
-                <v-btn class="mt-5 font-weight-black rounded-lg" color="blue-lighten-1" @click=pclick>사진 변경</v-btn>
+                <v-btn class="mt-5 font-weight-black rounded-lg" color="blue-lighten-1" @click=click2>사진 변경</v-btn>
                 <p class="mt-3">10mb 이내의 JPEG, PNG, GIF 형식이어야 합니다.</p>
               </v-col>
            </v-row>

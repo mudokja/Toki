@@ -2,7 +2,6 @@ import { localaxios } from "./BaseAxios"
 const local=localaxios();
 async function commonaxios(success,fail){
 await local.get("").then(success).catch(fail);
-console.log(local.get(""))
 }
 
 // GET 모든 뱃지 Read

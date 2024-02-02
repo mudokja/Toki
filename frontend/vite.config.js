@@ -12,13 +12,17 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
-  },server:{
+  },
+  server:{
+    //hmr:false,
+    cors:"*",
     proxy:{
-      '/gruopcall':{
+      '/groupcall':{
         target:'https://192.168.31.190:8443',
         ws:true,
         secure:true,
-        //rewrite:(path)=>path.replace(/^\/gruopcall/,''),
+        changeOrigin:true,
+        rewrite:(path)=>path.replace(/^\/gruopcall/,''),
       }
     }
   }

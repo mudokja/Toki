@@ -25,8 +25,8 @@ const router = createRouter({
       component: () => import('../views/SuccessView.vue')
     },
     {
-      path: '/main',
-      name: 'main',
+      path: '/ws',
+      name: 'ws',
       component: () => import('../views/MainView.vue')
     },
   ]
