@@ -15,10 +15,22 @@ spring:
     import: "application-secret.yml"
 
 
-
 logging:
   level:
-    web: debug
-    root: debug
+    root: info
+    org:
+      apache: debug
+      kurento: debug
+      springframework: info
+      AbstractHandshakeHandler: trace
 
 
+
+#ssl key
+server:
+  ssl:
+    enabled: true
+    key-store: classpath:${KEY-PATH}
+    key-store-password: ${KEY-PASS}
+    key-store-type: PKCS12
+    key-alias: ${KEY-ALIAS}

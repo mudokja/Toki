@@ -1,41 +1,47 @@
 package com.toki.backend.config;
 
 
+
+import com.toki.backend.webrtc.service.RoomHandler;
+import com.toki.backend.webrtc.service.TokiRoomManager;
+import com.toki.backend.webrtc.service.UserRegistry;
+import lombok.RequiredArgsConstructor;
 import org.kurento.client.KurentoClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 import org.springframework.web.socket.server.standard.ServletServerContainerFactoryBean;
 
-public class WebSocketConfig {
-//        implements WebSocketConfigurer {
-//    @Value("${TOKI-KMS-URI}")
-//    private String TOKI_KMS_URI;
-//    @Bean
-//    public RoomHandler roomHandler() {
-//        return new RoomHandler();
-//    }
-//
-//    @Bean
-//    public UserRegistry registry() {
-//        return new UserRegistry();
-//    }
-//
-//    @Bean
-//    public KurentoClient kurentoClient() {
-//        return KurentoClient.create(TOKI_KMS_URI);
-//    }
-//
-//    @Bean
-//    public ServletServerContainerFactoryBean createServletServerContainerFactoryBean() {
-//        ServletServerContainerFactoryBean container = new ServletServerContainerFactoryBean();
-//        container.setMaxTextMessageBufferSize(32768);
-//        return container;
-//    }
-//
-//    @Override
-//    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-//        registry.addHandler(roomHandler(), "/room");
-//    }
+@Configuration
+@EnableWebSocket
+@RequiredArgsConstructor
+public class WebSocketConfig implements WebSocketConfigurer {
+
+
+
+    private final UserRegistry userRegistry;
+    private final TokiRoomManager tokiRoomManager;
+
+
+
+    @Bean
+    public ServletServerContainerFactoryBean createServletServerContainerFactoryBean() {
+        ServletServerContainerFactoryBean container = new ServletServerContainerFactoryBean();
+        container.setMaxTextMessageBufferSize(32768);
+        container.setMaxBinaryMessageBufferSize(32768);
+        return container;
+    }
+    @Bean
+    public RoomHandler roomHandler() {
+        return new RoomHandler(tokiRoomManager,userRegistry);
+    }
+
+    @Override
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(roomHandler(), "/ws/room").setAllowedOrigins("*");
+    }
 }
