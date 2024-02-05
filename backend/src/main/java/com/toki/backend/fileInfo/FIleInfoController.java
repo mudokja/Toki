@@ -54,7 +54,7 @@ public class FIleInfoController {
                     .referenceUri(null)
                     .build());
         } catch (IOException e) {
-//            e.printStackTrace(); //무슨 역할인지 모르겠음.
+//            e.printStackTrace(); //무슨 역할인지 모르겠음.??
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(CommonResponseDto.builder()
                             .resultCode(400)
