@@ -14,8 +14,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriUtils;
 
 import java.io.IOException;
 import java.net.URI;
@@ -63,8 +65,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         cookie.setHttpOnly(true);
         cookie.setMaxAge(TokenProvider.getRefreshTokenExpiredTime());
         cookie.setPath("/");
-        cookie.setDomain("localhost");
-        cookie.setSecure(true);
+        cookie.setDomain(cookieDomain.getAuthority());
+        cookie.setSecure(true); // https가 아니므로 아직 안됨
         response.addCookie(cookie);
         Cookie deleteJSI=new Cookie("JSESSIONID","");
         deleteJSI.setMaxAge(1);
