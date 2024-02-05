@@ -6,7 +6,7 @@ import {register ,leaveRoom,onExistingParticipants,onNewParticipant,onParticipan
 import { Participant } from './Participant';
 import { ref,watch,onMounted } from 'vue';
 const { VITE_VUE_API_URL, VITE_ELECTRIC_CHARGING_STATION_URL } = import.meta.env;
-//const ws = new WebSocket('wss://192.168.31.237:8443/groupcall');
+// const ws = new WebSocket('wss://192.168.31.237:8443/groupcall');
 const data=ref({
 name:"안녕",
 room:"하하",
@@ -15,7 +15,7 @@ commit:"가냐",
 function sendText(message){
 	var jsonMessage = JSON.stringify(message);
 	console.log('텍스트: ' + jsonMessage);
-	ws.send(jsonMessage);
+	// ws.send(jsonMessage);
 	console.log('텍스트: ' + jsonMessage);
 }
 const message=ref({
@@ -98,6 +98,10 @@ onMounted(()=>{
     </div>
     안녕하세여<button @click="click1">get버튼</button><button @click="click2">post버튼</button><button @click="click3">보내기 버튼</button><button @click="click4">떠나기 버튼</button>
 <body>
+	<div>
+		<input type="text" name="userName" id="userName" v-model="data.name">
+		<div><input type="text" name="room" id="room" v-model="data.room"></div>
+	</div>
 	<div id="container">
 		<div id="wrapper">
 			<div id="join" class="animate join">
