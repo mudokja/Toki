@@ -100,7 +100,7 @@ onMounted(()=>{
 <body>
 	<div>
 		<input type="text" name="userName" id="userName" v-model="data.name">
-		<div><input type="text" name="room" id="room" v-model="data.room"></div>
+		<div><input type="text" name="tokiroom" id="tokiroom" v-model="data.room"></div>
 	</div>
 	<div id="container">
 		<div id="wrapper">
