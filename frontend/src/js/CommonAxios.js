@@ -3,6 +3,9 @@ const local=localaxios();
 async function commonaxios(success,fail){
 await local.get("").then(success).catch(fail);
 }
+async function commonpostaxios(value,success,fail){
+  await local.post("",JSON.stringify(value)).then(success).catch(fail);
+  }
 
 // GET 모든 뱃지 Read
 async function badgesRead(success, fail){
@@ -65,4 +68,5 @@ export{
     bannerDelete,
     postaxios,
     putaxios,
+    commonpostaxios,
 }

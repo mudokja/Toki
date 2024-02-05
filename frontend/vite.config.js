@@ -13,17 +13,17 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-  server:{
-    //hmr:false,
-    cors:"*",
-    proxy:{
-      '/groupcall':{
-        target:'https://192.168.31.190:8443',
-        ws:true,
-        secure:true,
-        changeOrigin:true,
-        rewrite:(path)=>path.replace(/^\/gruopcall/,''),
-      }
-    }
-  }
+  // server:{
+  //   //hmr:false,
+  //   cors:"*",
+  //   proxy:{
+  //     '/groupcall':{
+  //       target:'http://localhost:8443',
+  //       ws:true,
+  //       secure:true,
+  //       changeOrigin:true,
+  //       rewrite:(path)=>path.replace(/^\/gruopcall/,''),
+  //     }
+  //   }
+  // }
 })
