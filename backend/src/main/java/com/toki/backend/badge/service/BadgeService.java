@@ -6,6 +6,7 @@ import com.toki.backend.badge.entity.Badge;
 import com.toki.backend.badge.repository.BadgeRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,12 +50,10 @@ public class BadgeService {
      * @return 등록된 배지
      */
     public BadgeDTO saveBadge(BadgeDTO badgeDTO) {
-        // DTO에서 엔터티로 변환합니다.
         Badge newBadge = Badge.builder()
                 .name(badgeDTO.getName())
                 .imageUrl(badgeDTO.getImageUrl())
                 .build();
-        //새로운 배지를 저장하고 저장된 결과를 DTO로 변환하여 반환한다.
         Badge savedBadge = badgeRepository.save(newBadge);
         return convertEntityToDTO(savedBadge);
     }
@@ -68,13 +67,9 @@ public class BadgeService {
     public void deleteBadge(int idx) {
         badgeRepository.deleteById(idx);
     }
-    //주어진 인덱스에 해당하는 배지를 삭제한다.
 
     /**
      * Entity를 DTO로 변환하는 메서드
-     *
-     * @param badge 배지 Entity
-     * @return 변환된 DTO
      */
     private BadgeDTO convertEntityToDTO(Badge badge) {
         return new BadgeDTO(
@@ -84,28 +79,24 @@ public class BadgeService {
         );
     }
 
-
-    /**
-     * 사용자 식별자에 해당하는 배지 목록 조회
-     *
-     * @param userPk 사용자 식별자
-     * @return 사용자 식별자에 해당하는 배지 목록
-     */
     public List<BadgeDTO> getBadgesByUserPk(String userPk) {
-        //사용자 식별자로 조회한 배지 목록을 가져온다.
-        List<Badge> badges = badgeRepository.findByMemberUserPk(userPk);
-        //조회한 배지 목록을 DTO로 변환하여 반환한다.
+        BadgeDTO badge1 = BadgeDTO.builder()
+                .idx(1)
+                .name("활동왕")
+                .imageUrl("사진1")
+                .build();
 
-        return convertEntitiesToDTO(badges);
+        BadgeDTO badge2 = BadgeDTO.builder()
+                .idx(2)
+                .name("수다쟁이")
+                .imageUrl("사진2")
+                .build();
+
+        BadgeDTO badge3 = BadgeDTO.builder()
+                .idx(3)
+                .name("척척박사")
+                .imageUrl("사진3")  // 예시 지정해주어야 함
+                .build();
+        return Arrays.asList(badge1, badge2, badge3);
     }
-
-
-    //엔티티 목록을 DTO로 바꾼다.
-    private List<BadgeDTO> convertEntitiesToDTO(List<Badge> badges) {
-        return badges.stream()
-                .map(this::convertEntityToDTO)
-                .collect(Collectors.toList());
-    }
-
-
 }

@@ -35,7 +35,7 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false,length = 20)
 	Role userRole;
-	
+
 	@Column(nullable = false, length = 40)
 	String userName;
 
@@ -48,7 +48,7 @@ public class User {
 	@Column(updatable = false)
 	@CreatedDate
 	LocalDateTime createAt;
-	
+
 	@LastModifiedDate
 	LocalDateTime updateAt;
 	@GeneratedValue(generator = "0")

@@ -35,10 +35,23 @@ public class FileInfoService {
 
     // 파일 저장
     public FileInfoDTO saveFile(MultipartFile file) throws IOException {
-        FileInfoDTO fileInfoDTO = null;// convertMultipartFileToDTO(file);
+        FileInfoDTO fileInfoDTO =  convertMultipartFileToDTO(file);
         FileInfoEntity fileInfoEntity = convertDTOToEntity(fileInfoDTO);
         FileInfoEntity savedFileInfo = fileInfoRepository.save(fileInfoEntity);
         return convertEntityToDTO(savedFileInfo);
+    }
+
+    // MultipartFile을 DTO로 변환하는 메서드
+    private FileInfoDTO convertMultipartFileToDTO(MultipartFile file) throws IOException {
+        return FileInfoDTO.builder()
+                .uploadBy("김근형") // 적절한 값으로 변경
+                .fileOriginName(file.getOriginalFilename())
+                .fileName("공부왕배지") // 적절한 값으로 변경
+                .fileType("exampleFileType") // 적절한 값으로 변경
+                .fileSize(file.getSize())
+                .isImg(false) // 적절한 값으로 변경
+                .uploadPath("examplePath") // 적절한 값으로 변경
+                .build();
     }
 
 

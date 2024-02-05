@@ -2,7 +2,7 @@ package com.toki.backend.blacklist.service;
 
 
 import com.toki.backend.member.entity.User;
-import com.toki.backend.member.repository.UserRepository;
+import com.toki.backend.auth.repository.UserRepository;
 import com.toki.backend.blacklist.dto.request.BlacklistRequestDto;
 import com.toki.backend.blacklist.entity.Blacklist;
 import com.toki.backend.blacklist.repository.BlacklistRepository;

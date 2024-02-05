@@ -8,6 +8,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class BadgeDTO {
 
 
@@ -16,4 +17,6 @@ public class BadgeDTO {
     private int idx;
     private String name;
     private String imageUrl;
+
+
 }

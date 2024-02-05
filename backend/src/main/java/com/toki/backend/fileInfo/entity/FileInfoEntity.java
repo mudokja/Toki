@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+//@EntityListeners(FileInfoEntityListener.class)  // 엔티티 리스너 등록
 public class FileInfoEntity {
 
     @Id

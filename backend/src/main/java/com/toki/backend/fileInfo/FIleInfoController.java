@@ -60,7 +60,6 @@ public class FIleInfoController {
                     .resultCode(200)
                     .resultMessage("파일 저장 성공")
                     .data(savedFile)
-                    .referenceUri(null)
                     .build());
         } catch (IOException e) {
             e.printStackTrace(); //예외가 발생할 경우 스택 트레이스를 출력하는 역할

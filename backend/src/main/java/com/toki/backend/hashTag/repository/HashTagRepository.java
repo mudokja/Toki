@@ -10,12 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface HashTagRepository extends JpaRepository<HashTag, Integer> {
-    //태그 찾기, 태그 등록, 태그 삭제, 태그 수정
-    Optional<HashTag> findByTagName(String tagName);
 
-    List<HashTag> findAll();
-
-    Optional<HashTag> findByIdx(int idx);
 
 
     //태그 등록 , 삭제, 수정은 (CRUD)  Spring Data JPA에서는 JpaRepository를 상속받은 인터페이스를 사용하면,
