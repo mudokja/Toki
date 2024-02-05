@@ -6,7 +6,7 @@ import {register ,leaveRoom,onExistingParticipants,onNewParticipant,onParticipan
 import { Participant } from './Participant';
 import { ref,watch,onMounted } from 'vue';
 const { VITE_VUE_API_URL, VITE_ELECTRIC_CHARGING_STATION_URL } = import.meta.env;
-const ws = new WebSocket('wss://192.168.31.237:8443/groupcall');
+//const ws = new WebSocket('wss://192.168.31.237:8443/groupcall');
 const data=ref({
 name:"안녕",
 room:"하하",
@@ -32,10 +32,10 @@ const click1=()=>{
 sendText(message.value.message);
 
 }
-ws.onmessage=(message)=>{
-	let parsedMessage = JSON.parse(message.data);
-	console.dir("온건바로",parsedMessage);
-}
+// ws.onmessage=(message)=>{
+// 	let parsedMessage = JSON.parse(message.data);
+// 	console.dir("온건바로",parsedMessage);
+// }
 const click2=()=>{
 	
 // commonpostaxios(data.value,(response)=>{
