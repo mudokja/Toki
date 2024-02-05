@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/files") //아직 API명세서가 없음...
+@RequestMapping("/api/v1/file") //아직 API명세서가 없음...
 @RequiredArgsConstructor
 public class FIleInfoController {
 
@@ -23,9 +23,13 @@ public class FIleInfoController {
 
     // 모든 파일 정보 조회
     @GetMapping
-    public ResponseEntity<List<FileInfoDTO>> getAllFiles() {
+    public ResponseEntity<CommonResponseDto<List<FileInfoDTO>>> getAllFiles() {
         List<FileInfoDTO> allFiles = fileInfoService.getAllFiles();
-        return ResponseEntity.ok(allFiles);
+        return ResponseEntity.ok(CommonResponseDto.<List<FileInfoDTO>>builder()
+                .resultCode(200)
+                .resultMessage("파일 목록 조회 성공")
+                .data(allFiles)
+                .build());
     }
 
     // 파일 ID(혹은 Idx?)로 파일 정보 조회
@@ -50,7 +54,7 @@ public class FIleInfoController {
                     .referenceUri(null)
                     .build());
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); //무슨 역할인지 모르겠음.
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(CommonResponseDto.builder()
                             .resultCode(400)
@@ -61,9 +65,11 @@ public class FIleInfoController {
 
     // 파일 삭제
     @DeleteMapping("/{fileId}")
-    public ResponseEntity<Void> deleteFile(@PathVariable Long fileId) {
+    public ResponseEntity<CommonResponseDto<Void>> deleteFile(@PathVariable Long fileId) {
         fileInfoService.deleteFile(fileId);
-        System.out.println("파일이 삭제되었습니다.");
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(CommonResponseDto.<Void>builder()
+                .resultCode(200)
+                .resultMessage("파일 삭제 성공")
+                .build());
     }
 }
