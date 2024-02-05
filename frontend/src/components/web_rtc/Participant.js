@@ -12,8 +12,7 @@ function Participant(name) {
 	var video = document.createElement('video');
 	let text = document.createElement('textarea');
 	var rtcPeer;
-	//var rtcPeer=window.RTCPeerConnection || window.webkitRTCPeerConnection;
-
+	
 	container.appendChild(video);
 	container.appendChild(text);
 	container.appendChild(span);

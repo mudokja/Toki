@@ -6,7 +6,7 @@ import {register ,leaveRoom,onExistingParticipants,onNewParticipant,onParticipan
 import { Participant } from './Participant';
 import { ref,watch,onMounted } from 'vue';
 const { VITE_VUE_API_URL, VITE_ELECTRIC_CHARGING_STATION_URL } = import.meta.env;
-//const ws = new WebSocket('wss://i10b205.p.ssafy.io/ws/room');
+const ws = new WebSocket('wss://i10b205.p.ssafy.io/ws/room');
 const data=ref({
 name:"안녕",
 room:"하하",
