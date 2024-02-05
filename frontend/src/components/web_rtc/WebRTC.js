@@ -5,7 +5,7 @@ import adapter from 'webrtc-adapter';
 adapter
 var participants = {};
 var name;
-const ws = new WebSocket('wss://localhost:8443/groupcall');
+const ws = new WebSocket('wss://i10b205.p.ssafy.io/ws/room');
 window.onbeforeunload = function() {
 	ws.close();
 };
