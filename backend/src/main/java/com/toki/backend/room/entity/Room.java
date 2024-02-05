@@ -13,15 +13,11 @@ import org.hibernate.type.SqlTypes;
 
 import java.util.ArrayList;
 import java.util.List;
-import
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Getter
-@TypeDefs
-
 public class Room {
 
     @Id
@@ -40,7 +36,7 @@ public class Room {
     @OneToMany
     private List<User> members = new ArrayList<>();
 
-    @Column
+    @Column(nullable = false)
     private Boolean isPrivate;
 
     @Column
@@ -49,8 +45,9 @@ public class Room {
     @Column
     private String sessionId;
 
+    // 해시태그는 어떤 방식으로 짜여졌는지를 봐야 할 듯
     @JdbcTypeCode(SqlTypes.JSON)
-    private HashTag tag;
+    private HashTag hashTag;
 
 
 }

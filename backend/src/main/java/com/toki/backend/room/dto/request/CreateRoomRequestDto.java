@@ -1,17 +1,20 @@
 package com.toki.backend.room.dto.request;
 
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
 
-@Data
-public class RoomCreateDto {
+@Builder
+public class CreateRoomRequestDto {
 
     String roomName;
     Integer categoryPk;
     List<String> tags;
     Boolean isPrivate;
     String roomPassword;
+    String parentRoomId;
+    Object roomOption;
 
 }
