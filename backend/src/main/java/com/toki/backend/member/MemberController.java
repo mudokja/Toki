@@ -105,7 +105,7 @@ public class MemberController {
             MemberDTO result = memberService.updateUser(userPk, request);
             return ResponseEntity.ok(CommonResponseDto.<MemberDTO>builder()
                     .resultCode(200)
-                    .resultMessage("유저 정보 수정 성공")
+                    .resultMessage("유저 정보 수정 성공") //1
                     .data(result)
                     .build());
         } catch (EntityNotFoundException e) {
