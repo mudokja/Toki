@@ -1,9 +1,8 @@
 package com.toki.backend.friend.service;
 
-import com.toki.backend.member.entity.User;
-import com.toki.backend.member.repository.UserRepository;
-import com.toki.backend.friend.dto.request.CommonFriendDto;
-import com.toki.backend.friend.dto.request.FriendRequestDto;
+import com.toki.backend.auth.entity.User;
+import com.toki.backend.auth.repository.UserRepository;
+import com.toki.backend.friend.dto.FriendDto;
 import com.toki.backend.friend.entity.Friend;
 import com.toki.backend.friend.repository.FriendRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,90 +17,48 @@ public class FriendService {
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
 
-    public List<Friend> getFriendListByFromUserAndIsFriend(FriendRequestDto requestDto) {
-
-        User fromUser = User.builder()
-                .userPk(requestDto.getFromUserPk())
-                .build();
-
-        return friendRepository.findAllByFromUserPkAndIsFriend(fromUser, true);
+    public List<Friend> getFriendListByFromUserAndIsFriend(User fromUser) {
+        return friendRepository.findAllByFromUserAndIsFriend(fromUser, true);
     }
 
-    public List<Friend> getFriendListByToUserAndNotIsFriend(FriendRequestDto requestDto) {
-
-        User toUser = User.builder()
-                .userPk(requestDto.getToUserPk())
-                .build();
-
-        return friendRepository.findAllByToUserPkAndIsFriend(toUser, false);
+    public List<Friend> getFriendListByToUserAndNotIsFriend(User toUser) {
+        return friendRepository.findAllByToUserAndIsFriend(toUser, false);
     }
 
 
-    public void saveFriendByNotIsFriend(FriendRequestDto requestDto) {
-
-        User fromUserPk = User.builder()
-                        .userPk(requestDto.getFromUserPk())
-                        .build();
-        User toUserPk = User.builder()
-                        .userPk(requestDto.getToUserPk())
-                        .build();
-
+    public void saveFriendByNotIsFriend(FriendDto friendDto) {
 
         friendRepository.save(
                 Friend.builder()
-                        .fromUserPk(fromUserPk)
-                        .toUserPk(toUserPk)
+                        .fromUser(friendDto.getFromUser())
+                        .toUser(friendDto.getToUser())
                         .isFriend(false)
                         .build()
         );
     }
 
-    public void updateFriendByIsFriend(CommonFriendDto requestDto) {
 
-        User fromUserPk = User.builder()
-                .userPk(requestDto.getFromUserPk())
-                .build();
-        User toUserPk = User.builder()
-                .userPk(requestDto.getToUserPk())
-                .build();
-
-        Friend friend = friendRepository.findByFromUserPkAndToUserPk(fromUserPk, toUserPk);
-
+    public void updateFriendByIsFriend(FriendDto friendDto) {
+        Friend friend = friendRepository.findByFromUserAndToUser(friendDto.getFromUser(), friendDto.getToUser());
         friend.setIsFriend(true);
     }
 
 
-    public void saveFriendByIsFriend(CommonFriendDto requestDto) {
-
-        User fromUserPk = User.builder()
-                .userPk(requestDto.getFromUserPk())
-                .build();
-        User toUserPk = User.builder()
-                .userPk(requestDto.getToUserPk())
-                .build();
+    public void saveFriendByIsFriend(FriendDto friendDto) {
 
         friendRepository.save(
                 Friend.builder()
-                        .fromUserPk(fromUserPk)
-                        .toUserPk(toUserPk)
+                        .fromUser(friendDto.getFromUser())
+                        .toUser(friendDto.getToUser())
                         .isFriend(true)
                         .build()
         );
     }
 
-    public void deleteFriend(CommonFriendDto requestDto) {
 
-        User fromUserPk = User.builder()
-                .userPk(requestDto.getFromUserPk())
-                .build();
-        User toUserPk = User.builder()
-                .userPk(requestDto.getToUserPk())
-                .build();
-
-        Friend friend = friendRepository.findByFromUserPkAndToUserPk(fromUserPk, toUserPk);
-
+    public void deleteFriend(FriendDto friendDto) {
+        Friend friend = friendRepository.findByFromUserAndToUser(friendDto.getFromUser(), friendDto.getToUser());
         friendRepository.delete(friend);
-
     }
 
 }

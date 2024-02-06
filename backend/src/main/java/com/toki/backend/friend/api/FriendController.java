@@ -1,9 +1,11 @@
 package com.toki.backend.friend.api;
 
 
+import com.toki.backend.auth.entity.User;
+import com.toki.backend.auth.repository.UserRepository;
 import com.toki.backend.auth.service.CustomOAuth2User;
 import com.toki.backend.common.dto.response.CommonResponseDto;
-import com.toki.backend.friend.dto.request.CommonFriendDto;
+import com.toki.backend.friend.dto.FriendDto;
 import com.toki.backend.friend.dto.request.FriendRequestDto;
 import com.toki.backend.friend.dto.request.FriendRequestProcessDto;
 import com.toki.backend.friend.entity.Friend;
@@ -23,24 +25,20 @@ import java.util.List;
 public class FriendController {
 
     private final FriendService friendService;
+    private final UserRepository userRepository;
 
     // 친구 목록 조회 | 받은 친구 요청 조회
     @GetMapping
     public ResponseEntity<CommonResponseDto<Object>> findFriends(@AuthenticationPrincipal CustomOAuth2User userPrincipal,
                                                     @RequestParam Boolean isFriend) {
         List<Friend> data;
+        User MyUser = userRepository.findById(userPrincipal.getName()).get();
 
         if (isFriend) {
-            FriendRequestDto requestDto = FriendRequestDto.builder()
-                    .fromUserPk(userPrincipal.getName())
-                    .build();
-            data = friendService.getFriendListByFromUserAndIsFriend(requestDto);
+            data = friendService.getFriendListByFromUserAndIsFriend(MyUser);
         }
         else {
-            FriendRequestDto requestDto = FriendRequestDto.builder()
-                    .toUserPk(userPrincipal.getName())
-                    .build();
-            data = friendService.getFriendListByToUserAndNotIsFriend(requestDto);
+            data = friendService.getFriendListByToUserAndNotIsFriend(MyUser);
         }
 
         CommonResponseDto<Object> responseDto = CommonResponseDto.builder()
@@ -53,12 +51,18 @@ public class FriendController {
 
 
     // 친구 요청
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<CommonResponseDto<Object>> requestFriend(@RequestBody FriendRequestDto requestDto,
                                            @AuthenticationPrincipal CustomOAuth2User userPrincipal) {
 
-        requestDto.setFromUserPk(userPrincipal.getName());
-        friendService.saveFriendByNotIsFriend(requestDto);
+        User myUser = userRepository.findById(userPrincipal.getName()).get();
+        User toUser = userRepository.findByUserTag(requestDto.getToUserTag()).get();
+
+        friendService.saveFriendByNotIsFriend(FriendDto.builder()
+                .fromUser(myUser)
+                .toUser(toUser)
+                .build()
+        );
 
         CommonResponseDto<Object> responseDto = CommonResponseDto.builder()
                 .resultCode(200)
@@ -69,22 +73,27 @@ public class FriendController {
 
 
     // 친구 요청 수락 또는 거절
-    @PutMapping("/")
+    @PutMapping
     public ResponseEntity<CommonResponseDto<Object>> requestFriendProcess(@RequestBody FriendRequestProcessDto requestDto,
                                                                           @AuthenticationPrincipal CustomOAuth2User userPrincipal) {
 
-        CommonFriendDto commonFriendDto = CommonFriendDto.builder()
-                .fromUserPk(userPrincipal.getName())
-                .toUserPk(requestDto.getToUserPk())
-                .build();
+        User myUser = userRepository.findById(userPrincipal.getName()).get();
+        User toUser = userRepository.findByUserTag(requestDto.getToUserTag()).get();
 
         if (requestDto.getAcceptFriend()) {
-            friendService.updateFriendByIsFriend(commonFriendDto);
-            CommonFriendDto saveDto = CommonFriendDto.builder()
-                    .fromUserPk(requestDto.getToUserPk())
-                    .toUserPk(userPrincipal.getName())
-                    .build();
-            friendService.saveFriendByIsFriend(saveDto);
+
+            friendService.updateFriendByIsFriend(FriendDto.builder()
+                    .fromUser(toUser)
+                    .toUser(myUser)
+                    .build()
+            );
+
+            friendService.saveFriendByIsFriend(FriendDto.builder()
+                    .fromUser(myUser)
+                    .toUser(toUser)
+                    .build()
+            );
+
 
             CommonResponseDto<Object> responseDto = CommonResponseDto.builder()
                     .resultCode(200)
@@ -94,7 +103,13 @@ public class FriendController {
 
 
         } else {
-            friendService.deleteFriend(commonFriendDto);
+            friendService.deleteFriend(FriendDto.builder()
+                    .fromUser(toUser)
+                    .toUser(myUser)
+                    .build()
+            );
+
+
             CommonResponseDto<Object> responseDto = CommonResponseDto.builder()
                     .resultCode(200)
                     .resultMessage("친구 거절에 성공했습니다.")
@@ -107,22 +122,23 @@ public class FriendController {
     }
 
     // 친구 삭제
-    @DeleteMapping("/{friendPk}")
-    public ResponseEntity<?> deleteFriend(@PathVariable String friendPk,
+    @DeleteMapping("/{toUserTag}")
+    public ResponseEntity<?> deleteFriend(@PathVariable String toUserTag,
                                           @AuthenticationPrincipal CustomOAuth2User userPrincipal) {
-        CommonFriendDto myRelationDto = CommonFriendDto.builder()
-                .fromUserPk(userPrincipal.getName())
-                .toUserPk(friendPk)
-                .build();
 
-        friendService.deleteFriend(myRelationDto);
+        User myUser = userRepository.findById(userPrincipal.getName()).get();
+        User toUser = userRepository.findByUserTag(toUserTag).get();
 
-        CommonFriendDto friendRelationDto = CommonFriendDto.builder()
-                .fromUserPk(friendPk)
-                .toUserPk(userPrincipal.getName())
-                .build();
-
-        friendService.deleteFriend(friendRelationDto);
+        friendService.deleteFriend(FriendDto.builder()
+                .fromUser(toUser)
+                .toUser(myUser)
+                .build()
+        );
+        friendService.deleteFriend(FriendDto.builder()
+                .fromUser(myUser)
+                .toUser(toUser)
+                .build()
+        );
 
         CommonResponseDto<Object> responseDto = CommonResponseDto.builder()
                 .resultCode(200)

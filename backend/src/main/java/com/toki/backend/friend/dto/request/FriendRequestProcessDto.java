@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class FriendRequestProcessDto {
-    private String toUserPk;
+    private String toUserTag;
     private Boolean acceptFriend;
 }
