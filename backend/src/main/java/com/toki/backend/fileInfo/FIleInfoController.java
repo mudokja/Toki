@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/file") //아직 API명세서가 없음...
+@RequestMapping("/api/v1/file") //API명세서 작성이 되어있지 않아 임의로 작성하였습니다.
 @RequiredArgsConstructor
 public class FIleInfoController {
 
@@ -34,10 +34,19 @@ public class FIleInfoController {
 
     // 파일 ID(혹은 Idx?)로 파일 정보 조회
     @GetMapping("/{fileId}")
-    public ResponseEntity<FileInfoDTO> getFileById(@PathVariable Long fileId) {
+    public ResponseEntity<CommonResponseDto<FileInfoDTO>> getFileById(@PathVariable Long fileId) {
         return fileInfoService.getFileById(fileId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .map(fileInfoDTO -> ResponseEntity.ok(CommonResponseDto.<FileInfoDTO>builder()
+                        .resultCode(200)
+                        .resultMessage("파일 정보 조회 성공")
+                        .data(fileInfoDTO)
+                        .build()))
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(CommonResponseDto.<FileInfoDTO>builder()
+                                .resultCode(404)
+                                .resultMessage("파일을 찾을 수 없습니다.")
+                                .data(null)
+                                .build()));
     }
 
     // 파일 저장
@@ -54,7 +63,7 @@ public class FIleInfoController {
                     .referenceUri(null)
                     .build());
         } catch (IOException e) {
-//            e.printStackTrace(); //무슨 역할인지 모르겠음.??
+            e.printStackTrace(); //예외가 발생할 경우 스택 트레이스를 출력하는 역할
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(CommonResponseDto.builder()
                             .resultCode(400)
