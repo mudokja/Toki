@@ -1,15 +1,19 @@
 package com.toki.backend.blacklist.dto.request;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
-@Builder
+@Getter
+@NoArgsConstructor
 public class BlacklistRequestDto {
 
     private String toUserPk;
 
     private String fromUserPk;
+
+    @Builder
+    public BlacklistRequestDto(String toUserPk, String fromUserPk) {
+        this.toUserPk = toUserPk;
+        this.fromUserPk = fromUserPk;
+    }
 }

@@ -23,10 +23,10 @@ public class Blacklist {
     private Long idx;
 
     @ManyToOne
-    private User fromUserPk;
+    private User fromUser;
 
     @ManyToOne
-    private User toUserPk;
+    private User toUser;
 
     @CreatedDate
     private LocalDateTime createAt;

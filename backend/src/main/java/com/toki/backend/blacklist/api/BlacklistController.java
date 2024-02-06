@@ -3,6 +3,7 @@ package com.toki.backend.blacklist.api;
 import com.toki.backend.auth.service.CustomOAuth2User;
 import com.toki.backend.blacklist.dto.request.BlacklistRequestDto;
 import com.toki.backend.blacklist.dto.request.BlacklistSaveRequestDto;
+import com.toki.backend.blacklist.dto.response.BlacklistResponseDto;
 import com.toki.backend.blacklist.entity.Blacklist;
 import com.toki.backend.blacklist.service.BlacklistService;
 import com.toki.backend.common.dto.response.CommonResponseDto;
@@ -31,16 +32,13 @@ public class BlacklistController {
                 .fromUserPk(userPrincipal.getName())
                 .build();
 
-        List<Blacklist> blacklist = blacklistService.getBlacklistByFromUserPk(requestDto);
-
         CommonResponseDto<Object> responseDto = CommonResponseDto.builder()
                 .resultCode(200)
                 .resultMessage("블랙리스트 조회에 성공했습니다.")
-                .data(blacklist)
+                .data(blacklistService.getBlacklistByFromUserPk(requestDto))
                 .build();
 
         return ResponseEntity.ok(responseDto);
-
     }
 
     // 블랙리스트에 유저 추가

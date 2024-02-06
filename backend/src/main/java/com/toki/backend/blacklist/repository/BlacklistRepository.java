@@ -1,8 +1,10 @@
 package com.toki.backend.blacklist.repository;
 
-import com.toki.backend.member.entity.User;
+import com.toki.backend.auth.entity.User;
+import com.toki.backend.blacklist.dto.response.BlacklistResponseDto;
 import com.toki.backend.blacklist.entity.Blacklist;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,9 +13,9 @@ import java.util.List;
 public interface BlacklistRepository extends JpaRepository<Blacklist, Integer> {
 
 
-    List<Blacklist> findAllByFromUserPk(User fromUserId);
-
-    Blacklist findByFromUserPkAndToUserPk(User fromUserPk, User toUserPk);
-
+    @Query("select "
+            + "new com.toki.backend.blacklist.dto.response.BlacklistResponseDto(b.toUser)"
+            + "from Blacklist b where b.fromUser=:fromUser")
+    List<BlacklistResponseDto> findAllToUserByFromUser(User fromUser);
 
 }
