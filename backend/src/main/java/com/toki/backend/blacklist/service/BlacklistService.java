@@ -1,8 +1,7 @@
 package com.toki.backend.blacklist.service;
 
 
-import com.toki.backend.member.entity.User;
-import com.toki.backend.auth.repository.UserRepository;
+import com.toki.backend.auth.entity.User;
 import com.toki.backend.blacklist.dto.request.BlacklistRequestDto;
 import com.toki.backend.blacklist.dto.response.BlacklistResponseDto;
 import com.toki.backend.blacklist.entity.Blacklist;
@@ -17,7 +16,6 @@ import java.util.List;
 public class BlacklistService {
 
     private final BlacklistRepository blacklistRepository;
-    private final UserRepository userRepository;
 
     public List<BlacklistResponseDto> getBlacklistByFromUserPk(BlacklistRequestDto requestDto) {
 

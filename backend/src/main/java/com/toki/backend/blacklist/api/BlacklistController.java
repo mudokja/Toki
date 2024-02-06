@@ -3,8 +3,6 @@ package com.toki.backend.blacklist.api;
 import com.toki.backend.auth.service.CustomOAuth2User;
 import com.toki.backend.blacklist.dto.request.BlacklistRequestDto;
 import com.toki.backend.blacklist.dto.request.BlacklistSaveRequestDto;
-import com.toki.backend.blacklist.dto.response.BlacklistResponseDto;
-import com.toki.backend.blacklist.entity.Blacklist;
 import com.toki.backend.blacklist.service.BlacklistService;
 import com.toki.backend.common.dto.response.CommonResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
