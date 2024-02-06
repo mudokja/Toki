@@ -1,6 +1,5 @@
 package com.toki.backend.auth;
 
-import com.toki.backend.common.utils.ConvertUserTag;
 import com.toki.backend.member.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +20,6 @@ public class AuthController {
     public ResponseEntity<?> index(){
         log.warn("요청되돌아옴");
         System.out.println("요청돌아옴");
-
-
 
 //        CommonResponseDto<Object> result=CommonResponseDto.builder()
 //                .resultCode(200)
