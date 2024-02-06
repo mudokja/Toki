@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -23,9 +24,11 @@ import java.time.Duration;
 @EnableConfigurationProperties({RedisProperties.class})
 @RequiredArgsConstructor
 @Slf4j
+@EnableCaching
 public class RedisConfig {
 
     private final RedisProperties redisProperties;
+
 
 
     @Bean
@@ -52,7 +55,7 @@ public class RedisConfig {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
-                .entryTtl(Duration.ofMinutes(3L));
+                .entryTtl(Duration.ofDays(7));
 
         return RedisCacheManager
                 .RedisCacheManagerBuilder

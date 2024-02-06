@@ -1,36 +1,35 @@
 package com.toki.backend.roomchat.entity;
 
-//@Entity
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@EntityListeners(value = AuditingEntityListener.class)
-//@Builder
-//@RedisHash(value = "room_chat")
+
+import com.toki.backend.roomchat.dto.RoomChatType;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.redis.core.RedisHash;
+
+import java.time.LocalDateTime;
+
+@Entity
+@EntityListeners(value = AuditingEntityListener.class)
+@RedisHash(value = "room_chat")
 public class RoomChat {
+    @Id
+    @NotNull
+    private String RoomChatPk;
 
-//    @Id
-//    private Long idx;
+    @CreatedDate
+    private LocalDateTime createAt;
 
-//    @Column
-//    @ManyToOne
-//    private Room roomPk;
+    private RoomChatType chatType;
 
-//    @CreatedDate
-//    private LocalDateTime createAt;
-//
-//    @Column
-//    @ManyToOne
-//    private User fromUserPk;
-//
-//    @Column
-//    @ManyToOne
-//    private User toUserPk;
-//
-//    @Column
-//    private String context;
-//
-//    @TimeToLive
-//    private Long expiredTime;
+    @Column
+    private String fromUserPk;
+    @Column
+    private String sendTo;
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime crateAt;
+
 
 }

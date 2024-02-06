@@ -7,8 +7,8 @@ spring:
       on-profile: local
   redis:
     host: localhost
-    password: 1234
-    port: 6379
+    password: ssafyb205db
+    port: 33306
 
   # H2 Database 설정
   datasource:
