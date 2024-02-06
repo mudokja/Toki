@@ -1,8 +1,7 @@
-package com.toki.backend.auth.repository;
+package com.toki.backend.member.repository;
 
-import com.toki.backend.auth.entity.User;
+import com.toki.backend.member.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
@@ -15,4 +14,6 @@ public interface UserRepository extends JpaRepository<User, String> {
 	Optional<User> findByUserTag(User user);
 
     Optional<User> findByUserIdAndSnsType(String userId, int snsType);
+
+	Optional<Object> findByUserPk(String userPk);
 }

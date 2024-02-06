@@ -1,6 +1,6 @@
 package com.toki.backend.auth;
 
-import com.toki.backend.auth.repository.UserRepository;
+import com.toki.backend.member.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

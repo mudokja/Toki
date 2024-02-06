@@ -13,9 +13,9 @@ import javax.crypto.SecretKey;
 
 import com.toki.backend.auth.service.CustomOAuth2User;
 import com.toki.backend.auth.entity.RefreshToken;
-import com.toki.backend.auth.entity.User;
+import com.toki.backend.member.entity.User;
 import com.toki.backend.auth.repository.RefreshTokenRepository;
-import com.toki.backend.auth.repository.UserRepository;
+import com.toki.backend.member.repository.UserRepository;
 import com.toki.backend.auth.dto.token.RefreshTokenDto;
 import com.toki.backend.auth.dto.Role;
 import com.toki.backend.auth.dto.token.TokenInfoDto;

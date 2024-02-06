@@ -28,7 +28,7 @@ public class FIleInfoController {
         return ResponseEntity.ok(allFiles);
     }
 
-    // 파일 ID로 파일 정보 조회
+    // 파일 ID(혹은 Idx?)로 파일 정보 조회
     @GetMapping("/{fileId}")
     public ResponseEntity<FileInfoDTO> getFileById(@PathVariable Long fileId) {
         return fileInfoService.getFileById(fileId)

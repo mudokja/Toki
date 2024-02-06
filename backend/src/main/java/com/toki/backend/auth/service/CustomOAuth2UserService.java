@@ -1,7 +1,7 @@
 package com.toki.backend.auth.service;
 
-import com.toki.backend.auth.entity.User;
-import com.toki.backend.auth.repository.UserRepository;
+import com.toki.backend.member.entity.User;
+import com.toki.backend.member.repository.UserRepository;
 import com.toki.backend.auth.dto.Role;
 import com.toki.backend.auth.dto.snsUser.KakaoUserInfo;
 import com.toki.backend.auth.dto.snsUser.NaverUserInfo;
@@ -46,7 +46,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 null
         );
         if(user==null){
-            user=User.builder()
+            user= User.builder()
                     .userId(userId)
                     .userEmail(userEmail)
                     .userName(userName)

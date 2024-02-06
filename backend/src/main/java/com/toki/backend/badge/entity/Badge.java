@@ -1,7 +1,7 @@
 package com.toki.backend.badge.entity;
 
 
-import com.toki.backend.member.entity.Member;
+import com.toki.backend.member.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,7 +28,9 @@ public class Badge {
 
     @ManyToOne
     @JoinColumn(name = "member_id")
-    private Member member;
+    private User user;
+
+    private String memberUserPk;
 
 
 }

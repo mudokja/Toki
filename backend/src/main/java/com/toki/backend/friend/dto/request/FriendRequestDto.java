@@ -1,6 +1,5 @@
 package com.toki.backend.friend.dto.request;
 
-import com.toki.backend.auth.entity.User;
 import lombok.Builder;
 import lombok.Data;
 

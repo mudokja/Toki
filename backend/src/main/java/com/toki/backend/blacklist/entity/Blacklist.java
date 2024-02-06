@@ -1,7 +1,7 @@
 package com.toki.backend.blacklist.entity;
 
 
-import com.toki.backend.auth.entity.User;
+import com.toki.backend.member.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

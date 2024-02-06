@@ -2,9 +2,9 @@ package com.toki.backend.member;
 
 
 import com.toki.backend.common.dto.response.CommonResponseDto;
-import com.toki.backend.member.dto.MemberDTO;
-import com.toki.backend.member.dto.UpdateMemberRequestDTO;
-import com.toki.backend.member.service.MemberService;
+import com.toki.backend.member.dto.UserDTO;
+import com.toki.backend.member.dto.UpdateUserRequestDTO;
+import com.toki.backend.member.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
-public class MemberController {
+public class UserController {
 
 
-    private final MemberService memberService;
+    private final UserService userService;
 
 
   /*  //유저 상세 정보 조회
@@ -44,32 +44,32 @@ public class MemberController {
 
     // 유저 상세 정보 조회 & 간단 정보 조회
     @GetMapping("/{userPk}")
-    public ResponseEntity<CommonResponseDto<MemberDTO>> getUserInfo(
+    public ResponseEntity<CommonResponseDto<UserDTO>> getUserInfo(
             @PathVariable String userPk,
             @RequestParam(name = "info_type", defaultValue = "detail") String infoType
     ) {
         try {
-            MemberDTO result;
+            UserDTO result;
             if ("simple".equals(infoType)) {
-                result = memberService.getUserSimpleInfo(userPk);
+                result = userService.getUserSimpleInfo(userPk);
             } else {
-                result = memberService.getUserDetailInfo(userPk);
+                result = userService.getUserDetailInfo(userPk);
             }
-            return ResponseEntity.ok(CommonResponseDto.<MemberDTO>builder()
+            return ResponseEntity.ok(CommonResponseDto.<UserDTO>builder()
                     .resultCode(200)
                     .resultMessage("유저 정보를 반환합니다.")
                     .data(result)
                     .build());
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(CommonResponseDto.<MemberDTO>builder()
+                    .body(CommonResponseDto.<UserDTO>builder()
                             .resultCode(404)
                             .resultMessage("유저를 찾을 수 없습니다.")
                             .data(null)
                             .build());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(CommonResponseDto.<MemberDTO>builder()
+                    .body(CommonResponseDto.<UserDTO>builder()
                             .resultCode(500)
                             .resultMessage("서버 에러: " + e.getMessage())
                             .data(null)
@@ -100,24 +100,24 @@ public class MemberController {
 
     // 유저 정보 수정 -> 닉네임, 프로필URL, 이메일
     @PutMapping("/{userPk}")
-    public ResponseEntity<CommonResponseDto<MemberDTO>> updateUser(@PathVariable String userPk, @RequestBody UpdateMemberRequestDTO request) {
+    public ResponseEntity<CommonResponseDto<UserDTO>> updateUser(@PathVariable String userPk, @RequestBody UpdateUserRequestDTO request) {
         try {
-            MemberDTO result = memberService.updateUser(userPk, request);
-            return ResponseEntity.ok(CommonResponseDto.<MemberDTO>builder()
+            UserDTO result = userService.updateUser(userPk, request);
+            return ResponseEntity.ok(CommonResponseDto.<UserDTO>builder()
                     .resultCode(200)
                     .resultMessage("유저 정보 수정 성공") //1
                     .data(result)
                     .build());
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(CommonResponseDto.<MemberDTO>builder()
+                    .body(CommonResponseDto.<UserDTO>builder()
                             .resultCode(404)
                             .resultMessage("유저를 찾을 수 없습니다.")
                             .data(null)
                             .build());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(CommonResponseDto.<MemberDTO>builder()
+                    .body(CommonResponseDto.<UserDTO>builder()
                             .resultCode(500)
                             .resultMessage("서버 에러: " + e.getMessage())
                             .data(null)
