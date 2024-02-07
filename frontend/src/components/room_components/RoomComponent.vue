@@ -66,7 +66,7 @@ const chatBox = ref(false)
 
 
         <!-- 영상 옵션 바 -->
-        <v-row class="mt-1 ml-1 mr-1" style="height: 10%;">
+        <v-row class="mt-1 ml-1 mr-1" style="height: 10%; flex-direction: column-reverse;" >
           
           <!-- 마이크 설정-->
           <v-col>

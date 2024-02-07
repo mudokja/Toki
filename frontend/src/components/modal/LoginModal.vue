@@ -32,19 +32,20 @@ const login = () => {
 
 
 const loginWithKakao = () => {
-    const loginURL = `https://i10b205.p.ssafy.io/oauth2/authorization/kakao`;
+    const baseUrl = import.meta.env.VITE_BASE_URL
+    const networkUrl = import.meta.env.VITE_NETWORK_URL
+    const loginURL = `${networkUrl}/oauth2/authorization/kakao`;
     console.log(loginURL)
 
     window.location.href = loginURL
 }
 
 const loginWithNaver = () => {
-    const clientID = import.meta.env.VITE_NAVER_CLIENT_ID
-    const redirectURI = import.meta.env.VITE_NAVER_REDIRECT_URI
-    const loginURL = `https://i10b205.p.ssafy.io/oauth2/authorization/naver`;
+    const baseUrl = import.meta.env.VITE_BASE_URL
+    const networkUrl = import.meta.env.VITE_NETWORK_URL
+    const loginURL = `${networkUrl}/oauth2/authorization/naver`;
     // const loginURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientID}&redirect_uri=${redirectURI}&state=1234`
-    // localStorage.setItem()
-    console.log(loginURL)
+    // localStorage.setItem()    
     
     window.location.href = loginURL
 }
@@ -60,12 +61,33 @@ const loginWithNaver = () => {
     <div>
         <v-dialog v-model="dialogState" width="auto">
             <v-card width="500" height="700" justify="center">
-                <v-sheet height="300" class="mx-auto">
-                    <v-card-text class="text-center">
-                        <v-btn class="mt-4 mr-0 text-h5" color="primary" width="320" height="65" @click="dialogState = false, dialog2 = true">
+                <v-sheet 
+                    height="300" 
+                    class="d-flex mx-auto align-center text-h4 text-light-blue-lighten-2"
+                    justify="center"
+                >
+                    <!-- <v-card-text class="text-center">
+                        <v-btn 
+                            class="mt-4 mr-0 text-h5" 
+                            color="primary" 
+                            width="320" 
+                            height="65" 
+                            @click="dialogState = false, dialog2 = true"
+                        >
                             계정으로 로그인
                         </v-btn>
-                    </v-card-text>
+                    </v-card-text> -->
+                    <!-- <v-card
+                        class="d-flex align-center text-center text-h5"
+                        justify="center"
+                    >
+                        로그인 방법 선택
+                    </v-card> -->
+
+                        로그인 방법 선택
+
+                </v-sheet>
+                <v-sheet>
                     <v-card-text class="text-center">
                         <button id="naverIdLogin_loginButton" href="#">
                             <img src="https://static.nid.naver.com/oauth/big_g.PNG" width=320 @click="loginWithNaver">
@@ -76,10 +98,11 @@ const loginWithNaver = () => {
                             <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="320" />
                         </button>
                     </v-card-text>
+
                 </v-sheet>
             </v-card>
         </v-dialog>
-        <v-dialog v-model="dialog2" width="auto">
+        <!-- <v-dialog v-model="dialog2" width="auto">
             <v-card width="500" height="700">
                 <v-toolbar color="rgba(0, 0, 0, 0)">
                     <v-btn class="ma-2" icon @click="closeDialog">
@@ -104,7 +127,7 @@ const loginWithNaver = () => {
                     </v-form>
                 </v-sheet>
             </v-card>
-        </v-dialog>
+        </v-dialog> -->
     </div>
 </template>
 

@@ -1,8 +1,9 @@
 <script setup>
-import { commonaxios, postaxios } from '@/js/CommonAxios';
-import { ref,watch } from 'vue';
+import { blackListAdd, blackListsearch } from '@/js/Blacklist' 
+import { ref, watch, inject } from 'vue';
+
 // 상태 주입
-//const broadcastDialog = inject('broadcastState')
+const broadcastDialog = inject('broadcastState')
 
 // 반응형 참조 변수들
 const roomName = ref(null)
@@ -20,35 +21,29 @@ const btn3 = ref(false)
 const btn4 = ref(false)
 
 
-const testing = ref({
-    name: '안녕하세요',
-    age: '33',
-})
+const testPk = 
+    {    
+        toUserPk: 'c0a81fbc-8d68-18e0-818d-68c8fda10000'    
+    }
 
-const test = ref('1111')
-const test1 = ref({
-    testing
-})
-
-
-const cllick = () => {
-  commonaxios(({ data }) => {
-    test.value = data
-    console.log(test.value)
-  },
-  (error) => {
-    console.log(error)
-  })
-  
+const blackListGet = () => {
+    blackListsearch(
+        (success) => {
+            console.log(success)
+        },
+        (error) => {
+            console.log(error)
+        }
+    )
 }
 
-const pclick = () => {
-    postaxios(
-        test1.value,
-    (response) => {
-        console.log(response)
-    },
-    (error) => {
+const blackListPost = () => {
+    blackListAdd(
+        testPk,
+        (success) => {
+            console.log(success)
+        },
+        (error) => {        
         console.log(error)
     }
     )
@@ -85,20 +80,20 @@ const removeHashtag = (removeTag) => {
 }
 //----------------------오류때문에주석처리함---------------------------------
 // Dialog 상태 변경 감시
-// watch(broadcastDialog, (newValue) => {
-//     if (!newValue) {
-//         roomName.value = null
-//         ageLimit.value = null
-//         rooomPassword.value = null
-//         tags.value = []
-//         newHashtag.value = ''
-//         genderCatch.value = ''
-//         categoryCatch.value = ''
-//         btn2.value = false
-//         btn3.value = false
-//         btn4.value = false
-//     }
-// })
+watch(broadcastDialog, (newValue) => {
+    if (!newValue) {
+        roomName.value = null
+        ageLimit.value = null
+        rooomPassword.value = null
+        tags.value = []
+        newHashtag.value = ''
+        genderCatch.value = ''
+        categoryCatch.value = ''
+        btn2.value = false
+        btn3.value = false
+        btn4.value = false
+    }
+})
 
 </script>
 
@@ -242,7 +237,7 @@ const removeHashtag = (removeTag) => {
                             variant="text"
                             color="primary"
                             :active="btn2"
-                            @click="btn2 = !btn2"                            
+                            @click="blackListGet"                            
                         >
                           뱃지 착용
                         </v-btn>
@@ -251,7 +246,7 @@ const removeHashtag = (removeTag) => {
                             class="mx-5"
                             stacked
                             :active="btn3"
-                            @click="pclick"                           
+                            @click="blackListPost"                           
                         >
                             악성 유저
                         </v-btn>
@@ -339,7 +334,7 @@ const removeHashtag = (removeTag) => {
                     
                 </v-container>
 
-                <v-containter
+                <v-container
                     class="d-flex justify-end" 
                     style="width: 95%;"
                 >
@@ -359,7 +354,7 @@ const removeHashtag = (removeTag) => {
                     >
                         취소
                     </v-btn>
-                </v-containter>
+                </v-container>
             </v-card>
         </v-dialog>
     </div>

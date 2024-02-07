@@ -1,13 +1,33 @@
 <script setup>
-import { ref } from 'vue';
-import SideVarView from '@/views/SideVarView.vue';
+import { ref, onMounted } from 'vue';
 import LoginButton from '@/components/buttons/LoginButton.vue';
 import SideVarButton from '@/components/buttons/SideVarButton.vue';
 import BroadcastButton from '@/components/buttons/BroadcastButton.vue';
 
 
 const isLoggedIn = ref(true)
+const search = ref('')
+const tokenCheck = localStorage.accessToken
 
+const loginCheck = (value) => {
+  if(value) {
+    isLoggedIn.value = true
+  } else {
+    isLoggedIn.value = false
+  }
+}
+
+const logout = () => {
+  localStorage.removeItem('accessToken')
+  isLoggedIn.value = false
+  
+}
+
+
+onMounted(() => {
+  loginCheck(tokenCheck)
+
+})
 </script>
 
 <template>
@@ -56,13 +76,12 @@ const isLoggedIn = ref(true)
       </v-col>
       
       <!-- <router-link :to="{ name: 'profile', params: { userId: userId }}"><img src="@/assets/profile_assets/프로필.png" alt="프로필 사진"></router-link> -->
-      <v-col v-if="isLoggedIn">
+      <v-col v-if="isLoggedIn">          
+        <v-btn style="width: 90px;" @click="logout">logout</v-btn>
+      </v-col>
+      <v-col v-else>
         <LoginButton />
       </v-col>
-        <v-col v-else>
-          
-          <v-btn id="menu_btn_logout" @click="isLoggedIn = !isLoggedIn">logout</v-btn>
-        </v-col>
         
 
       <v-col>

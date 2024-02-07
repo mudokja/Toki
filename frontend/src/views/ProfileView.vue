@@ -4,9 +4,9 @@ import ProfileComponent from '@/components/profile_components/ProfileComponent.v
 
 
 <template>
-  <div>
+  <v-app>
     <ProfileComponent/>  
-  </div>
+  </v-app>
 </template>
 
 

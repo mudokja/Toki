@@ -2,6 +2,7 @@
     <div>
 
         <v-btn
+            style="width: 90px"
             color="primary"
             @click="openDialog"
         >

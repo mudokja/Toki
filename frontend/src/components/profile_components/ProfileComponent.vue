@@ -1,53 +1,55 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+// import { memberDetail } from '@/js/Member.js'
+// import { friendListSearch } from '@/js/Friend.js'
+// import { useAuthStore } from '@/stores/auth.js'
 import ProfileMyDataComponent from '@/components/profile_components/ProfileMyDataComponent.vue'
 import ProfileMyFriendsComponent from '@/components/profile_components/ProfileMyFriendsComponent.vue'
 import ProfileMyBlacklistComponent from '@/components/profile_components/ProfileMyBlacklistComponent.vue'
-import { commonaxios,postaxios } from '@/js/CommonAxios'
+import ProfileFileinputComponent from '@/components/profile_components/ProfileFileinputComponent.vue'
+import ProfileMessageComponent from '@/components/profile_components/ProfileMessageComponent.vue'
 
 // css 정보-친구-블랙리스트 탭
-const tab = ref(null);
-const test =ref("");
-const test1 =ref({
-  name:"안녕",
-  age:"11"
-});
-
-const click=()=>{
-  commonaxios(({ data }) => {
-      test.value = data;
-      console.log(test.value.name)
-    },
-    (error) => {
-      console.error(error);
-    });
-}
-const click2 = () => {
-  commonaxios(({ data }) => {
-    test.value = data
-    console.log(test.value.name)
-  },
-  (error) => {
-    console.log(error)
-  })
-
-}
-
-
-
-const pclick=()=>{
-  postaxios(
-    test1.value,
-    (Response) => {
-      console.log(Response)
-    },
-    (error) => console.error(error)
-  );
-}
-
+const tab = ref(null)
 
 // 프로필 level 게이지 막대
 const gaze = ref(25);
+
+// 파일 업로드 on/off 토글
+const uploadToggle = ref(false)
+
+// pinia 유저 id 가져오기
+// const userId = useAuthStore().user.userId
+
+// GET 유저 정보 상세 조회
+  // 유저 정보 할당
+// const memberDetailData = ref()
+// const memberDetailAxios = function() {
+//   memberDetail(
+//     userId,
+//     ({data}) => {console.log(data, '[Success] ProfileComponent.vue : memberDetailAxios'); memberDetailData.value = data;},
+//     (fail) => {console.log(fail, '[Error] ProfileComponent.vue : memberDetailAxios');}
+//     )
+//   }
+
+// GET 친구 목록 조회
+  // 친구 인가? 친구가 아닌가? 변수 설정
+  const isFriend = ref(true)
+  // 친구 목록 정보 할당
+  const friendListSearchData = ref() 
+// const friendListSearchAxios = function() {
+//   friendListSearch(
+//     isFriend.value,
+//     ({data}) => {console.log(data, '[Success] ProfileComponent.vue : friendListSearchAxios'); friendListSearchData.value = data;},
+//     (fail) => {console.log(fail, '[Error] ProfileComponent.vue : friendListSearchAxios');}
+//     )
+//   }
+
+// onMounted(() => {
+//   memberDetailAxios(),
+//   friendListSearchAxios()
+// })
+
 </script>
 
 <style scoped>
@@ -72,8 +74,12 @@ const gaze = ref(25);
                 <div class="pb-10 bg-indigo-lighten-5 rounded-pill" style="position: relative; z-index: 1;">
                   <div v-bind:class="`pb-10 bg-light-green-accent-3 rounded-pill w-${gaze}`" style="position: absolute;"></div>
                 </div>
-                <v-btn class="mt-5 font-weight-black rounded-lg" color="blue-lighten-1" @click=click2>사진 변경</v-btn>
-                <p class="mt-3">10mb 이내의 JPEG, PNG, GIF 형식이어야 합니다.</p>
+                <v-btn-toggle v-model="uploadToggle">
+                  <v-btn class="mt-5 font-weight-black rounded-lg" color="blue-lighten-1" :value="true">사진 변경</v-btn>
+                </v-btn-toggle>
+                <div v-show="uploadToggle">
+                  <ProfileFileinputComponent/>
+                </div>
               </v-col>
            </v-row>
         </v-container>
@@ -85,13 +91,16 @@ const gaze = ref(25);
     <v-tab :value="1">나의 정보</v-tab>
     <v-tab :value="2">나의 친구</v-tab>
     <v-tab :value="3">나의 블랙리스트</v-tab>
+    <v-tab :value="4">쪽지함</v-tab>
   </v-tabs>
   
   <v-window v-model="tab">
-    <v-window-item v-for="n in 3" :key="n" :value="n">
+    <v-window-item v-for="n in 4" :key="n" :value="n">
+      <!-- 유저 정보 데이터 ProfileMyDataComponent 로 보냄 -->
       <template v-if="n === 1"><ProfileMyDataComponent/></template>
       <template v-else-if="n === 2"><ProfileMyFriendsComponent/></template>
-      <template v-else><ProfileMyBlacklistComponent/></template>
+      <template v-else-if="n === 3"><ProfileMyBlacklistComponent/></template>
+      <template v-else><ProfileMessageComponent/></template>
     </v-window-item>
   </v-window>
 

@@ -29,7 +29,8 @@
   background-repeat: no-repeat;
   z-index: 0; 
   position: absolute;
-
+  bottom: 0;  
+  width: 100%;
 
 
 }
@@ -38,16 +39,6 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-}
-
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  margin-bottom: 200px; 
 }
 
 .footer {

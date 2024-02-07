@@ -37,7 +37,6 @@ const load = async ({ done }) => {
 
 <template>
   <v-app>
-    <HeaderView/>
 
     <v-container 
       fluid 
@@ -67,9 +66,6 @@ const load = async ({ done }) => {
       </v-infinite-scroll>
     </v-container>
 
-
-
-    <FooterView/>
   </v-app>
   <main>
   </main>
