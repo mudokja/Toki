@@ -45,18 +45,33 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         User user =userRepository.findByUserIdAndSnsType(userId,snsType).orElse(
                 null
         );
+
+        // 데이터베이스에서 최대 userTag 값을 가져오기
+        Integer maxUserTag = userRepository.findMaxUserTag();
+        int initialUserTag = maxUserTag != null ? maxUserTag + 1 : 1000;
+
+
+
+
+
         if(user==null){
             user= User.builder()
                     .userId(userId)
                     .userEmail(userEmail)
                     .userName(userName)
                     .snsType(snsType)
+                    .userTag(initialUserTag) // 초기값 설정
                     .userRole(Role.USER)
                     .userNickName(userNickname)
                     .birthYear(userBirthYear)
                     .profileImageUrl(userProfileImageUrl)
                     .build();
             userRepository.save(user);
+
+            System.out.println(("전체 내용 조회: " + user.toString())); //태그숫자 조회용 테스트
+
+//             가입자가 증가할 때마다 userTag를 1씩 증가시킴
+            initialUserTag++;
         }
         return new CustomOAuth2User(user,oAuth2User.getAttributes());
     }

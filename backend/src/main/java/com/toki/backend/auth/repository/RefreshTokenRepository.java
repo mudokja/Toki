@@ -1,6 +1,7 @@
 package com.toki.backend.auth.repository;
 
 import com.toki.backend.auth.entity.RefreshToken;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +16,6 @@ public interface RefreshTokenRepository extends CrudRepository<RefreshToken, Str
     Optional<RefreshToken> findOneByUserPkAndRefreshToken(String userPk, String refreshToken);
 
     int countByRefreshToken(String userPk);
+
+
 }
