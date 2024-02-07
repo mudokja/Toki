@@ -1,5 +1,14 @@
 <script setup>
 import RoomComponent from '@/components/room_components/RoomComponent.vue'
+import { defineProps, onMounted } from 'vue';
+
+const roomData = JSON.parse(sessionStorage.getItem('roomData'))
+
+
+onMounted(() => {
+  console.log(roomData)
+})
+
 </script>
 
 <template>

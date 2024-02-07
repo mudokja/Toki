@@ -17,7 +17,10 @@
         </v-icon>
     </v-btn>
 
-    <BroadcastModal/>
+    <BroadcastModal 
+      :broadcastDialog="broadcastDialog"
+      @update:broadcastDialog="broadcastDialog = $event"
+    />
     <!-- <div id="b3" class="box">
       <svg id="i3" class="icon" viewBox="0 0 100 100">
         <path id="top-line-3"     d="M30,37 L70,37 Z"></path>
@@ -36,9 +39,9 @@ import BroadcastModal from '@/components/modal/BroadcastModal.vue';
 const broadcastDialog = ref(false)
 
 const openBroadcast = () => {
-    broadcastDialog.value = true
+    broadcastDialog.value = !broadcastDialog.value
 }
-provide('broadcastState', broadcastDialog)
+// provide('broadcastState', broadcastDialog)
 
 
 </script>

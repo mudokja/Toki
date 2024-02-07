@@ -1,14 +1,29 @@
 <script setup>
-import { blackListAdd, blackListsearch } from '@/js/Blacklist' 
-import { ref, watch, inject } from 'vue';
+import { commonaxios, postaxios } from '@/js/CommonAxios';
+import { roomCreate } from '@/js/Room';
+import { ref, watch, onMounted, inject, defineProps, computed } from 'vue';
+import router from '@/router';
 
 // 상태 주입
-const broadcastDialog = inject('broadcastState')
+// const broadcastDialog = inject('broadcastState')
+
+const props = defineProps({
+  broadcastDialog: {
+    type: Boolean,
+    required: true,
+  }
+});
+
+const emit = defineEmits(['update:broadcastDialog'])
+
+function closeModal() {
+  emit('update:broadcastDialog', false)
+}
 
 // 반응형 참조 변수들
-const roomName = ref(null)
-const ageLimit = ref(null)
-const rooomPassword = ref(null)
+const roomName = ref('')
+const ageLimit = ref('')
+const rooomPassword = ref('')
 const genderDisabled = ref(true)
 const genderCatch = ref('')
 const categoryCatch = ref('')
@@ -20,34 +35,21 @@ const btn2 = ref(false)
 const btn3 = ref(false)
 const btn4 = ref(false)
 
+const roomData = computed(() => ({
+    roomName: roomName.value,
+    categoryPk: categoryCatch.value,
+    tags: tags.value,
+    isPrivate: isPrivate.value,
+    rooomPassword: rooomPassword.value,
 
-const testPk = 
-    {    
-        toUserPk: 'c0a81fbc-8d68-18e0-818d-68c8fda10000'    
-    }
+}))
 
-const blackListGet = () => {
-    blackListsearch(
-        (success) => {
-            console.log(success)
-        },
-        (error) => {
-            console.log(error)
-        }
-    )
+const cllick = () => {
+        sessionStorage.setItem('roomData', JSON.stringify(roomData.value))
+        router.push('/room')
+
 }
 
-const blackListPost = () => {
-    blackListAdd(
-        testPk,
-        (success) => {
-            console.log(success)
-        },
-        (error) => {        
-        console.log(error)
-    }
-    )
-}
 
 // 상수
 const category = ['게임', '공부', '스포츠', '음악', '잡담', '정보', '자유(기타)', ]
@@ -80,7 +82,7 @@ const removeHashtag = (removeTag) => {
 }
 //----------------------오류때문에주석처리함---------------------------------
 // Dialog 상태 변경 감시
-watch(broadcastDialog, (newValue) => {
+watch(() => props.broadcastDialog, (newValue) => {
     if (!newValue) {
         roomName.value = null
         ageLimit.value = null
@@ -100,12 +102,13 @@ watch(broadcastDialog, (newValue) => {
 <template>
     <div>
         <v-dialog 
-            v-model="broadcastDialog" 
+            v-model="props.broadcastDialog" 
             width="auto"
+            @click:outside="closeModal"
         >
             <v-card 
-                width="800" 
-                height="800" 
+                width="800px" 
+                height="1000px" 
                 justify="center"
             >
                 <v-sheet>
@@ -237,7 +240,6 @@ watch(broadcastDialog, (newValue) => {
                             variant="text"
                             color="primary"
                             :active="btn2"
-                            @click="blackListGet"                            
                         >
                           뱃지 착용
                         </v-btn>
@@ -246,7 +248,6 @@ watch(broadcastDialog, (newValue) => {
                             class="mx-5"
                             stacked
                             :active="btn3"
-                            @click="blackListPost"                           
                         >
                             악성 유저
                         </v-btn>
@@ -344,13 +345,14 @@ watch(broadcastDialog, (newValue) => {
                         :button-font-size="100"
                         font-coloe="light-blue-lighten-1"
                         @click="cllick()"
+                        
                     >
                         토키 생성
                     </v-btn>
 
                     <v-btn
                         class="mx-5"
-                        @click="broadcastDialog = !broadcastDialog"
+                        @click="closeModal"
                     >
                         취소
                     </v-btn>

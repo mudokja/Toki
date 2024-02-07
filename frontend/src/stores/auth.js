@@ -11,11 +11,12 @@ export const useAuthStore = defineStore('auth', () => {
     const isAuthenticated = computed(() => !accessToken.value)
 
     function setToken(newToken) {
-        const decoded = jwtDecode(newToken)
+        const decoded = jwtDecode(newToken).userId
         user.value = decoded
         accessToken.value = decoded.accessToken
         localStorage.setItem('accessToken', newToken)
-
+        localStorage.setItem('userId', decoded)
+        
         try {
             user.value = jwtDecode(newToken)
         } catch (error) {

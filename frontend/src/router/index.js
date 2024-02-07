@@ -35,6 +35,11 @@ const router = createRouter({
       path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue')
+    },
+    {
+      path: '/test',
+      name: 'test',
+      component: () => import('../views/TestView.vue')
     }
   ]
 })
@@ -48,6 +53,7 @@ router.beforeEach((to, from, next) => {
       authStore.setToken(token)
       
       next('/')
+      // router.go(0)
     } else {
       next('/success')
     }
