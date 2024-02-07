@@ -27,7 +27,7 @@ public class RoomHandler extends TextWebSocketHandler {
 
   private final TokiRoomManager tokiRoomManager;
 
-  private final UserRegistry registry;
+  private final TokiUserRegistry registry;
 
   @Override
   public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {

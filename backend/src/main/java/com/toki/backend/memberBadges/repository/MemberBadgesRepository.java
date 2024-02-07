@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@Repository
-public interface MemberBadgesRepository extends JpaRepository<MemberBadges, Long> {
-
-
-
-}
+//@Repository
+//public interface MemberBadgesRepository extends JpaRepository<MemberBadges, Long> {
+//
+//
+//
+//}

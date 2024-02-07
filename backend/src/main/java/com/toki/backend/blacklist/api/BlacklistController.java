@@ -44,7 +44,7 @@ public class BlacklistController {
 
         BlacklistRequestDto requestDto = BlacklistRequestDto.builder()
                 .fromUserPk(userPrincipal.getName())
-                .toUserPk(saveRequestDto.getToUserPk())
+                .toUserTag(saveRequestDto.getToUserTag())
                 .build();
 
         blacklistService.saveBlacklist(requestDto);
@@ -65,7 +65,7 @@ public class BlacklistController {
 
         BlacklistRequestDto requestDto = BlacklistRequestDto.builder()
                 .fromUserPk(userPrincipal.getName())
-                .toUserPk(userPk)
+                .toUserTag(userPk)
                 .build();
 
         blacklistService.deleteBlacklist(requestDto);

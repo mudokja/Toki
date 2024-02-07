@@ -41,7 +41,8 @@ public class RoomController {
     // 화상 채팅방 생성
     @PostMapping
     public ResponseEntity<?> createRoom(@RequestBody CreateRoomRequestDto requestDto) {
-        roomService.saveRoom(requestDto);
+//        roomService.saveRoom(requestDto);
+        return null;
     }
 
     // 타 이용자가 화상 채팅방 접속

@@ -30,5 +30,5 @@ public class Badge {
     private String imageUrl;
 
     @OneToMany(mappedBy = "badge")
-    private List<MemberBadge> memberBadges = new ArrayList<>();
+    private List<MemberBadge> memberBadges;
 }

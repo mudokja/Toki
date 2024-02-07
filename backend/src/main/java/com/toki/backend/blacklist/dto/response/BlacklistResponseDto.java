@@ -1,6 +1,6 @@
 package com.toki.backend.blacklist.dto.response;
 
-import com.toki.backend.auth.entity.User;
+import com.toki.backend.member.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +11,7 @@ public class BlacklistResponseDto {
     private String userNickname;
 
     public  BlacklistResponseDto(User user) {
-        this.userTag = user.getUserTag();
+        this.userTag = String.valueOf(user.getUserTag());
         this.userNickname = user.getUserNickName();
     }
 }

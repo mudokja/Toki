@@ -1,8 +1,9 @@
 package com.toki.backend.friend.api;
 
 
-import com.toki.backend.auth.entity.User;
-import com.toki.backend.auth.repository.UserRepository;
+import com.toki.backend.common.utils.ConvertUserTag;
+import com.toki.backend.member.entity.User;
+import com.toki.backend.member.repository.UserRepository;
 import com.toki.backend.auth.service.CustomOAuth2User;
 import com.toki.backend.common.dto.response.CommonResponseDto;
 import com.toki.backend.friend.dto.FriendDto;
@@ -42,7 +43,7 @@ public class FriendController {
         }
 
         CommonResponseDto<Object> responseDto = CommonResponseDto.builder()
-                .resultCode(200)//success
+                .resultCode(200)
                 .resultMessage("조회에 성공했습니다.")
                 .data(data)
                 .build();
@@ -56,7 +57,7 @@ public class FriendController {
                                            @AuthenticationPrincipal CustomOAuth2User userPrincipal) {
 
         User myUser = userRepository.findById(userPrincipal.getName()).get();
-        User toUser = userRepository.findByUserTag(requestDto.getToUserTag()).get();
+        User toUser = userRepository.findByUserTag(ConvertUserTag.convertUserTag(requestDto.getToUserTag())).get();
 
         friendService.saveFriendByNotIsFriend(FriendDto.builder()
                 .fromUser(myUser)
@@ -127,7 +128,7 @@ public class FriendController {
                                           @AuthenticationPrincipal CustomOAuth2User userPrincipal) {
 
         User myUser = userRepository.findById(userPrincipal.getName()).get();
-        User toUser = userRepository.findByUserTag(toUserTag).get();
+        User toUser = userRepository.findByUserTag(ConvertUserTag.convertUserTag(toUserTag)).get();
 
         friendService.deleteFriend(FriendDto.builder()
                 .fromUser(toUser)

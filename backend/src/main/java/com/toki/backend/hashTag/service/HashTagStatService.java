@@ -18,12 +18,12 @@ public class HashTagStatService {
 
 
     //가장 많이 사용된 태그를 조회하는 메서드 (인기있는 상위 태그 5개만..)
-    public List<HashTagStatDTO> getMostUsedTags() {
-        List<HashTagStat> mostUsedTags = hashTagStatRepository.findTop5();
-        return mostUsedTags.stream()
-                .map(this::convertEntityToDTO)
-                .collect(Collectors.toList());
-    }
+//    public List<HashTagStatDTO> getMostUsedTags() {
+//        List<HashTagStat> mostUsedTags = hashTagStatRepository.findTop5();
+//        return mostUsedTags.stream()
+//                .map(this::convertEntityToDTO)
+//                .collect(Collectors.toList());
+//    }
 
     private HashTagStatDTO convertEntityToDTO(HashTagStat hashTagStat) {
         return new HashTagStatDTO(

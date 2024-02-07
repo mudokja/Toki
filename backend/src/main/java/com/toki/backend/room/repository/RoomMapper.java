@@ -1,6 +1,6 @@
 package com.toki.backend.room.repository;
 
-import com.toki.backend.auth.entity.User;
+import com.toki.backend.member.entity.User;
 import com.toki.backend.hashTag.entity.HashTag;
 
 import java.util.List;

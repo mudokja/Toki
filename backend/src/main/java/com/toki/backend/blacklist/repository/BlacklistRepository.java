@@ -1,8 +1,8 @@
 package com.toki.backend.blacklist.repository;
 
-import com.toki.backend.auth.entity.User;
 import com.toki.backend.blacklist.dto.response.BlacklistResponseDto;
 import com.toki.backend.blacklist.entity.Blacklist;
+import com.toki.backend.member.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

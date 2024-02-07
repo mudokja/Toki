@@ -1,7 +1,7 @@
 package com.toki.backend.blacklist.service;
 
 
-import com.toki.backend.auth.entity.User;
+import com.toki.backend.member.entity.User;
 import com.toki.backend.blacklist.dto.request.BlacklistRequestDto;
 import com.toki.backend.blacklist.dto.response.BlacklistResponseDto;
 import com.toki.backend.blacklist.entity.Blacklist;
@@ -31,7 +31,7 @@ public class BlacklistService {
                 .userPk(requestDto.getFromUserPk())
                 .build();
         User toUser = User.builder()
-                .userPk(requestDto.getToUserPk())
+                .userPk(requestDto.getToUserTag())
                 .build();
         blacklistRepository.save(
                 Blacklist.builder()
@@ -46,7 +46,7 @@ public class BlacklistService {
                 .userPk(requestDto.getFromUserPk())
                 .build();
         User toUser = User.builder()
-                .userPk(requestDto.getToUserPk())
+                .userPk(requestDto.getToUserTag())
                 .build();
         blacklistRepository.save(
                 Blacklist.builder()

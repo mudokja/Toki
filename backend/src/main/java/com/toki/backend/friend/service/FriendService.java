@@ -1,12 +1,14 @@
 package com.toki.backend.friend.service;
 
-import com.toki.backend.auth.entity.User;
-import com.toki.backend.auth.repository.UserRepository;
+import com.toki.backend.member.entity.User;
+import com.toki.backend.member.repository.UserRepository;
 import com.toki.backend.friend.dto.FriendDto;
 import com.toki.backend.friend.entity.Friend;
 import com.toki.backend.friend.repository.FriendRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

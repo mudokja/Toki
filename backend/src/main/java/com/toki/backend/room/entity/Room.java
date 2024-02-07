@@ -1,7 +1,7 @@
 package com.toki.backend.room.entity;
 
 
-import com.toki.backend.auth.entity.User;
+import com.toki.backend.member.entity.User;
 import com.toki.backend.hashTag.entity.HashTag;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

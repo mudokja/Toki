@@ -7,13 +7,13 @@ import lombok.*;
 @NoArgsConstructor
 public class BlacklistRequestDto {
 
-    private String toUserPk;
+    private String toUserTag;
 
     private String fromUserPk;
 
     @Builder
-    public BlacklistRequestDto(String toUserPk, String fromUserPk) {
-        this.toUserPk = toUserPk;
+    public BlacklistRequestDto(String toUserTag, String fromUserPk) {
+        this.toUserTag = toUserTag;
         this.fromUserPk = fromUserPk;
     }
 }

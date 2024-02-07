@@ -11,9 +11,4 @@ public interface BadgeRepository extends JpaRepository<Badge, Integer> {
     Optional<Badge> findByIdx(int idx);
 
 
-
-    List<Badge> findByMemberUserPk(String userPk);
-
-
-
 }

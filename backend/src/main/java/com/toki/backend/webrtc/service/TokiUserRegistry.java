@@ -34,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service
 @RequiredArgsConstructor
-public class UserRegistry {
+public class TokiUserRegistry {
 
   private final ConcurrentHashMap<String, UserRoomSession> usersByName = new ConcurrentHashMap<>();
   private final ConcurrentHashMap<String, UserRoomSession> usersBySessionId = new ConcurrentHashMap<>();

@@ -6,9 +6,9 @@ spring:
     activate:
       on-profile: local
   redis:
-    host: localhost
-    password:
-    port: 6379
+    host: ${REDISDB-HOST-LOCAL}
+    password: ${REDISDB-PASSWORD-LOCAL}
+    port: ${REDISDB-PORT-LOCAL}
 
   # H2 Database 설정
   datasource:

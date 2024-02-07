@@ -4,6 +4,7 @@ package com.toki.backend.badge.service;
 import com.toki.backend.badge.dto.BadgeDTO;
 import com.toki.backend.badge.entity.Badge;
 import com.toki.backend.badge.repository.BadgeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -11,13 +12,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class BadgeService {
 
     private final BadgeRepository badgeRepository;
-
-    public BadgeService(BadgeRepository badgeRepository) {
-        this.badgeRepository = badgeRepository;
-    }
 
     /**
      * 모든 배지 조회

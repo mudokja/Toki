@@ -1,6 +1,7 @@
 package com.toki.backend.memberBadges.dto;
 
 import com.toki.backend.badge.dto.BadgeDTO;
+import com.toki.backend.member.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +18,7 @@ public class MemberBadgesDTO {
 
 
     private Long id;
-    private MemberDTO member;
+    private UserDTO user;
     private BadgeDTO badge;
     private LocalDateTime createAt;
 

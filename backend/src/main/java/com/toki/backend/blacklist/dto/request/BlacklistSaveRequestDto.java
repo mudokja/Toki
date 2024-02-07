@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class BlacklistSaveRequestDto {
-    private String toUserPk;
+    private String toUserTag;
 
     @Builder
-    public BlacklistSaveRequestDto(String toUserPk) {
-        this.toUserPk = toUserPk;
+    public BlacklistSaveRequestDto(String toUserTag) {
+        this.toUserTag = toUserTag;
     }
 }

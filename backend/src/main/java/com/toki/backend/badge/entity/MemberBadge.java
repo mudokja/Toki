@@ -1,5 +1,6 @@
 package com.toki.backend.badge.entity;
 
+import com.toki.backend.member.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,7 +23,7 @@ public class MemberBadge {
 
     @ManyToOne
     @JoinColumn(name = "member_id")
-    private Member member; //아직 수정 안되었음.....g
+    private User user; //아직 수정 안되었음.....g
 
     @ManyToOne
     @JoinColumn(name = "badge_id")
