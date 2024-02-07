@@ -3,16 +3,19 @@ package com.toki.backend.member.service;
 
 import com.toki.backend.badge.dto.BadgeDTO;
 import com.toki.backend.badge.service.BadgeService;
+import com.toki.backend.member.dto.OtherUserDTO;
 import com.toki.backend.member.dto.UserDTO;
 import com.toki.backend.member.dto.UpdateUserRequestDTO;
 import com.toki.backend.member.entity.User;
 import com.toki.backend.member.repository.UserRepository;
+
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +45,24 @@ public class UserService {
 
         // Member 엔티티를 MemberDTO로 변환
         return convertEntityToSimpleDTO(user);
+    }
+
+    // 다른 사용자의 정보 조회
+    public OtherUserDTO getOtherUserInfo(String userPk) {
+        Optional<User> userOptional = userRepository.findByUserPk(userPk);
+        if (!userOptional.isPresent()) {
+            throw new EntityNotFoundException("UserPk에 해당하는 회원이 없습니다. " + userPk);
+        }
+
+        User user = userOptional.get();
+
+        // 필요한 필드만 OtherUserDTO 객체에 설정하여 반환
+        return OtherUserDTO.builder()
+                .userRole(String.valueOf(user.getUserRole())) //오류 발생하여 valueOf로 감쌌습니다.
+                .userNickName(user.getUserNickName())
+                .userTag(user.getUserTag())
+                .snsType(user.getSnsType())
+                .build();
     }
 
     private UserDTO convertEntityToSimpleDTO(User user) {
@@ -97,4 +118,9 @@ public class UserService {
 
 
 
+
+
 }
+
+
+
