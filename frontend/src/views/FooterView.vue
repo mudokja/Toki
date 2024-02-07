@@ -33,6 +33,7 @@
   width: 100%;
 
 
+
 }
 
 .footer-content {
@@ -41,10 +42,15 @@
   align-items: flex-start;
 }
 
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+
+/* html {
+  position: relative;
+  min-height: 100%;
 }
+
+body {
+  margin-bottom: 200px; 
+} */
+
 
 </style>

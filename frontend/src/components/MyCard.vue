@@ -13,7 +13,7 @@
     </v-img>
 
     <v-card-subtitle class="pt-4">
-      Number {{ item }}
+      Number {{ props.item }}
     </v-card-subtitle>
 
     <v-card-text>
@@ -36,13 +36,16 @@
 </template>
 
 <script setup>
-defineProps({
+import { onMounted } from "vue"
+
+const props = defineProps({
   item: {
     type: [Number, Object],
     required: true,
   },
   index: Number
 })
+
 
 
 </script>

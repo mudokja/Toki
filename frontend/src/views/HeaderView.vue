@@ -1,37 +1,64 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, watchEffect, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import LoginButton from '@/components/buttons/LoginButton.vue';
 import SideVarButton from '@/components/buttons/SideVarButton.vue';
 import BroadcastButton from '@/components/buttons/BroadcastButton.vue';
+import router from '@/router/index.js';
 
 
-const isLoggedIn = ref(true)
+
+const isLoggedIn = ref(false)
 const search = ref('')
-const tokenCheck = localStorage.accessToken
 
-const loginCheck = (value) => {
-  if(value) {
-    isLoggedIn.value = true
-  } else {
-    isLoggedIn.value = false
-  }
+const updateLoginStatus = () => {
+  isLoggedIn.value = !!localStorage.getItem('accessToken')
 }
+
+watchEffect(() => {
+  updateLoginStatus()
+})
 
 const logout = () => {
   localStorage.removeItem('accessToken')
-  isLoggedIn.value = false
-  
+  localStorage.removeItem('userId')
+  localStorage.removeItem('auth')
+  // 로그아웃 후 홈으로 리디렉션
+  router.go(0)
 }
 
 
-onMounted(() => {
-  loginCheck(tokenCheck)
+// const tokenCheck = localStorage.accessToken
 
-})
+// const loginCheck = (value) => {
+//   if(value) {
+//     isLoggedIn.value = true
+    
+//   } else {
+//     isLoggedIn.value = false
+    
+//   }
+// }
+
+// const logout = () => {
+//   localStorage.removeItem('accessToken')
+//   localStorage.removeItem('userId')
+//   localStorage.removeItem('auth')
+//   isLoggedIn.value = false
+//   router.push('/')
+  
+// }
+
+
+// onMounted(() => {
+//   loginCheck(tokenCheck)
+// })
+
+
 </script>
 
 <template>
-  <v-row>
+  
     <div class="menu">
       <v-col
       cols="1"
@@ -94,35 +121,13 @@ onMounted(() => {
       <FooterComponent/>
     </v-app> -->
     
-  </v-row>
+  
 </template>
 
 <style scoped>
 .menu {
-    /* position: fixed; 
-  top: 0; 
-  left: 0; 
-  width: 100%; 
-  background-color: #FFF; 
-  z-index: 1000; 
-  margin-top: 0; 
-  column-gap: 10px; 
-  display: flex;
-  justify-content: space-evenly;
-  padding: 10px 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);  */
-    /* position: fixed;
-    display: flex;
-    left: 0;
-    width: 100%;
-    margin-top: 1px;
-    height: 80px;
-    background-color:#FFF;
-    margin-bottom: 50px;
-    justify-content:space-evenly;
-    align-items: center;
-    margin: auto; */
-    position: fixed; /* 고정 위치 */
+  white-space: nowrap;
+  position: fixed; /* 고정 위치 */
   top: 0; /* 상단에 위치 */
   left: 0; /* 왼쪽 끝에서 시작 */
   right: 0; /* 오른쪽 끝까지 연장 */

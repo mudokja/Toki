@@ -8,7 +8,7 @@ const local = localaxios();
 
 async function blackListsearch(success, fail) {
     await local.get('/api/v1/blacklist')
-        .then(success)        
+        .then(success)
         .catch(fail)
 }
 

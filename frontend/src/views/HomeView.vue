@@ -37,7 +37,8 @@ const load = async ({ done }) => {
 
 <template>
   <v-app>
-
+    
+    
     <v-container 
       fluid 
       style="margin-top: 80px; padding-top: 60px; margin-bottom: 200px;"
@@ -65,7 +66,10 @@ const load = async ({ done }) => {
         
       </v-infinite-scroll>
     </v-container>
+    
 
+
+    
   </v-app>
   <main>
   </main>

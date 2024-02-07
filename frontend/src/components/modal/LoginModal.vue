@@ -89,8 +89,8 @@ const loginWithNaver = () => {
                 </v-sheet>
                 <v-sheet>
                     <v-card-text class="text-center">
-                        <button id="naverIdLogin_loginButton" href="#">
-                            <img src="https://static.nid.naver.com/oauth/big_g.PNG" width=320 @click="loginWithNaver">
+                        <button id="naverIdLogin_loginButton" href="#" @click="loginWithNaver">
+                            <img src="https://static.nid.naver.com/oauth/big_g.PNG" width=320>
                         </button>
                     </v-card-text>
                     <v-card-text class="text-center">
