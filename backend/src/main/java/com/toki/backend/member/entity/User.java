@@ -56,11 +56,12 @@ public class User {
 	LocalDateTime deleteAt;
 	String birthYear;
 	String profileImageUrl;
+	String selfInfo; //자기소개를 의미합니다.
 
 
 
 	@Builder
-	public User(String userPk, String userNickName, String birthYear, String profileImageUrl, String userId, Role userRole, String userName, String userEmail, Integer userTag, Integer snsType) {
+	public User(String userPk, String userNickName, String birthYear, String profileImageUrl, String userId, Role userRole, String userName, String userEmail, Integer userTag, Integer snsType, String selfInfo) {
 		this.userPk = userPk;
 		this.userId = userId;
 		this.userRole = userRole;
@@ -71,5 +72,6 @@ public class User {
 		this.snsType= snsType;
 		this.profileImageUrl=profileImageUrl;
 		this.userTag = userTag;
+		this.selfInfo=selfInfo; //추가된 부분. (자기소개)
 	}
 }

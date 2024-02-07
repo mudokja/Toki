@@ -24,11 +24,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final BadgeService badgeService ;
 
-    // 유저 정보 상세 조회(이메일, 가입일자, 로그인타입, 배지)
+
+    //상세조회? : 닉네임, 유저태그, sns타입, 생성일자, 프로필 이미지 URL, 자기소개, 배지 (7개)
+
     public UserDTO getUserDetailInfo(String userPk) {
         // userPk로 회원 정보 조회
         User user = (User) userRepository.findByUserPk(userPk)
-                .orElseThrow(() -> new EntityNotFoundException("UserPk에 맞는 회원이 없습니다 : " + userPk));
+                .orElseThrow(() -> new EntityNotFoundException("UserPk에 해당하는 회원이 없습니다 : " + userPk));
 
         // 배지 정보 가져오기
         List<BadgeDTO> badges = badgeService.getBadgesByUserPk(userPk);
@@ -41,7 +43,7 @@ public class UserService {
     public UserDTO getUserSimpleInfo(String userPk) {
         // userPk로 회원 정보 조회
         User user = (User) userRepository.findByUserPk(userPk)
-                .orElseThrow(() -> new EntityNotFoundException("UserPk에 맞는 회원이 없습니다 :" + userPk));
+                .orElseThrow(() -> new EntityNotFoundException("UserPk에 해당하는 회원이 없습니다 :" + userPk));
 
         // Member 엔티티를 MemberDTO로 변환
         return convertEntityToSimpleDTO(user);
@@ -61,7 +63,7 @@ public class UserService {
                 .userRole(String.valueOf(user.getUserRole())) //오류 발생하여 valueOf로 감쌌습니다.
                 .userNickName(user.getUserNickName())
                 .userTag(user.getUserTag())
-                .snsType(user.getSnsType())
+                .selfInfo(user.getSelfInfo()) // 자기소개 정보 추가
                 .build();
     }
 
@@ -88,6 +90,7 @@ public class UserService {
                 .snsType(user.getSnsType())
                 .profileImageUrl(user.getProfileImageUrl())
                 .birthYear(user.getBirthYear())
+                .selfInfo(user.getSelfInfo()) // 자기소개 정보 추가
                 .build();
     }
 
@@ -98,10 +101,10 @@ public class UserService {
         User user = (User) userRepository.findByUserPk(userPk)
                 .orElseThrow(() -> new EntityNotFoundException("UserPk에 맞는 회원이 없습니다 : " + userPk));
 
-        // 업데이트할 정보 설정(닉네임,프로필URL,E-mail)
+        // 업데이트할 정보 설정(닉네임,프로필URL,E-mail대신에 셀프인포(자기소개)로 대체)
         user.setUserNickName(request.getUserNickname());
         user.setProfileImageUrl(request.getProfileImageUrl());
-        user.setUserEmail(request.getUserEmail());
+        user.setSelfInfo(request.getSelfInfo()); // 자기소개 정보 추가
 
         // 엔티티 저장
         User updatedUser = userRepository.save(user);

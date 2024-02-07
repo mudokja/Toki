@@ -17,7 +17,7 @@ public class OtherUserDTO { //여기에선 타인의 정보를 조회할 시 반
     private String userRole;          // 사용자 역할 (ADMIN, USER 등)
     private String userNickName;    // 사용자 닉네임
     private Integer userTag;         // 사용자 식별을 위한 태그
-    private Integer snsType;        // 소셜 미디어 타입
+    private String selfInfo;        // 자기소개
 
     //위와같이 4가지 반환.
 
