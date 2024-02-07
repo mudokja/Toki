@@ -1,4 +1,6 @@
 <template>
+  <v-app>
+
     <v-footer class="footer bg-indigo-lighten-1">
       <div class="footer-content">
         <div class="text-h4 text-left mt-4 mb-6">
@@ -14,6 +16,7 @@
         </div>
       </div>
     </v-footer>
+  </v-app>
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
 </template>
   
