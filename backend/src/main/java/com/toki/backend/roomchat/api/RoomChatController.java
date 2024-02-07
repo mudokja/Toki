@@ -1,10 +1,8 @@
 package com.toki.backend.roomchat.api;
 
-import com.toki.backend.roomchat.dto.request.RoomChatRequestDto;
-import com.toki.backend.roomchat.entity.RoomChat;
+import com.toki.backend.roomchat.dto.request.RoomChatRequestMessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -21,7 +19,7 @@ public class RoomChatController {
     private final SimpMessageSendingOperations sendingOperations;
 
     @MessageMapping("/room/enter")
-    public void enter(@Payload RoomChatRequestDto roomChatRequestDto, SimpMessageHeaderAccessor headerAccessor) {
+    public void enter(@Payload RoomChatRequestMessageDto roomChatRequestDto, SimpMessageHeaderAccessor headerAccessor) {
 
 
 
@@ -29,7 +27,7 @@ public class RoomChatController {
 
 
     @MessageMapping("/chat/sendMessage")
-    public void sendMessage(@Payload RoomChatRequestDto roomChatRequestDto) {
+    public void sendMessage(@Payload RoomChatRequestMessageDto roomChatRequestDto) {
         sendingOperations.convertAndSend("/subChat/room");
 
     }

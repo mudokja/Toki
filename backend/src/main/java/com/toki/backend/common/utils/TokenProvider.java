@@ -90,6 +90,14 @@ public class TokenProvider {
 
         return null;
     }
+    public static String resolveToken(String bearerToken) {
+
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+
+        return null;
+    }
     public String createAccessToken(String userId, Collection<? extends GrantedAuthority> authorities, Integer snsType) {
         String authoritiesString = authorities.stream()
                 .map(GrantedAuthority::getAuthority)
