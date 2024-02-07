@@ -1,8 +1,6 @@
   
 <script setup>
 import { ref } from 'vue'
-// import { bannerRead, bannerCreate } from '@/js/CommonAxios';
-import axios from 'axios';
 
 const files = ref([])
 
@@ -11,10 +9,13 @@ const rules = ref([
     value => !value || !value.length || value[0].size < 2000000 || 'Avatar size should be less than 2 MB!',
 ])
 
+const fileSubmit = () => {
+  console.log('file upload')
+}
 </script>
 
 <template>
-  <form @submit.prevent>
+  <form @submit.prevent class="mt-4">
   <v-file-input
     v-model="files"
     :rules="rules"
@@ -22,11 +23,11 @@ const rules = ref([
     color="blue-lighten-1"
     counter
     label="File Image input"
-    multiple
     prepend-icon="mdi-camera"
     variant="outlined"
     :show-size="1000"
-    @change="handleFileChange2(files)"
+    clear-icon="mdi-upload"
+    :on-click:clear="fileSubmit"
   >
     <template v-slot:selection="{ fileNames }">
       <template v-for="(fileName) in fileNames" :key="fileName">
@@ -36,10 +37,11 @@ const rules = ref([
       </template>
     </template>
   </v-file-input>
+  <p class="mt-3">2mb 이내의 JPEG, PNG, BMP 형식이어야 합니다.</p>
   </form>  
   
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
-  </template>
+</template>
   
 
 <style scoped>

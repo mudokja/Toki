@@ -1,25 +1,60 @@
 <script setup>
 import { ref } from 'vue'
 
-const dialogData = ref('')
-const dialog = ref(false)
-const items = ref([
-  { text: '아이디', icon: 'mdi-account' },
-  { text: '아이디 닉네임', icon: 'mdi-account' },
-  { text: '아이디 or 닉네임', icon: 'mdi-account' },
+// 전체 유저 목록 GET axios
+const userList = ref([
+  { text: '싸', icon: 'mdi-account' },
+  { text: '싸피', icon: 'mdi-account' },
+  { text: 'ssafy', icon: 'mdi-account' },
+  { text: 'SSAFY', icon: 'mdi-account' },
+  { text: 'sa', icon: 'mdi-account' },
 ])
+
+// 유저 검색할 때, 키워드
+const inputValue = ref()
+
+// 유저 검색 후, 선택한 유저
+const dialogData = ref('')
+
+// 유저 검색 모달창, On / Off 변수
+const dialog = ref(false)
+
+// 유저 검색 모달창 '친구 추가' 클릭
+const dialogOk = function(dialogData){
+  console.log(dialogData, '블랙리스트 추가 됨')
+  dialog.value = false
+}
+
+// 유저 검색 모달창 '닫기' 클릭
+const dialogClose = function(){
+  dialog.value = false
+}
+
+// 검색된 유저 목록
+const items = ref([])
+
+const searchUser = function(inputValue) {
+  for (const user of userList.value) {
+    if (user.text.indexOf(inputValue)) {
+      continue
+    } else {
+      items.value.push(user)
+    }
+  }
+}
 
 const loaded = ref(false)
 const loading = ref(false)
-const onSearch = function() {
-    loading.value = true
 
-    setTimeout(() => {
-        loading.value = false
-        loaded.value = true
-    }, 2000)
+const onSearch = function(user) {
+  loading.value = true
+
+  setTimeout(() => {
+    loading.value = false
+    loaded.value = true
+  }, 2000)
+  searchUser(user)
 }
-
 </script>
 
 <template>
@@ -28,8 +63,8 @@ const onSearch = function() {
       <template v-slot:activator="{ props }">
         <v-btn color="grey" v-bind="props">블랙리스트 추가</v-btn>
       </template>
-      <v-card style="width: 300px;">
-        <v-card-title>유저 검색</v-card-title>
+      <v-card style="width: 500px;">
+        <v-card-title class="ml-3 mt-3">유저 검색</v-card-title>
 
         <!-- 검색 창 -->
         <v-card-text>
@@ -41,8 +76,9 @@ const onSearch = function() {
             append-inner-icon="mdi-magnify"
             single-line
             hide-details
-            @click:append-inner="onSearch"
-            @keyup.enter="onSearch"
+            v-model="inputValue"
+            @click:append-inner="onSearch(inputValue)"
+            @keyup.enter="onSearch(inputValue)"
           ></v-text-field>
         </v-card-text>    
 
@@ -64,13 +100,12 @@ const onSearch = function() {
             <v-list-item-title v-text="item.text"></v-list-item-title>
           </v-list-item>
           <v-divider></v-divider>
-
-        <!-- 유저 추가 버튼 -->
+          
           <v-card-actions>
-            <v-btn color="grey-darken-3" variant="text" @click="dialog = false">
+            <v-btn color="grey-darken-1" variant="text" @click="dialogClose()">
               닫기
             </v-btn>
-            <v-btn color="grey-darken-3" variant="text" @click="dialog = false">
+            <v-btn color="grey-darken-1" variant="text" @click="dialogOk(dialogData)">
               블랙리스트 추가
             </v-btn>
           </v-card-actions>

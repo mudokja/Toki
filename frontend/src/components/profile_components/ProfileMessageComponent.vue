@@ -1,40 +1,40 @@
 <script setup>
 import { ref } from 'vue'
-import ProfileBlacklistCreateModal from '@/components/modal/ProfileBlacklistCreateModal.vue';
+import ProfileMessageCreateModal from '@/components/modal/ProfileMessageCreateModal.vue';
 
 const items = ref([
   {
     id: 1,
     prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
     title: '아이디 or 닉네임',
-    subtitle: `<span class="text-primary">자기 소개</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
+    subtitle: `<span class="text-primary">쪽지 내용</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
   },
   {
     id: 2,
     prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
     title: '아이디 or 닉네임',
-    subtitle: `<span class="text-primary">자기 소개</span> &mdash; Wish I could come, but I'm out of town this weekend.`,
+    subtitle: `<span class="text-primary">쪽지 내용</span> &mdash; Wish I could come, but I'm out of town this weekend.`,
   },
   {
     id: 3,
     prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
     title: '아이디 or 닉네임',
     subtitle:
-      '<span class="text-primary">자기 소개</span> &mdash; Do you have Paris recommendations? Have you ever been?',
+      '<span class="text-primary">쪽지 내용</span> &mdash; Do you have Paris recommendations? Have you ever been?',
   },
   {
     id: 4,
     prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
     title: '아이디 or 닉네임',
     subtitle:
-      '<span class="text-primary">자기 소개</span> &mdash; Have any ideas about what we should get Heidi for her birthday?',
+      '<span class="text-primary">쪽지 내용</span> &mdash; Have any ideas about what we should get Heidi for her birthday?',
   },
   {
     id: 5,
     prependAvatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
     title: '아이디 or 닉네임',
     subtitle:
-      '<span class="text-primary">자기 소개</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.',
+      '<span class="text-primary">쪽지 내용</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.',
   },
 ])
 </script>
@@ -45,12 +45,12 @@ const items = ref([
       <v-col offset="1" cols="10">
         <v-card class="mx-auto">
           <div class="mt-7 mb-4 mr-10">
-            <!-- 블랙리스트 추가 버튼 -->
-            <ProfileBlacklistCreateModal/>
+            <!-- 쪽지 보내기 버튼 -->
+            <ProfileMessageCreateModal/>
           </div>
           <div class="v-list v-theme--light v-lt--density-default v-list--three-line" tabindex="0" role="listbox">
             <div class="v-list-subheader" type="subheader">
-              <div class="v-list-subheader__text ml-2">블랙 리스트</div>
+              <div class="v-list-subheader__text ml-2">쪽지 보관함</div>
             </div>
             <template v-for="item in items" :key="item.id">
               <div v-ripple class="v-list-item v-theme--light v-list-item--density-default v-list-item--three-line v-list-item--variant-text">
@@ -72,12 +72,12 @@ const items = ref([
                   <div class="v-list-item-subtitle">
                     <div class="d-flex justify-space-between">
                       <div>
-                        <!-- 자기 소개 -->
-                        <span class="text-primary">자기 소개</span>
-                        <!-- 자기 소개 내용 -->
+                        <!-- 쪽지 제목 -->
+                        <span class="text-primary">쪽지 제목</span>
+                        <!-- 쪽지 내용 -->
                         {{ item.subtitle }}
                       </div>
-                      <v-btn class="ma-1 ml-7" color="blue-grey-lighten-5">블랙리스트 삭제</v-btn>
+                      <v-btn class="ma-1 ml-7" color="deep-purple-lighten-5">쪽지 삭제</v-btn>
                     </div>
                   </div>
                 </div>
@@ -89,9 +89,9 @@ const items = ref([
     </v-row>
   </v-container>
 </template>
-  
 
-  
-  <style scoped>
 
-  </style>
+
+<style scoped>
+
+</style>

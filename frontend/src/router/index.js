@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { jwtDecode } from 'jwt-decode'
+import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,18 +26,30 @@ const router = createRouter({
       name: 'success',
       component: () => import('../views/SuccessView.vue')
     },
+    {
+      path: '/detail/:detail',
+      name: 'detail',
+      component: () => import('../views/DetailView.vue')
+    },
+    {
+      path: '/about',
+      name: 'about',
+      component: () => import('../views/AboutView.vue')
+    }
   ]
 })
 
 router.beforeEach((to, from, next) => {
-  console.log(to.query)
+  const authStore = useAuthStore()
   const { resultCode, token } = to.query
+
   if (resultCode && token) {
-    if (resultCode === '200') {
-      localStorage.setItem('accessToken', token)
-      next('/success')
-    } else {
+    if (resultCode === '200') {      
+      authStore.setToken(token)
+      
       next('/')
+    } else {
+      next('/success')
     }
   } else {
     next()

@@ -1,5 +1,6 @@
 import axios from "axios";
 const { VITE_VUE_API_URL, VITE_ELECTRIC_CHARGING_STATION_URL } = import.meta.env;
+const token = localStorage.getItem('accessToken')
 function localaxios(){
 const instance = axios.create({
     baseURL: "http://192.168.31.238:8081",
@@ -13,7 +14,7 @@ const instance = axios.create({
     withCredentials:true
 })
 //request시  아래
-instance.defaults.headers.common["Authorization"]="";
+instance.defaults.headers.common["Authorization"]=`Bearer ${token}`;
 instance.defaults.headers.post["Content-Type"]="application/json";
 instance.defaults.headers.put["Content-Type"]="appication/json"
 return instance;

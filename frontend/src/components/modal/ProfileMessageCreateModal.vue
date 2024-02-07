@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import ProfileMessageSendModal from '@/components/modal/ProfileMessageSendModal.vue'
 
 // 전체 유저 목록 GET axios
 const userList = ref([
@@ -61,7 +62,7 @@ const onSearch = function(user) {
   <v-row justify="end">
     <v-dialog v-model="dialog" scrollable width="auto">
       <template v-slot:activator="{ props }">
-        <v-btn color="primary" v-bind="props">친구 추가</v-btn>
+        <v-btn color="purple" v-bind="props">쪽지 보내기</v-btn>
       </template>
       <v-card style="width: 500px;">
         <v-card-title class="ml-3 mt-3">유저 검색</v-card-title>
@@ -102,11 +103,12 @@ const onSearch = function(user) {
           <v-divider></v-divider>
           
           <v-card-actions>
-            <v-btn color="blue-darken-1" variant="text" @click="dialogClose()">
+            <v-btn color="purple-darken-1" variant="text" @click="dialogClose()">
               닫기
             </v-btn>
-            <v-btn color="blue-darken-1" variant="text" @click="dialogOk(dialogData)">
-              친구 추가
+            <ProfileMessageSendModal/>
+            <v-btn color="purple-darken-1" variant="text" @click="dialogOk(dialogData)">
+              쪽지 보내기
             </v-btn>
           </v-card-actions>
         </v-list>
