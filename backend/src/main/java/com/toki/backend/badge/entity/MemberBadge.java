@@ -22,7 +22,7 @@ public class MemberBadge {
 
     @ManyToOne
     @JoinColumn(name = "member_id")
-    private Member member; //아직 수정 안되었음..
+    private Member member; //아직 수정 안되었음.....g
 
     @ManyToOne
     @JoinColumn(name = "badge_id")
