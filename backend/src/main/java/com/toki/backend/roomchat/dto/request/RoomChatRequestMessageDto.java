@@ -9,6 +9,7 @@ import lombok.Getter;
 public class RoomChatRequestMessageDto extends RoomChatMessageDto {
 
     RoomChatType roomChatType;
+    String sendTO="ALL";
     @Builder
     public RoomChatRequestMessageDto(String roomChatPk, String fromUser, String content, RoomChatType roomChatType) {
         super(roomChatPk, fromUser, content);

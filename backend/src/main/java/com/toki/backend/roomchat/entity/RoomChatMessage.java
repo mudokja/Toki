@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.redis.core.RedisHash;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 @RedisHash(value = "room_chat")
 @Getter
 @NoArgsConstructor
+@ToString
 public class RoomChatMessage {
     @Id
     private String RoomChatPk;

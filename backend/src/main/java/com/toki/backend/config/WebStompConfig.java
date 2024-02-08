@@ -1,6 +1,6 @@
 package com.toki.backend.config;
 
-import com.toki.backend.roomchat.service.ChatHandler;
+import com.toki.backend.roomchat.service.RoomChatHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -14,7 +14,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @RequiredArgsConstructor
 public class WebStompConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final ChatHandler chatHandler;
+    private final RoomChatHandler roomChatHandler;
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
@@ -32,6 +32,6 @@ public class WebStompConfig implements WebSocketMessageBrokerConfigurer {
     // 인증필터 예정지...
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration){
-        registration.interceptors(chatHandler);
+        registration.interceptors(roomChatHandler);
     }
 }

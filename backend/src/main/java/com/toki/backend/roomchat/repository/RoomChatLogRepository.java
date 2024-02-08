@@ -11,4 +11,6 @@ import org.springframework.data.repository.Repository;
 public interface RoomChatLogRepository extends CrudRepository<RoomChatLog, Long> {
     Integer countByRoomChatPk(String roomPk);
 
+
+
 }

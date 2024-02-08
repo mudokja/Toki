@@ -35,7 +35,7 @@ public class RedisRoomChatSubscriber implements MessageListener {
                                 .roomChatPk(roomChatRequestDto.getRoomChatPk())
                         .content(roomChatRequestDto.getContent())
                                         .build();
-                messagingTemplate.convertAndSend("/subChat/room/" + roomChatRequestDto.getRoomChatPk(), roomChatResponseDto);
+                messagingTemplate.convertAndSend("/room/" + roomChatRequestDto.getRoomChatPk(), roomChatResponseDto);
             }
 
 

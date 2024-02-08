@@ -7,13 +7,17 @@ import com.toki.backend.roomchat.dto.response.RoomChatResponseMessageDto;
 import com.toki.backend.roomchat.entity.RoomChatMessage;
 import com.toki.backend.roomchat.repository.RoomChatMessageRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class RoomChatService {
     private final RoomChatMessageRepository roomChatMessageRepository;
     private final RedisTemplate<String, String> redisTemplate;
@@ -22,13 +26,14 @@ public class RoomChatService {
 
     @Transactional
     public void sendMessage(RoomChatRequestMessageDto roomChatRequestDto, String userPk) {
-        RoomChatMessage roomChatMssage = roomChatMessageRepository.findById(roomChatRequestDto.getRoomChatPk()).orElseThrow(Exception::new);
+
 
         //채팅 생성 및 저장
         RoomChatMessage roomChatMessage = RoomChatMessage.builder()
                 .roomChatPk(roomChatRequestDto.getRoomChatPk())
                 .chatType(roomChatRequestDto.getRoomChatType())
                 .fromUser(userPk)
+                .sendTo(roomChatRequestDto.getSendTO())
                         .build();
         roomChatMessageRepository.save(roomChatMessage);
         String topic = channelTopic.getTopic();
@@ -43,7 +48,8 @@ public class RoomChatService {
         }
     }
     public void deleteAndUpdateRoomChatLog(String roomChatPk){
-            Iterable<RoomChatMessage> roomChatMessageRepository.findAllById(roomChatPk);
+            List<RoomChatMessage> roomChatList=roomChatMessageRepository.findAllByRoomChatPk(roomChatPk);
+            log.debug(roomChatList.toString());
 
 
     }
