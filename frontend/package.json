@@ -12,6 +12,7 @@
   "dependencies": {
     "@jamescoyle/vue-icon": "^0.1.2",
     "@mdi/js": "^7.4.47",
+    "@stomp/stompjs": "^7.0.0",
     "axios": "^1.6.5",
     "kurento-utils": "^7.0.0",
     "pinia": "^2.1.7",
@@ -20,7 +21,8 @@
     "vue": "^3.3.11",
     "vue-router": "^4.2.5",
     "vuetify": "^3.5.1",
-    "webrtc-adapter": "^8.2.3"
+    "webrtc-adapter": "^8.2.3",
+    "websocket": "^1.0.34"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",

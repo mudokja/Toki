@@ -2,20 +2,20 @@ import { Participant } from './Participant';
 //const kurentoUtils = require('kurento-utils');
 import kurentoUtils from 'kurento-utils';
 import adapter from 'webrtc-adapter';
+import UserDisplayVue from './UserDisplay.vue';
 adapter
-var participants = {};
-var name;
-const ws = new WebSocket('wss://i10b205.p.ssafy.io/ws/room');
-//const ws = new WebSocket('wss://localhost:8443/groupcall');
-
-window.onbeforeunload = function() {
+let participants = {};
+let name;
+//const ws = new WebSocket('wss://i10b205.p.ssafy.io/ws/room');
+const ws = new WebSocket('wss://localhost:8443/groupcall');
+ window.onbeforeunload = function() {
 	ws.close();
 };
-
-ws.onmessage = function(message) {
-	var parsedMessage = JSON.parse(message.data);
+ws.onmessage =(message)=> {
+	let parsedMessage = JSON.parse(message.data);
 	console.info('Received message: ' + message.data);
 	console.dir("여기온 메세지"+message);
+	console.dir(ws.CONNECTING);
 	switch (parsedMessage.id) {
 	case 'existingParticipants':
 		onExistingParticipants(parsedMessage);
@@ -43,13 +43,14 @@ ws.onmessage = function(message) {
 }
 
 const register=(data)=> {///////////////////////////1방 이름이랑 생성함
-	 name = data.name;
+	 
+	name = data.name;
 	let room = data.room;
 	document.getElementById('room-header').innerText = 'ROOM ' + room;
 	document.getElementById('join').style.display = 'none';
 	document.getElementById('room').style.display = 'block';
 	console.dir("이름이",name);
-	var message = {///////////////메세지 만들고
+	let message = {///////////////메세지 만들고
 		id : 'joinRoom',
 		name : name,
 		room : room,
@@ -79,7 +80,7 @@ function callResponse(message) {
 }
 
 function onExistingParticipants(msg) {
-	var constraints = {
+	let constraints = {
 		audio : true,
 		video : {
 			mandatory : {
@@ -91,10 +92,10 @@ function onExistingParticipants(msg) {
 	};
 
 	console.log(name + " registered in room " + room);
-	var participant = new Participant(name);
+	let participant = new Participant(name);
 	participants[name] = participant;
-	var video = participant.getVideoElement();
-	var options = {
+	let video = participant.getVideoElement();
+	let options = {
 	      localVideo: video,
 	      mediaConstraints: constraints,
 	      onicecandidate: participant.onIceCandidate.bind(participant)
@@ -115,23 +116,20 @@ function leaveRoom() {
 		id : 'leaveRoom'
 	});
 
-	for ( var key in participants) {
+	for ( let key in participants) {
 		participants[key].dispose();
 	}
-
-	document.getElementById('join').style.display = 'block';
-	document.getElementById('room').style.display = 'none';
 
 	ws.close();
 }
 
 function receiveVideo(sender) {
-	var participant = new Participant(sender);
+	let participant = new Participant(sender);
 	console.dir("비디오는 되냐")
 	participants[sender] = participant;
-	var video = participant.getVideoElement();
+	let video = participant.getVideoElement();
 
-	var options = {
+	let options = {
       remoteVideo: video,
       onicecandidate: participant.onIceCandidate.bind(participant)
     }
@@ -146,13 +144,13 @@ function receiveVideo(sender) {
 
 function onParticipantLeft(request) {
 	console.log('Participant ' + request.name + ' left');
-	var participant = participants[request.name];
+	let participant = participants[request.name];
 	participant.dispose();
 	delete participants[request.name];
 }
 
 function sendMessage(message) {
-	var jsonMessage = JSON.stringify(message);
+	let jsonMessage = JSON.stringify(message);
 	console.log('Sending message: ' + jsonMessage);
 	ws.send(jsonMessage);
 }
@@ -170,5 +168,4 @@ export{
 	onExistingParticipants,
 	callResponse,
 	onNewParticipant,
-	
 }

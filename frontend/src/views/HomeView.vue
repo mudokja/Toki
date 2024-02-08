@@ -8,7 +8,6 @@ import { commonaxios, postaxios } from '@/js/CommonAxios';
 
 // 데이터 상태 변수
 const items = ref(Array.from({ length: 48 }, (_, v) => v + 1));
-var ws = new WebSocket('wss://192.168.31.190:8443/groupcall');
 
 
 

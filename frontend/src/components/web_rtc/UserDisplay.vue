@@ -2,101 +2,87 @@
 import { commonaxios,commonpostaxios } from '@/js/CommonAxios';
 import adapter from 'webrtc-adapter';
 import kurentoUtils from 'kurento-utils';
-import {register ,leaveRoom,onExistingParticipants,onNewParticipant,onParticipantLeft,receiveVideoResponse} from './WebRTC'
+import {register ,leaveRoom,onExistingParticipants,onNewParticipant,onParticipantLeft,receiveVideoResponse,sendMessage} from './WebRTC'
 import { Participant } from './Participant';
 import { ref,watch,onMounted } from 'vue';
-const { VITE_VUE_API_URL, VITE_ELECTRIC_CHARGING_STATION_URL } = import.meta.env;
+import {Client} from '@stomp/stompjs';
+import {sendName,disconnect,connect,showGreeting} from './WebChat'
+import { commonaxios1 } from '@/js/Click';
 //const ws = new WebSocket('wss://192.168.31.237:8443/groupcall');
-const data=ref({
-name:"안녕",
+// const ws = new WebSocket('wss://localhost:8443/groupcall');
+//let ws = new WebSocket('ws://localhost:8080/gs-guide-websocket');
+//const ws = new WebSocket('wss://i10b205.p.ssafy.io/ws/room');
+//  const stompClient = new Client({
+
+// 	brokerURL:'ws://localhost:8080/gs-guide-websocket',
+//  })
+ const text4=ref("");
+ const data=ref({
+name:'',
 room:"하하",
 commit:"가냐",
 })
-function sendText(message){
-	var jsonMessage = JSON.stringify(message);
-	console.log('텍스트: ' + jsonMessage);
-	ws.send(jsonMessage);
-	console.log('텍스트: ' + jsonMessage);
+const soclick=()=>{
+connect();
 }
-const message=ref({
-	name:"안녕",
-	room:"하하",
-	message:"안녕하세요",
-})
+const soclick1=()=>{
+	disconnect();
+}
+const soclick2=(te)=>{
+	text4.value=te;
+	console.dir(te);
+	sendName(text4.value);
+}
+const soclick3=(te)=>{
+	data.value.name=te;
+	console.dir(te);
+	console.dir(data);
+}
+
+// function sendText(message){
+// 	var jsonMessage = JSON.stringify(message);
+// 	console.log('텍스트: ' + jsonMessage);
+// 	ws.onopen=()=>ws.send(jsonMessage);
+// 	console.log('텍스트: ' + jsonMessage);
+// }
 const click1=()=>{
-// commonaxios(({data})=>{
-// console.dir(data)
-// },(error)=>{
-// 	console.dir(error)
-// })//
-sendText(message.value.message);
+	//채팅
+getMessage();
 
 }
-// ws.onmessage=(message)=>{
-// 	let parsedMessage = JSON.parse(message.data);
-// 	console.dir("온건바로",parsedMessage);
-// }
 const click2=()=>{
-	
-// commonpostaxios(data.value,(response)=>{
-// console.dir(response)
-// },(error)=>{
-// 	console.dir(error)
-// })
+	//채팅 확인
+	console.dir(text4.value);
 }
 const click3=()=>{
-	//let ws = new WebSocket('wss://localhost:8443/groupcall');
+	
 	register(data.value);
 	
 }
 const click4=()=>{
-	leaveRoom();
+	leaveRoom(); 
+	
 }
 onMounted(()=>{
 	
+
 	console.dir("지금");
-	//register(data.value);
+	//ws.onopen=()=>register(data.value);
 	//click3();
 })
-// watch((message)=>{
-// 	ws.onmessage = function(message) {
-// 	var parsedMessage = JSON.parse(message.data);
-// 	console.info('Received message: ' + message.data);
-// 	console.dir("여기온 메세지"+message);
-// 	switch (parsedMessage.id) {
-// 	case 'existingParticipants':
-// 		onExistingParticipants(parsedMessage);
-// 		break;
-// 	case 'newParticipantArrived':
-// 		onNewParticipant(parsedMessage);
-// 		break;
-// 	case 'participantLeft':
-// 		onParticipantLeft(parsedMessage);
-// 		break;
-// 	case 'receiveVideoAnswer':
-// 		receiveVideoResponse(parsedMessage);
-// 		break;
-// 	case 'iceCandidate':
-// 		participants[parsedMessage.name].rtcPeer.addIceCandidate(parsedMessage.candidate, function (error) {
-// 	        if (error) {
-// 		      console.error("Error adding candidate: " + error);
-// 		      return;
-// 	        }
-// 	    });
-// 	    break;
-// 	default:
-// 		console.error('Unrecognized message', parsedMessage);
-// 	}
-// }
-// })
+
 </script>
 
 <template>
-	
-    <div >
-        <video src="" width="200" height="200" id="display"></video>
-    </div>
-    안녕하세여<button @click="click1">get버튼</button><button @click="click2">post버튼</button><button @click="click3">보내기 버튼</button><button @click="click4">떠나기 버튼</button>
+<button @click="soclick">connect</button>
+<button @click="soclick1">disconnect</button>
+<div>메세지<input type="text" v-model="text" v-on:keyup.enter="soclick2(text)">
+</div>
+	<button @click="click1">메세지 가져오기 버튼</button>
+	<button @click="click2">메세지 확인 버튼</button>
+	<div>이름<input type="text" v-model="text1" v-on:keyup.enter="soclick3(text1)">
+	</div><button @click="click3">보내기 버튼</button>
+	<button @click="click4">떠나기 버튼</button>
 <body>
 	<div id="container">
 		<div id="wrapper">

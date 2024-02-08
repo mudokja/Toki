@@ -2,7 +2,7 @@ import axios from "axios";
 const { VITE_VUE_API_URL, VITE_ELECTRIC_CHARGING_STATION_URL } = import.meta.env;
 function localaxios(){
 const instance = axios.create({
-    baseURL:VITE_VUE_API_URL,
+    baseURL:'http://localhost:8080/gs-guide-websocket',
 
     //응답을 아래 형식으로 받음
     headers:{

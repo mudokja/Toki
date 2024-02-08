@@ -5,13 +5,13 @@ import adapter from 'webrtc-adapter';
 adapter
 function Participant(name) {
 	this.name = name;
-	var container = document.createElement('span');
+	let container = document.createElement('span');
 	container.className = isPresentMainParticipant() ? PARTICIPANT_CLASS : PARTICIPANT_MAIN_CLASS;
 	container.id = name;
-	var span = document.createElement('span');
-	var video = document.createElement('video');
+	let span = document.createElement('span');
+	let video = document.createElement('video');
 	let text = document.createElement('textarea');
-	var rtcPeer;
+	let rtcPeer;
 	
 	container.appendChild(video);
 	container.appendChild(text);
@@ -38,7 +38,7 @@ function Participant(name) {
 	}
 	function switchContainerClass() {
 		if (container.className === PARTICIPANT_CLASS) {
-			var elements = Array.prototype.slice.call(document.getElementsByClassName(PARTICIPANT_MAIN_CLASS));
+			let elements = Array.prototype.slice.call(document.getElementsByClassName(PARTICIPANT_MAIN_CLASS));
 			elements.forEach(function(item) {
 					item.className = PARTICIPANT_CLASS;
 				});
@@ -56,7 +56,7 @@ function Participant(name) {
 	this.offerToReceiveVideo = function(error, offerSdp, wp){
 		if (error) return console.error ("sdp offer error")
 		console.log('Invoking SDP offer callback function');
-		var msg =  { id : "receiveVideoFrom",
+		let msg =  { id : "receiveVideoFrom",
 				sender : name,
 				sdpOffer : offerSdp
 			};
@@ -67,7 +67,7 @@ function Participant(name) {
 	this.onIceCandidate = function (candidate, wp) {
 		  console.log("Local candidate" + JSON.stringify(candidate));
 		  console.dir("이거안되는듯?")
-		  var message = {
+		  let message = {
 		    id: 'onIceCandidate',
 		    candidate: candidate,
 		    name: name
