@@ -44,4 +44,26 @@ public class BadgeController {
                 .build());
     }
 
+    //3. 회원에게 배지 추가.
+    @PostMapping("/api/v1/admin/badges/{userTag}")
+    public ResponseEntity<CommonResponseDto<BadgeDTO>> saveToMember(@PathVariable String userTag, @RequestBody BadgeDTO badgeDTO){
+        BadgeDTO  addBadge = badgeService.saveBadge(badgeDTO);
+        return ResponseEntity.ok(CommonResponseDto.<BadgeDTO>builder()
+                .resultCode(200)
+                .resultMessage(userTag + "회원에게 배지 추가 성공")
+                .data(addBadge)
+                .build());
+
+    }
+
+    // 4. 특정 회원의 배지 조회하기
+    @GetMapping("/api/v1/badges/{userTag}")
+    public ResponseEntity<CommonResponseDto<BadgeDTO>> getBadgeByIdx(@PathVariable String userTag) {
+        List<BadgeDTO> badges = badgeService.findByUserTag(userTag);
+        return ResponseEntity.ok(CommonResponseDto.<BadgeDTO>builder()
+                .resultCode(200)
+                .resultMessage("배지 조회 성공")
+                .data((BadgeDTO) badges)
+                .build());
+    }
 }

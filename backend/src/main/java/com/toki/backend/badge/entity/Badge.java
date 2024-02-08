@@ -21,14 +21,17 @@ public class Badge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private int idx;
+    private int idx; //배지 인덱스
 
     @Column(length = 100)
-    private String name;
+    private String name; //배지 이름
 
     @Column(length = 512)
-    private String imageUrl;
+    private String imageUrl; //배지 이미지
+    
+    @Column
+    private String userTag; //유저태그
 
-    @OneToMany(mappedBy = "badge")
-    private List<MemberBadge> memberBadges;
+//    @OneToMany(mappedBy = "badge")
+//    private List<MemberBadge> memberBadges;
 }

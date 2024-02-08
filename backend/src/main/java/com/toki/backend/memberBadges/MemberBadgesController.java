@@ -33,7 +33,7 @@
 //    }
 //
 //    // 특정 멤버의 모든 배지 정보 조회
-//    @GetMapping("/badges/{memberid}") //지금은 API문서에 특정회원 조회에 대한 내용이 없음 임시로 작성해둔 URI
+//    @GetMapping("/badges/{1}") //지금은 API문서에 특정회원 조회에 대한 내용이 없음 임시로 작성해둔 URI
 //    public ResponseEntity<CommonResponseDto<List<MemberBadgesDTO>>> getMemberBadgesByMemberId(@PathVariable Long memberId) {
 //        List<MemberBadgesDTO> memberBadgesByMemberId = memberBadgesService.getMemberBadgesByMemberId(memberId);
 //        CommonResponseDto<List<MemberBadgesDTO>> response = CommonResponseDto.<List<MemberBadgesDTO>>builder()

@@ -17,11 +17,9 @@ public class BadgeService {
 
     private final BadgeRepository badgeRepository;
 
-    /**
-     * 모든 배지 조회
-     *
-     * @return 모든 배지 목록
-     */
+
+    //모든 배지 조회
+
     public List<BadgeDTO> getAllBadges() {
         List<Badge> badges = badgeRepository.findAll();
         return badges.stream()
@@ -29,24 +27,15 @@ public class BadgeService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 특정 배지 조회
-     *
-     * @param idx 배지 인덱스
-     * @return 조회된 배지
-     */
-    public BadgeDTO getBadgeByIdx(int idx) {
-        Badge badge = badgeRepository.findById(idx).orElse(null);
+
+     //특정 회원이 가지고 있는 배지를 조회.
+    public BadgeDTO getBadgeByIdx(String userTag) {
+        Badge badge = badgeRepository.findById(Integer.valueOf(userTag)).orElse(null);
         return badge != null ? convertEntityToDTO(badge) : null;
     }
 
 
-    /**
-     * 배지 등록
-     *
-     * @param badgeDTO 등록할 배지 정보
-     * @return 등록된 배지
-     */
+    //배지 등록
     public BadgeDTO saveBadge(BadgeDTO badgeDTO) {
         Badge newBadge = Badge.builder()
                 .name(badgeDTO.getName())
@@ -57,18 +46,25 @@ public class BadgeService {
     }
 
 
-    /**
-     * 배지 삭제
-     *
-     * @param idx 삭제할 배지의 인덱스
-     */
+    //배지 삭제
     public void deleteBadge(int idx) {
         badgeRepository.deleteById(idx);
     }
 
-    /**
-     * Entity를 DTO로 변환하는 메서드
-     */
+
+    //특정 회원의 배지 조회하기
+    public List<BadgeDTO> findByUserTag(String userTag) {
+        List<Badge> badges = badgeRepository.findByUserTag(userTag);
+
+        //배지 엔티티를 DTO로 바꿔서 반환하기.
+
+        return badges.stream()
+                .map(this::convertEntityToDTO)
+                .collect(Collectors.toList());
+    }
+
+     // Entity를 DTO로 변환하는 메서드
+
     private BadgeDTO convertEntityToDTO(Badge badge) {
         return new BadgeDTO(
                 badge.getIdx(),
@@ -97,4 +93,7 @@ public class BadgeService {
                 .build();
         return Arrays.asList(badge1, badge2, badge3);
     }
+
+
+
 }

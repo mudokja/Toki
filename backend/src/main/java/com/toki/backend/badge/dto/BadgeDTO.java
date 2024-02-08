@@ -14,11 +14,11 @@ public class BadgeDTO {
 
 
 
-    private int idx;
-    private String name;
-    private String imageUrl;
+    private int idx; //배지 인덱스
+    private String name; //배지 이름
+    private String imageUrl; //배지 이미지 URL
 
-    //상세 유저 조회에서 필요한 내용?
+
 
 
 
