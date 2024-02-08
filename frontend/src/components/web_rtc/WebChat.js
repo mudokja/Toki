@@ -1,14 +1,14 @@
 import {Client} from '@stomp/stompjs';
 import UserDisplayVue from './UserDisplay.vue';
 const stompClient = new Client;
-stompClient.brokerURL='ws://localhost:8080/gs-guide-websocket';
-//stompClient.brokerURL='wss://i10b205.p.ssafy.io/ws/chat';
+//stompClient.brokerURL='ws://localhost:8080/gs-guide-websocket';
+stompClient.brokerURL='wss://i10b205.p.ssafy.io/ws/chat';
 let message;
 stompClient.onConnect = (frame) => {
-    //setConnected(true);
+    setConnected(true);
     console.log('Connected: ' + frame);
-     stompClient.subscribe('/topic/greetings', (greeting) => {
-       // stompClient.subscribe('/pubChat', (greeting) => {
+     //stompClient.subscribe('/topic/greetings', (greeting) => {
+        stompClient.subscribe('/pubChat', (greeting) => {
         message=JSON.parse(greeting.body).content;
         console.dir("메세지뭔데");
     console.dir(message);
@@ -45,15 +45,15 @@ function connect() {
 
 function disconnect() {
     stompClient.deactivate();
-  //  setConnected(false);
+   setConnected(false);
     console.log("Disconnected");
 }
 
 function sendName(value) {
     console.dir(value);
     stompClient.publish({
-        destination: "/app/hello",
-        //destination: "/subChat",
+        //destination: "/app/hello",
+        destination: "/subChat",
         body: JSON.stringify('name'+ value)
     });
     console.dir("보내기");

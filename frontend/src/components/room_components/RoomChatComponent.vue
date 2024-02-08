@@ -1,9 +1,18 @@
 <script setup>
 import { ref,onMounted } from 'vue'
 import {Client} from '@stomp/stompjs';
-const stompClient = new Client;
-// stompClient.brokerURL='ws://localhost:8080/gs-guide-websocket';
-stompClient.brokerURL='ws://ib205.p.ssafy.io/ws/chat';
+// const stompClient = new Client({
+// brokerURL:'ws://192.168.31.190:8081/ws/chat',
+// onConnect:()=>{
+//   console.dir("연결시도");
+//   stompClient.subscribe('/subChat/room',message=>console.dir("왔음",message.body));
+//   stompClient.publish({destination:'/pubChat/room',body:'Frist Messsage'});
+// }
+
+// })
+
+//stompClient.brokerURL='ws://localhost:8080/gs-guide-websocket';
+//stompClient.brokerURL='ws://ib205.p.ssafy.io/ws/chat';
 const items = ref([
     { 'name': '토키1', 'content': 'good day' },
     { 'name': '토키2', 'content': 'bed day' },
@@ -21,7 +30,9 @@ user1.value=value;
 
 //채팅 열자마자 연결
 onMounted(() => {
- connect();
+  
+const ws = new WebSocket('ws://192.168.31.190:8081/ws/chat');
+ //connect();
 })
 
 const message=ref('');
@@ -41,24 +52,24 @@ const clearMessage = function(){
     message.value = ''
 }
 //메세지 받으면
-stompClient.onConnect = (frame) => {
-    //setConnected(true);
-    console.log('Connected: ' + frame);
-     //stompClient.subscribe('/topic/greetings', (data) => {
-        stompClient.subscribe('/pubChat', (greeting) => {
-        receiveMessage(JSON.parse(data.name).content,JSON.parse(data.body).content);
-        console.dir("메세지뭔데");
-    });
-};
+// stompClient.onConnect = (frame) => {
+//     setConnected(true);
+//     console.log('Connected: ' + frame);
+//      //stompClient.subscribe('/topic/greetings', (data) => {
+//         stompClient.subscribe('/subChat/room/1', (greeting) => {
+//         receiveMessage(JSON.parse(data.name).content,JSON.parse(data.body).content);
+//         console.dir("메세지뭔데");
+//     });
+// };
 //에러 
-stompClient.onWebSocketError = (error) => {
-    console.error('Error with websocket', error);
-};
+// stompClient.onWebSocketError = (error) => {
+//     console.error('Error with websocket', error);
+// };
 
-stompClient.onStompError = (frame) => {
-    console.error('Broker reported error: ' + frame.headers['message']);
-    console.error('Additional details: ' + frame.body);
-};
+// stompClient.onStompError = (frame) => {
+//     console.error('Broker reported error: ' + frame.headers['message']);
+//     console.error('Additional details: ' + frame.body);
+// };
 
 //통신 연결
 const connect=()=> {
@@ -73,12 +84,12 @@ const disconnect=()=> {
 }
 //메세지 보내기
 const sendName=(value1)=> {
-    console.dir(value1);
-    console.dir(data.value)
-    console.dir(JSON.stringify(data.value));
+    // console.dir(value1);
+    // console.dir(data.value)
+    // console.dir(JSON.stringify(data.value));
     stompClient.publish({
         //destination: "/app/hello",
-        destination: "/subChat",
+        destination: "/pubChat/room",
         //name: JSON.stringify(data.value.name),
         body: JSON.stringify(data.value)
     });
