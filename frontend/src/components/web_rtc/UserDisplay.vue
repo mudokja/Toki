@@ -84,6 +84,10 @@ onMounted(()=>{
 	</div><button @click="click3">보내기 버튼</button>
 	<button @click="click4">떠나기 버튼</button>
 <body>
+	<div>
+		<input type="text" name="userName" id="userName" v-model="data.name">
+		<div><input type="text" name="tokiroom" id="tokiroom" v-model="data.room"></div>
+	</div>
 	<div id="container">
 		<div id="wrapper">
 			<div id="join" class="animate join">
