@@ -48,9 +48,9 @@ public class TokenProvider {
     @Value("${jwt-config.secret}")
     private String secretKey;
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static String JwtType="Bearer ";
+    public static String jwtType="Bearer ";
     @Value("${JWT-TIME-ZONE:Asia/Seoul}")
-    private String TIME_ZONE;
+    public static String TIME_ZONE;
 
     private static long accessTokenExipredTime=60*30L;
     private static long refreshTokenExpiredTime=60*60*24*3L;
@@ -84,7 +84,7 @@ public class TokenProvider {
     public static String resolveToken(HttpServletRequest request) {
         String bearerToken= request.getHeader("Authorization");
 
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(jwtType)) {
             return bearerToken.substring(7);
         }
 
@@ -92,7 +92,7 @@ public class TokenProvider {
     }
     public static String resolveToken(String bearerToken) {
 
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(jwtType)) {
             return bearerToken.substring(7);
         }
 

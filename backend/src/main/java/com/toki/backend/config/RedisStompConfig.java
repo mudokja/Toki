@@ -1,6 +1,6 @@
 package com.toki.backend.config;
 
-import com.toki.backend.roomchat.service.RedisRoomChatSubscriber;
+import com.toki.backend.roomchat.service.RedisRoomChatMessageListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ public class RedisStompConfig {
     }
 
     @Bean
-    public MessageListenerAdapter listenerAdapter(RedisRoomChatSubscriber subscriber) { // (2)
+    public MessageListenerAdapter listenerAdapter(RedisRoomChatMessageListener subscriber) { // (2)
         return new MessageListenerAdapter(subscriber, "onMessage");
     }
 

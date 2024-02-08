@@ -22,20 +22,21 @@ public class RoomChatHandler implements ChannelInterceptor {
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
-        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-        if(accessor.getCommand() == StompCommand.CONNECT) {
-            String jwt = TokenProvider.resolveToken(accessor.getFirstNativeHeader("Authorization"));
-            if(!tokenProvider.validateAccessToken(jwt)){
-                try {
-                    Authentication authentication = tokenProvider.getAuthentication(jwt);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                    log.debug("웹소켓 '{}' 인증 정보를 저장했습니다,", authentication.getName());
-                    throw new AccessDeniedException("채팅 인증 오류");
-                } catch (AccessDeniedException e) {
-                    log.error(e.getMessage());
-                }
-            }
-        }
+        log.debug("메시지 : {}, 채널 {},",message.toString(),message.getHeaders());
+//        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+//        if(accessor.getCommand() == StompCommand.CONNECT) {
+//            String jwt = TokenProvider.resolveToken(accessor.getFirstNativeHeader("Authorization"));
+//            if(!tokenProvider.validateAccessToken(jwt)){
+//                try {
+//                    Authentication authentication = tokenProvider.getAuthentication(jwt);
+//                    SecurityContextHolder.getContext().setAuthentication(authentication);
+//                    log.debug("웹소켓 '{}' 인증 정보를 저장했습니다,", authentication.getName());
+//                    throw new AccessDeniedException("채팅 인증 오류");
+//                } catch (AccessDeniedException e) {
+//                    log.error(e.getMessage());
+//                }
+//            }
+//        }
         return message;
     }
 }

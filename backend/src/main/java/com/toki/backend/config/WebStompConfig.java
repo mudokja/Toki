@@ -30,8 +30,8 @@ public class WebStompConfig implements WebSocketMessageBrokerConfigurer {
     }
 
     // 인증필터 예정지...
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration){
-        registration.interceptors(roomChatHandler);
-    }
+//    @Override
+//    public void configureClientInboundChannel(ChannelRegistration registration){
+//        registration.interceptors(roomChatHandler);
+//    }
 }

@@ -12,31 +12,27 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class RedisRoomChatSubscriber implements MessageListener {
+public class RedisRoomChatMessageListener implements MessageListener {
     private final ObjectMapper objectMapper;
     private final RedisTemplate<String, String> redisTemplate;
     private final SimpMessageSendingOperations messagingTemplate;
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-
+        log.debug("뭔가왔다아아!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         log.info("Message= {}", message);
         try {
             String publishMessage = redisTemplate.getStringSerializer().deserialize(message.getBody());
 
-            RoomChatRequestMessageDto roomChatRequestDto = objectMapper.readValue(publishMessage, RoomChatRequestMessageDto.class);
-            log.debug(publishMessage);
+            RoomChatResponseMessageDto responseMessageDto = objectMapper.readValue(publishMessage, RoomChatResponseMessageDto.class);
+            log.debug("보내진 메시지 {}",publishMessage);
 
-            if (roomChatRequestDto.getRoomChatType().equals(RoomChatType.COMMONCHAT)) {
-                RoomChatResponseMessageDto roomChatResponseDto = RoomChatResponseMessageDto.builder()
-                                .roomChatPk(roomChatRequestDto.getRoomChatPk())
-                        .content(roomChatRequestDto.getContent())
-                                        .build();
-                messagingTemplate.convertAndSend("/room/" + roomChatRequestDto.getRoomChatPk(), roomChatResponseDto);
-            }
+                messagingTemplate.convertAndSend("/subChat/room/" + responseMessageDto.getRoomChatPk(), Objects.requireNonNull(publishMessage));
 
 
         } catch (Exception e) {
