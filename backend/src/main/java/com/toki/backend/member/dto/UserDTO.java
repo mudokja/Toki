@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class UserDTO { //상세조회? : 닉네임, 유저태그, sns타입, 생성일자, 프로필 이미지 URL, 자기소개 (6개)
-
+//사용자 정보를 담는 DTO 클래스
     private String userPk;          // 사용자의 주요 식별키
     private String userId;          // 사용자 아이디
     private String userRole;          // 사용자 역할 (ADMIN, USER 등)
@@ -34,9 +34,5 @@ public class UserDTO { //상세조회? : 닉네임, 유저태그, sns타입, 생
 
 
 }
-
-
-
-
 
 

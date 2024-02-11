@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class OtherUserDTO { //여기에선 타인의 정보를 조회할 시 반환해야할 필드를 적는다.
-    //
+    //다른 사용자의 정보를 조회할 때 반환되는 DTO 클래스
     private String userRole;          // 사용자 역할 (ADMIN, USER 등)
     private String userNickName;    // 사용자 닉네임
     private Integer userTag;         // 사용자 식별을 위한 태그

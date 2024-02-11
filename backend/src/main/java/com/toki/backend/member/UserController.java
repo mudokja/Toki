@@ -19,25 +19,32 @@ import java.security.Principal;
 public class UserController {
 
 
-//    2024,02,07 유저정보조회 수정하였음 -> 다른 사람 정보를 조회시, 민감정보는 제외하고 DTO에 담는다.
+//    2024,02,08 유저정보조회 수정하였음 -> 다른 사람 정보를 조회시, 민감정보는 제외하고 DTO에 담는다.
     private final UserService userService;
 
-    // 유저 정보 조회
-    @GetMapping("/{userPk}")
+
+
+//     유저 정보 조회
+//     userTag 조회할 유저의 태그
+//     infoType 조회할 정보의 타입 (상세 또는 간단)
+//     principal 현재 사용자의 Principal 객체
+//     return 조회된 유저 정보
+
+    @GetMapping("/{userTag}")
     public ResponseEntity<CommonResponseDto<UserDTO>> getUserInfo(
             @RequestParam(name = "info_type", defaultValue = "detail") String infoType,
             Principal principal
     ) {
         try {
-            String currentUserPk = principal.getName();
+            String currentUserTag = principal.getName();
 
             UserDTO result;
             if ("simple".equals(infoType)) {
                 // 간단한 정보 조회 요청일 경우
-                result = userService.getUserSimpleInfo(currentUserPk);
+                result = userService.getUserSimpleInfo(currentUserTag);
             } else {
                 // 상세 정보 조회 요청일 경우
-                result = userService.getUserDetailInfo(currentUserPk);
+                result = userService.getUserDetailInfo(currentUserTag);
             }
 
             return ResponseEntity.ok(CommonResponseDto.<UserDTO>builder()
@@ -64,11 +71,20 @@ public class UserController {
         }
     }
 
-    // 다른 사용자 정보 조회
-    @GetMapping("/others/{userPk}")
-    public ResponseEntity<CommonResponseDto<OtherUserDTO>> getOtherUserInfo(@PathVariable String userPk) {
+
+
+
+
+
+//     다른 사용자 정보 조회
+//     userTag 조회할 사용자의 태그
+//     return 조회된 사용자 정보
+
+    @GetMapping("/others/{userTag}")
+    public ResponseEntity<CommonResponseDto<OtherUserDTO>> getOtherUserInfo(@PathVariable String userTag) {
+        //@PathVariable: URL 경로에 있는 변수 값을 메소드의 매개변수로 받아올 때 사용
         try {
-            OtherUserDTO result = userService.getOtherUserInfo(userPk);
+            OtherUserDTO result = userService.getOtherUserInfo(userTag);
             return ResponseEntity.ok(CommonResponseDto.<OtherUserDTO>builder()
                     .resultCode(200)
                     .resultMessage("다른 사용자 정보를 조회합니다.")
@@ -93,11 +109,18 @@ public class UserController {
         }
     }
 
-    // 유저 정보 수정
-    @PutMapping("/{userPk}")
-    public ResponseEntity<CommonResponseDto<UserDTO>> updateUser(@PathVariable String userPk, @RequestBody UpdateUserRequestDTO request) {
+
+//     유저 정보 수정
+//     userTag 수정할 유저의 태그
+//     request 수정할 정보를 담은 DTO 객체
+//     return 수정된 유저 정보
+//
+    @PutMapping("/{userTag}")
+    public ResponseEntity<CommonResponseDto<UserDTO>> updateUser(@PathVariable String userTag, @RequestBody UpdateUserRequestDTO request) {
+        //@PathVariable: URL 경로에 있는 변수 값을 메소드의 매개변수로 받아올 때 사용
+        //@RequestBody: HTTP 요청의 본문에 있는 데이터를 메소드의 매개변수로 받아올 때 사용.
         try {
-            UserDTO result = userService.updateUser(userPk, request);
+            UserDTO result = userService.updateUser(userTag, request);
             return ResponseEntity.ok(CommonResponseDto.<UserDTO>builder()
                     .resultCode(200)
                     .resultMessage("유저 정보를 수정합니다.")
