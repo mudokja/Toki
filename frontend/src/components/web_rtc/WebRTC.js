@@ -1,13 +1,13 @@
 import { Participant } from './Participant';
 //const kurentoUtils = require('kurento-utils');
-import kurentoUtils from 'kurento-utils';
+// import kurentoUtils from 'kurento-utils';
 import adapter from 'webrtc-adapter';
 import UserDisplayVue from './UserDisplay.vue';
 adapter
 let participants = {};
 let name;
 //const ws = new WebSocket('wss://i10b205.p.ssafy.io/ws/room');
-const ws = new WebSocket('wss://localhost:8443/groupcall');
+const ws = new WebSocket('ws://localhost:8443/groupcall');
  window.onbeforeunload = function() {
 	ws.close();
 };
