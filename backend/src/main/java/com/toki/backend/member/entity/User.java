@@ -42,7 +42,7 @@ public class User {
 	String userNickName;
 	@Column(nullable = true)
 	String userEmail;
-	Integer userTag;
+	String userTag;
 	Integer snsType;
 
 	@Column(updatable = false)
@@ -61,7 +61,7 @@ public class User {
 
 
 	@Builder
-	public User(String userPk, String userNickName, String birthYear, String profileImageUrl, String userId, Role userRole, String userName, String userEmail, Integer userTag, Integer snsType, String selfInfo) {
+	public User(String userPk, String userNickName, String birthYear, String profileImageUrl, String userId, Role userRole, String userName, String userEmail, String userTag, Integer snsType, String selfInfo) {
 		this.userPk = userPk;
 		this.userId = userId;
 		this.userRole = userRole;

@@ -10,6 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class BadgeDTO {
+//다른 곳으로 배지 정보를 전달할 때 사용
 
 
 

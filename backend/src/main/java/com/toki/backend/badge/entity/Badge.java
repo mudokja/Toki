@@ -8,17 +8,17 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
+@Entity //JPA 엔티티임을 나타내는 어노테이션
+@Getter // Lombok을 사용하여 자동으로 게터, 세터 및 toString 메서드를 생성
+@Setter // Lombok을 사용하여 자동으로 게터, 세터 및 toString 메서드를 생성
+@ToString // Lombok을 사용하여 자동으로 게터, 세터 및 toString 메서드를 생성
+@NoArgsConstructor //파라미터가 없는 기본 생성자와 모든 필드를 사용하는 생성자를 생성
 @AllArgsConstructor
 @Table(name = "badge")
 @Builder
 public class Badge {
 
-    @Id
+    @Id //해당 필드를 엔티티의 기본 키로 지정
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private int idx; //배지 인덱스
