@@ -47,7 +47,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             loginSuccess(response, oAuth2User,authentication.getAuthorities()); // 로그인에 성공한 경우 access, refresh 토큰 생성
         } catch (Exception e) {
 
-            log.debug("로그인 에러: {}",e.getMessage());
+            log.debug("로그인 에러: {} 원인 :{}, {}",e.getMessage(),e.getCause(),e.getStackTrace());
         }
         log.info("로그인 절차 완료!");
 
@@ -65,13 +65,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         cookie.setHttpOnly(true);
         cookie.setMaxAge(TokenProvider.getRefreshTokenExpiredTime());
         cookie.setPath("/");
-        cookie.setDomain(cookieDomain.getAuthority());
+        cookie.setDomain(cookieDomain.getHost());
         cookie.setSecure(true); // https가 아니므로 아직 안됨
         response.addCookie(cookie);
-        Cookie deleteJSI=new Cookie("JSESSIONID","");
-        deleteJSI.setMaxAge(1);
-        deleteJSI.setHttpOnly(true);
-        response.addCookie(deleteJSI);
         log.debug("토큰 :{}",accessToken);
         UriComponents uriComponent= UriComponentsBuilder.fromHttpUrl(frontendBaseurl)
                 .pathSegment("auth","login")

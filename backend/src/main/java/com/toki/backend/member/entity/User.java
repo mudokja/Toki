@@ -10,7 +10,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,7 +26,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	String userPk;
 
-//	//    배지 정보를 가져오기 위해서 적음.
+	//    배지 정보를 가져오기 위해서 적음.
 //	@OneToMany
 //	private List<Badge> badges;
 
@@ -57,12 +56,11 @@ public class User {
 	LocalDateTime deleteAt;
 	String birthYear;
 	String profileImageUrl;
-	String selfInfo; //자기소개를 의미합니다.
 
 
 
 	@Builder
-	public User(String userPk, String userNickName, String birthYear, String profileImageUrl, String userId, Role userRole, String userName, String userEmail, Integer userTag, Integer snsType, String selfInfo) {
+	public User(String userPk, String userNickName, String birthYear, String profileImageUrl, String userId, Role userRole, String userName, String userEmail, Integer userTag, Integer snsType) {
 		this.userPk = userPk;
 		this.userId = userId;
 		this.userRole = userRole;
@@ -73,13 +71,5 @@ public class User {
 		this.snsType= snsType;
 		this.profileImageUrl=profileImageUrl;
 		this.userTag = userTag;
-		this.selfInfo=selfInfo; //추가된 부분. (자기소개)
 	}
-
-
-
-	@ManyToMany
-	private List<Badge> badges = new ArrayList<>();
-
-
 }

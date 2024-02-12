@@ -5,23 +5,25 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.redis.core.RedisHash;
 
 import java.time.LocalDateTime;
 
 /**
  * 리프레시 토큰 엔티티
  */
-@Entity
-@Table(name = "refresh_token",indexes = @Index(name = "idx_refresh_token",columnList = "refresh_token"))
+
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
+@RedisHash("refresh_token")
+@ToString
 public class RefreshToken {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long idx;
     String refreshToken;
     @CreatedDate
     LocalDateTime createAt;
