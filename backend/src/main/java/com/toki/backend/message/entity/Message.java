@@ -26,7 +26,6 @@ public class Message {
     @ManyToOne
     private User toUser;
     private String content;
-    private Boolean isRead;
     @CreatedDate
     LocalDateTime createAt;
 }

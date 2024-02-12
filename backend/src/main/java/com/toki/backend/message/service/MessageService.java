@@ -4,8 +4,7 @@ package com.toki.backend.message.service;
 import com.toki.backend.common.utils.ConvertUserTag;
 import com.toki.backend.member.entity.User;
 import com.toki.backend.member.repository.UserRepository;
-import com.toki.backend.message.dto.response.MessageByFromUserDto;
-import com.toki.backend.message.dto.response.MessageByToUserDto;
+import com.toki.backend.message.dto.response.MessageResponseDto;
 import com.toki.backend.message.dto.request.MessageSendRequestDto;
 import com.toki.backend.message.entity.Message;
 import com.toki.backend.message.repository.MessageRepository;
@@ -21,13 +20,8 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
 
-    public Page<MessageByFromUserDto> getMessageListByFromUser(User fromUser, int page) {
-        PageRequest pageRequest = PageRequest.of(page, 20);
-        return messageRepository.findAllByFromUser(fromUser, pageRequest);
-    }
-
-    public Page<MessageByToUserDto> getMessageListByToUser(User toUser, int page) {
-        PageRequest pageRequest = PageRequest.of(page, 20);
+    public Page<MessageResponseDto> getMessageListByToUser(User toUser, int page) {
+        PageRequest pageRequest = PageRequest.of(page, 10);
         return messageRepository.findAllByToUser(toUser, pageRequest);
     }
 
@@ -42,20 +36,18 @@ public class MessageService {
                 .fromUser(fromUser)
                 .toUser(toUser)
                 .content(messageSendRequestDto.getContent())
-                .isRead(false)
                 .build());
     }
-//
-//
-//    // 메세지 삭제
-//    public void deleteMessage(MessageRequestDto requestDto) {
-//        return messageRepository.save();
-//    }
-//
-//    // 쪽지 디테일
-//    public Message getMessage(MessageRequestDto requestDto) {
-//        return messageRepository.findBy();
-//    }
 
+    public Message getMessageByMessagePk(Long messagePk) {
+        return messageRepository.findById(messagePk).orElse(null);
+    }
+
+
+    // 메세지 삭제
+    public void deleteMessage(Long messagePk) {
+        Message message = messageRepository.findById(messagePk).get();
+        messageRepository.delete(message);
+    }
 
 }
