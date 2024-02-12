@@ -1,12 +1,15 @@
 package com.toki.backend.room.dto.request;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.List;
 
-@Builder
+@AllArgsConstructor
+@Getter
 public class CreateRoomRequestDto {
 
     String roomName;
@@ -14,7 +17,7 @@ public class CreateRoomRequestDto {
     List<String> tags;
     Boolean isPrivate;
     String roomPassword;
-    String parentRoomId;
+    Integer parentRoomId;
     Object roomOption;
 
 }

@@ -2,11 +2,15 @@ package com.toki.backend.room.service;
 
 import com.toki.backend.auth.service.CustomOAuth2User;
 import com.toki.backend.common.dto.response.CommonResponseDto;
+import com.toki.backend.room.dto.RoomInfoDto;
 import com.toki.backend.room.dto.request.CreateRoomRequestDto;
+import com.toki.backend.room.dto.response.CreateRoomResponseDto;
 import com.toki.backend.room.dto.response.RoomListByCategoryDto;
 import com.toki.backend.room.entity.Category;
 import com.toki.backend.room.entity.Room;
+import com.toki.backend.room.entity.RoomMember;
 import com.toki.backend.room.repository.CategoryRepository;
+import com.toki.backend.room.repository.RoomMemberRepository;
 import com.toki.backend.room.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,60 +19,83 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 public class RoomService {
 
     private final CategoryRepository categoryRepository;
     private final RoomRepository roomRepository;
+    private final RoomMemberRepository roomMemberRepository;
 
 
-    public CommonResponseDto<Object> getRoomList(int page) {
+    public Page<RoomInfoDto> getRoomList(int page) {
         PageRequest pageRequest = PageRequest.of(page, 12);
-        Page<Room> rooms = roomRepository.findAll(pageRequest);
-
-        return CommonResponseDto.builder()
-                .resultCode(200)
-                .resultMessage("방 목록 조회에 성공했습니다.")
-                .data(rooms)
-                .build();
+        return roomRepository.findAll(pageRequest);
     }
 
-    // 해시태그 부분
-//    public CommonResponseDto<Object> getRoomListByHashTag(String hashTag) {
-//        List<Room> rooms = roomRepository.findAllByHashTag(hashTag);
-//    }
 
-    public CommonResponseDto<Object> getRoomListByCategoryPk(int categoryPk, int page) {
+    public RoomListByCategoryDto getRoomListByCategoryPk(int categoryPk, int page) {
         PageRequest pageRequest = PageRequest.of(page, categoryPk);
-        Page<Room> rooms = roomRepository.findAllByCategoryPk(pageRequest, categoryPk);
+        Page<RoomInfoDto> rooms = roomRepository.findAllByCategoryPk(pageRequest, categoryPk);
 
         Category category = categoryRepository.findById(categoryPk)
                         .orElseThrow(
                                 NullPointerException::new
                         );
 
-        RoomListByCategoryDto roomListByCategoryDto = RoomListByCategoryDto.builder()
+        return RoomListByCategoryDto.builder()
                 .categoryPk(categoryPk)
                 .categoryName(category.getName())
                 .rooms(rooms)
                 .build();
-
-        return CommonResponseDto.builder()
-                .resultCode(200)
-                .resultMessage("카테고리별 방 리스트 조회에 성공하였습니다.")
-                .data(roomListByCategoryDto)
-                .build();
     }
 
-    @Transactional
-    public CommonResponseDto<Object> saveRoom(@AuthenticationPrincipal CustomOAuth2User userPrincipal,
-                                              CreateRoomRequestDto requestDto) {
+    public Room getRoomByRoomPk(int roomPk) {
+        return roomRepository.findById(roomPk).orElse(null);
+    }
 
-        return CommonResponseDto.builder()
-                .resultCode(200)
-                .resultMessage("방 저장에 성공하였습니다.")
-                .data(null)
+    public RoomMember getRoomMembersByRoomPk(int roomPk) {
+        return roomMemberRepository.findById(roomPk).orElse(null);
+    }
+
+    public void updateRoomMember(int roomPk, String userPk) {
+        RoomMember room = getRoomMembersByRoomPk(roomPk);
+        roomMemberRepository.save(room);
+    }
+
+
+    @Transactional
+    public CreateRoomResponseDto saveRoom(CreateRoomRequestDto createRoomRequestDto, String hostUserPk) {
+
+
+        Room room = Room.builder()
+                .parentRoomPk(roomRepository.findById(createRoomRequestDto.getParentRoomId()).orElse(null))
+                .title(createRoomRequestDto.getRoomName())
+                .category(categoryRepository.findById(createRoomRequestDto.getCategoryPk()).get())
+                .isPrivate(createRoomRequestDto.getIsPrivate())
+                .password(createRoomRequestDto.getRoomPassword())
                 .build();
+
+        roomRepository.save(room);
+
+        Set<String> members = new HashSet<>();
+        members.add(hostUserPk);
+
+        RoomMember roomMember = RoomMember.builder()
+                        .roomPk(room.getRoomPk())
+                                .members(members)
+                                        .build();
+
+        roomMemberRepository.save(roomMember);
+
+        return CreateRoomResponseDto.builder()
+                .roomId(room.getRoomPk())
+                .roomName(room.getTitle())
+                .sessionId(room.getSessionId())
+                .build();
+
     }
 }

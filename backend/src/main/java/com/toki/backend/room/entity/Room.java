@@ -18,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Builder
 public class Room {
 
     @Id
@@ -31,10 +32,7 @@ public class Room {
     private String title;
 
     @OneToOne
-    private Category categoryPk;
-
-    @OneToMany
-    private List<User> members = new ArrayList<>();
+    private Category category;
 
     @Column(nullable = false)
     private Boolean isPrivate;
@@ -44,10 +42,5 @@ public class Room {
 
     @Column
     private String sessionId;
-
-    // 해시태그는 어떤 방식으로 짜여졌는지를 봐야 할 듯
-    @JdbcTypeCode(SqlTypes.JSON)
-    private HashTag hashTag;
-
 
 }
