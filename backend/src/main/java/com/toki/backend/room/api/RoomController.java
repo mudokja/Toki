@@ -18,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @Slf4j
 @RestController
@@ -41,17 +42,23 @@ public class RoomController {
     }
 
     // 검색어가 포함된 해시태그를 가지고 있는 화상 채팅방 조회
-//    @GetMapping()
-//    public ResponseEntity<CommonResponseDto<Object>> findRoomListByHashTag(@RequestParam String tagName) {
-//
-//        return ResponseEntity.ok().body(roomService.getRoomListByHashTag(tagName));
-//    }
+    @GetMapping
+    public ResponseEntity<CommonResponseDto<Object>> findRoomListByHashTag(@RequestParam String tagName) {
+
+        Stream<RoomInfoDto> rooms = roomService.getRoomListByTag(tagName);
+
+        return ResponseEntity.ok(CommonResponseDto.builder()
+                .resultCode(200)
+                .resultMessage("방 목록 조회에 성공했습니다.")
+                .data(rooms)
+                .build());
+    }
 
     // 카테고리 기반 화상 채팅방 조회
     @GetMapping("/search")
     public ResponseEntity<CommonResponseDto<Object>> findRoomListByCategory(@RequestParam int category,
                                                                             @RequestParam(required = false, defaultValue = "0") int page) {
-        RoomListByCategoryDto rooms = roomService.getRoomListByCategoryPk(category, page);
+        Page<RoomInfoDto> rooms = roomService.getRoomListByCategoryPk(category, page);
 
         return ResponseEntity.ok(CommonResponseDto.builder()
                 .resultCode(200)
@@ -113,7 +120,7 @@ public class RoomController {
 
 
         else {
-            roomService.updateRoomMember(roomId, userPrincipal.getName());
+            roomService.addRoomMember(roomId, userPrincipal.getName());
             return ResponseEntity.ok(CommonResponseDto.builder()
                     .resultCode(200)
                     .resultMessage("참여하였습니다.")
@@ -122,7 +129,7 @@ public class RoomController {
     }
 
 
-    // 화상 채팅방 정보 수정
+    // 태그 수정
 
     // 화상 채팅방 나가기
 

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @Getter
@@ -14,7 +15,7 @@ public class CreateRoomRequestDto {
 
     String roomName;
     Integer categoryPk;
-    List<String> tags;
+    Set<String> tags;
     Boolean isPrivate;
     String roomPassword;
     Integer parentRoomId;
