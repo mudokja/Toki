@@ -15,5 +15,5 @@ public interface HashTagStatRepository extends JpaRepository<HashTagStat, Intege
     Optional<HashTagStat> findByTagName(String tagName);
 
     // 태그 사용 횟수 기준으로 상위 5개 조회
-//    List<HashTagStat> findTop5();
+    List<HashTagStat> findTop5();
 }

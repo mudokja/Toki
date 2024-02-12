@@ -11,24 +11,24 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "hashTag")
+@Table(name = "hashTag") //데이터베이스에서 사용될 테이블 이름은 "hashTag"로 지정
 @Builder
 public class HashTag {
 
-    @Id
+    @Id //기본키
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private int idx;
+    private int idx; //해시태그 인덱스
 
     @Column(length = 50)
-    private String tagName;
+    private String tagName; //해시태그의 이름
 
     @Column
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt; // 해시태그가 생성된 일자를 저장
 
     @Column
-    private long score;
+    private long score; //해시태그의 사용횟수를 저장
 
     @Column
-    private LocalDateTime lastUsedAt;
+    private LocalDateTime lastUsedAt; //해시태그가 마지막으로 사용된 일자를 저장
 }
