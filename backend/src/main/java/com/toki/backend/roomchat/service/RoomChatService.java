@@ -1,12 +1,17 @@
 package com.toki.backend.roomchat.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.toki.backend.common.utils.TokenProvider;
 import com.toki.backend.member.repository.UserRepository;
+import com.toki.backend.room.entity.Room;
 import com.toki.backend.roomchat.dto.RoomChatType;
 import com.toki.backend.roomchat.dto.request.RoomChatRequestMessageDto;
 import com.toki.backend.roomchat.dto.response.RoomChatResponseMessageDto;
+import com.toki.backend.roomchat.entity.RoomChatLog;
 import com.toki.backend.roomchat.entity.RoomChatMessage;
+import com.toki.backend.roomchat.repository.RoomChatLogRepository;
 import com.toki.backend.roomchat.repository.RoomChatMessageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +22,18 @@ import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
 public class RoomChatService {
     private final RoomChatMessageRepository roomChatMessageRepository;
+    private final RoomChatLogRepository roomChatLogRepository;
     private final RedisTemplate<String, String> redisTemplate;
     private final UserRepository userRepository;
     private final ChannelTopic channelTopic;
@@ -32,35 +42,70 @@ public class RoomChatService {
     @Transactional(readOnly = true)
     public void sendMessage(RoomChatRequestMessageDto roomChatRequestDto, String userPk) throws JsonProcessingException {
 
-
+        String roomPk=roomChatRequestDto.getRoomChatPk();
 
         //채팅 생성 및 저장
         RoomChatMessage roomChatMessage = RoomChatMessage.builder()
-                .roomChatPk(roomChatRequestDto.getRoomChatPk())
+                .roomChatPk(roomPk)
                 .chatType(roomChatRequestDto.getChatType())
                 .fromUser(userPk)
+                .content(roomChatRequestDto.getContent())
                 .sendTo(roomChatRequestDto.getSendTo())
+                .roomChatIdx(Objects.requireNonNull(redisTemplate.opsForSet().size("roomchatmessage:roomChatPk:" + roomPk))+1)
+                .crateAt(LocalDateTime.now(ZoneId.of("Asia/Seoul")).toString())
                         .build();
         log.debug("채팅 엔티티 {}",roomChatMessage.toString());
         roomChatMessageRepository.save(roomChatMessage);
         String topic = channelTopic.getTopic();
         RoomChatResponseMessageDto roomChatResponseMessageDto = RoomChatResponseMessageDto.builder()
-                .roomChatPk(roomChatRequestDto.getRoomChatPk())
+                .roomChatPk(roomPk)
                 .fromUser(userPk)
                 .content(roomChatRequestDto.getContent())
                 .build();
+
         log.debug("요청 주소 {}, 개체 {}",topic,roomChatResponseMessageDto);
         if (roomChatRequestDto.getChatType() == RoomChatType.COMMONCHAT) {
             // 그륩 채팅일 경우
             sendCommonChat(topic,roomChatResponseMessageDto);
         }
+        if(roomChatMessage.getRoomChatIdx()>80){
+        deleteAndUpdateRoomChatLog(roomPk);
+        }
     }
+
     public void sendCommonChat(String topic, RoomChatResponseMessageDto roomChatResponseMessageDto) throws JsonProcessingException {
         redisTemplate.convertAndSend(topic, objectMapper.writeValueAsString(roomChatResponseMessageDto));
     }
-    public void deleteAndUpdateRoomChatLog(String roomChatPk){
-            List<RoomChatMessage> roomChatList=roomChatMessageRepository.findAllByRoomChatPk(roomChatPk);
-            log.debug(roomChatList.toString());
+    public List<RoomChatMessage> getLastRoomChatMessage(String roomPk) {
+        List<RoomChatMessage> roomChatMessageList = new java.util.ArrayList<>(roomChatMessageRepository.findAllByRoomChatPk(roomPk).stream().filter((v) -> v.getChatType().equals(RoomChatType.COMMONCHAT)).toList());
+        if (roomChatMessageList.size() < 10) {
+            RoomChatLog lastRoomChatLog = roomChatLogRepository.findTopByRoomChatPkOrderByRoomChatSessionNumber(roomPk).orElseThrow(() -> new RuntimeException("이전 기록없음"));
+            try {
+                List<RoomChatMessage> lastRoomChatMessageList = (List<RoomChatMessage>) objectMapper
+                        .readValue(lastRoomChatLog.getRoomChatLogContent(), new TypeReference<Collection<? extends RoomChatMessage>>(){});
+
+
+                    roomChatMessageList.addAll(lastRoomChatMessageList.stream().filter((v)->v.getChatType().equals(RoomChatType.COMMONCHAT)).sorted((a,b)->(int)(b.getRoomChatIdx()-a.getRoomChatIdx())).limit(20)
+                            .toList());
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+        return roomChatMessageList;
+    }
+    @Transactional(readOnly = true)
+    public void deleteAndUpdateRoomChatLog(String roomChatPk) throws JsonProcessingException {
+
+        List<RoomChatMessage> roomChatList=roomChatMessageRepository.findAllByRoomChatPk(roomChatPk);
+        String roomChatLogText=objectMapper.writeValueAsString(roomChatList);
+        roomChatLogRepository.save(RoomChatLog.builder()
+                .roomChatPk(roomChatPk)
+                .roomChatSessionNumber(roomChatLogRepository.countByRoomChatPk(roomChatPk)+1)
+                .roomChatLogContent(roomChatLogText)
+                .build()
+        );
+        roomChatMessageRepository.deleteAll(roomChatMessageRepository.findAllByRoomChatPk(roomChatPk));
 
 
     }

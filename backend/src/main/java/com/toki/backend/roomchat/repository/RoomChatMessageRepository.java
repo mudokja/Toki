@@ -9,4 +9,7 @@ import java.util.List;
 
 public interface RoomChatMessageRepository extends CrudRepository<RoomChatMessage, String> {
     List<RoomChatMessage>  findAllByRoomChatPk(String roomChatPk);
+
+
+
 }
