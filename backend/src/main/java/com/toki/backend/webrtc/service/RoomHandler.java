@@ -65,6 +65,9 @@ public class RoomHandler extends TextWebSocketHandler {
       case "leaveRoom":
         leaveRoom(user);
         break;
+      case "ping":
+        pong(user);
+        break;
       case "onIceCandidate":
         JsonObject candidate = jsonMessage.get("candidate").getAsJsonObject();
 
@@ -79,6 +82,9 @@ public class RoomHandler extends TextWebSocketHandler {
     }
   }
 
+  public void pong(UserRoomSession user ) throws IOException {
+    user.pong(user);
+  }
   @Override
   public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
     UserRoomSession user = registry.removeBySession(session);

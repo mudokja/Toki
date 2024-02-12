@@ -82,6 +82,12 @@ public class UserRoomSession implements Closeable {
     return outgoingMedia;
   }
 
+  public void pong(UserRoomSession user) throws IOException {
+    JsonObject response = new JsonObject();
+    response.addProperty("id","pong");
+    response.addProperty("user",user.getName());
+    sendMessage(response);
+  }
   public void receiveVideoFrom(UserRoomSession sender, String sdpOffer) throws IOException {
     log.info("USER {}: connecting with {} in room {}", this.name, sender.getName(), this.roomName);
 
