@@ -2,11 +2,9 @@
 import { commonaxios,commonpostaxios } from '@/js/CommonAxios';
 import adapter from 'webrtc-adapter';
 import kurentoUtils from 'kurento-utils';
-import {register ,leaveRoom,onExistingParticipants,onNewParticipant,onParticipantLeft,receiveVideoResponse,sendMessage} from './WebRTC'
-import { Participant } from './Participant';
 import { ref,watch,onMounted } from 'vue';
 import {Client} from '@stomp/stompjs';
-import {sendName,disconnect,connect,showGreeting} from './WebChat'
+// import {sendName,disconnect,connect,showGreeting} from './WebChat'
 import { commonaxios1 } from '@/js/Click';
 //const ws = new WebSocket('wss://192.168.31.237:8443/groupcall');
 // const ws = new WebSocket('wss://localhost:8443/groupcall');
