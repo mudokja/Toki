@@ -56,7 +56,7 @@ public class UserService {
     public OtherUserDTO getOtherUserInfo(int userTag) {
         Optional<User> userOptional = userRepository.findByUserTag(userTag);
         if (!userOptional.isPresent()) {
-            throw new EntityNotFoundException("UserPk에 해당하는 회원이 없습니다. " + userTag);
+            throw new EntityNotFoundException("UserTag에 해당하는 회원이 없습니다. " + userTag);
         }
 
         User user = userOptional.get();
