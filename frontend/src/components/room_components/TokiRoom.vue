@@ -114,6 +114,7 @@ function receiveVideo(sender) {
       }
 	participant.rtcPeer =new kurentoUtil.WebRtcPeer.WebRtcPeerRecvonly(options,
 		function (error) {
+      console.log("오류 발생 의심지점 ",error)
             if(error) {
                 return console.error(error);
             }
