@@ -47,7 +47,7 @@ const { status, data, send, open, close } = useWebSocket(wsUrl, {
 		onParticipantLeft(parsedMessage);
 		break;
 	case 'receiveVideoAnswer':
-		receiveVideoResponse(parsedMessage);
+		setTimeout(()=>receiveVideoResponse(parsedMessage),10);
       break;
   case 'pong':
       break;
