@@ -1,9 +1,11 @@
 package com.toki.backend.member.dto;
 
 
+import com.toki.backend.badge.dto.BadgeDTO;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,7 +21,7 @@ public class UserDTO { //상세조회? : 닉네임, 유저태그, sns타입, 생
     private String userName;        // 사용자 실명
     private String userNickName;    // 사용자 닉네임 -> 상세
     private String userEmail;        // 사용자 이메일 주소
-    private String userTag;         // 사용자 식별을 위한 태그 -> 상세
+    private Integer userTag;         // 사용자 식별을 위한 태그 -> 상세
     private Integer snsType;        // 소셜 미디어 타입 -> 상세
     private LocalDateTime createAt; // 사용자 생성일자 ->상세
     private LocalDateTime updateAt; // 사용자 정보 수정일자
@@ -28,10 +30,12 @@ public class UserDTO { //상세조회? : 닉네임, 유저태그, sns타입, 생
     private String birthYear;       // 사용자 생년월일
     private String profileImageUrl; // 프로필 이미지 URL -> 상세
     private String selfInfo;        // 자기소개 -> 상세
-
+    private List<BadgeDTO> badges;      // 사용자가 보유한 배지 목록
 
 
 }
+
+
 
 
 

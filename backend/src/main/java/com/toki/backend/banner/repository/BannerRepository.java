@@ -1,5 +1,6 @@
 package com.toki.backend.banner.repository;
 
+import com.toki.backend.badge.entity.Badge;
 import com.toki.backend.banner.entity.Banner;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

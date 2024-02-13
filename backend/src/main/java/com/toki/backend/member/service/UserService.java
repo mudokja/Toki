@@ -29,7 +29,7 @@ public class UserService {
 
     public UserDTO getUserDetailInfo(String userPk) {
         // userPk로 회원 정보 조회
-        User user = (User) userRepository.findByUserPk(userPk)
+        User user = userRepository.findByUserPk(userPk)
                 .orElseThrow(() -> new EntityNotFoundException("UserPk에 해당하는 회원이 없습니다 : " + userPk));
 
         // 배지 정보 가져오기

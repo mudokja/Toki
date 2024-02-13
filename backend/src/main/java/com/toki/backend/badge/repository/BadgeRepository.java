@@ -15,10 +15,10 @@ public interface BadgeRepository extends JpaRepository<Badge, Integer> {
 
     Optional<Badge> findByIdx(int idx); //주어진 인덱스에 해당하는 배지를 찾아서 반환.
 
-    List<Badge> findAll(); // 모든 배지 조회하여 리스트로 반환.
+
 
     // 특정 사용자가 가지고 있는 배지 조회
-    List<Badge> findByUserTag(String userTag); //유저태그로 회원을 찾아서 그 회원의 배지정보를 리스트로 반환.
-
+//    List<Badge> findByUserTag(int userTag); //유저태그로 회원을 찾아서 그 회원의 배지정보를 리스트로 반환.
+//잠깐 주석
 
 }

@@ -60,7 +60,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .userEmail(userEmail)
                     .userName(userName)
                     .snsType(snsType)
-                    .userTag(String.valueOf(initialUserTag)) // 초기값 설정
+                    .userTag(initialUserTag) // 초기값 설정
                     .userRole(Role.USER)
                     .userNickName(userNickname)
                     .birthYear(userBirthYear)

@@ -28,10 +28,19 @@ public class Badge {
 
     @Column(length = 512)
     private String imageUrl; //배지 이미지
-    
-    @Column
-    private String userTag; //유저태그
 
-//    @OneToMany(mappedBy = "badge")
-//    private List<MemberBadge> memberBadges;
+
+
+
+//
+    @ManyToMany(mappedBy = "badges")
+    // 이렇게 하면 Badge 엔티티와 User 엔티티 간의 다대다 관계가 정의
+    private List<User> users = new ArrayList<>();
+    ///엔티티가 가진 사용자 목록
+
+//    배지 엔티티는 배지의 정보를 저장하는데 사용되며,
+//    사용자와의 다대다 관계를 설정하여 한 사용자가 여러 배지를 가질 수 있고,
+//    한 배지는 여러 사용자에 의해 소유될 수 있습니다.
+
+
 }

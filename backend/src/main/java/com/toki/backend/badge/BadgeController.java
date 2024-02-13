@@ -61,7 +61,7 @@ public class BadgeController {
 
     // 4. 회원에게 배지 추가.
     @PostMapping("/api/v1/admin/badges/{userTag}")
-    public ResponseEntity<CommonResponseDto<BadgeDTO>> saveToMember(@PathVariable String userTag, @RequestBody BadgeDTO badgeDTO){
+    public ResponseEntity<CommonResponseDto<BadgeDTO>> saveToMember(@PathVariable int userTag, @RequestBody BadgeDTO badgeDTO){
         BadgeDTO  addBadge = badgeService.saveBadge(badgeDTO);
         return ResponseEntity.ok(CommonResponseDto.<BadgeDTO>builder()
                 .resultCode(200)
@@ -73,7 +73,7 @@ public class BadgeController {
 
     // 5. 특정 회원의 배지 조회하기
     @GetMapping("/api/v1/badges/{userTag}")
-    public ResponseEntity<CommonResponseDto<BadgeDTO>> getBadgeByIdx(@PathVariable String userTag) {
+    public ResponseEntity<CommonResponseDto<BadgeDTO>> getBadgeByIdx(@PathVariable int userTag) {
         // 특정 회원의 배지 조회 메서드 호출
         BadgeDTO badgeDTO = badgeService.getBadgeByIdx(userTag);
         return ResponseEntity.ok(CommonResponseDto.<BadgeDTO>builder()
@@ -85,7 +85,7 @@ public class BadgeController {
 
     // 6. 사용자로부터 배지 제거
     @DeleteMapping("/api/v1/admin/badges/{badgeIdx}/users/{userTag}")
-    public ResponseEntity<CommonResponseDto<Void>> deleteBadgeFromUser(@PathVariable int badgeIdx, @PathVariable String userTag) {
+    public ResponseEntity<CommonResponseDto<Void>> deleteBadgeFromUser(@PathVariable int badgeIdx, @PathVariable int userTag) {
         badgeService.deleteBadgeFromUser(badgeIdx, userTag);
         return ResponseEntity.ok(CommonResponseDto.<Void>builder()
                 .resultCode(200)
