@@ -12,7 +12,7 @@ import java.util.Set;
 @Builder
 @Getter
 public class CreateRoomResponseDto {
-    private Integer roomId;
+    private String roomId;
     private String roomName;
     private String sessionId;
     private Set<String> hashTag;

@@ -22,8 +22,8 @@ import java.util.List;
 public class Room {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer roomPk;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String roomPk;
 
     @ManyToOne
     private Room parentRoomPk;

@@ -42,7 +42,7 @@ public class RoomController {
     }
 
     // 검색어가 포함된 해시태그를 가지고 있는 화상 채팅방 조회
-    @GetMapping
+    @GetMapping("/search/tag")
     public ResponseEntity<CommonResponseDto<Object>> findRoomListByHashTag(@RequestParam String tagName) {
 
         Stream<RoomInfoDto> rooms = roomService.getRoomListByTag(tagName);
@@ -55,10 +55,10 @@ public class RoomController {
     }
 
     // 카테고리 기반 화상 채팅방 조회
-    @GetMapping("/search")
-    public ResponseEntity<CommonResponseDto<Object>> findRoomListByCategory(@RequestParam int category,
+    @GetMapping("/search/category")
+    public ResponseEntity<CommonResponseDto<Object>> findRoomListByCategory(@RequestParam int categoryPk,
                                                                             @RequestParam(required = false, defaultValue = "0") int page) {
-        Page<RoomInfoDto> rooms = roomService.getRoomListByCategoryPk(category, page);
+        Page<RoomInfoDto> rooms = roomService.getRoomListByCategoryPk(categoryPk, page);
 
         return ResponseEntity.ok(CommonResponseDto.builder()
                 .resultCode(200)
@@ -84,7 +84,7 @@ public class RoomController {
     @PostMapping("/{roomId}")
     public ResponseEntity<?> joinRoom(@RequestBody JoinRoomRequestDto joinRoomRequestDto,
                                       @AuthenticationPrincipal CustomOAuth2User userPrincipal,
-                                      @PathVariable Integer roomId) {
+                                      @PathVariable String roomId) {
 
         Room room = roomService.getRoomByRoomPk(roomId);
 

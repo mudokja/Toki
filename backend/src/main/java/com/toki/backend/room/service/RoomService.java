@@ -52,7 +52,7 @@ public class RoomService {
     @Transactional
     public Stream<RoomInfoDto> getRoomListByTag(String tagName) {
         List<RoomTag> roomTags = roomTagRepository.findAllByTagsContains(tagName);
-        List<Integer> roomTagsPk = roomTags.stream().map(RoomTag::getRoomPk).toList();
+        List<String> roomTagsPk = roomTags.stream().map(RoomTag::getRoomPk).toList();
         List<Room> rooms = roomRepository.findAllById(roomTagsPk);
 
         return rooms.stream().map(room -> {
@@ -96,31 +96,31 @@ public class RoomService {
         });
     }
 
-    public Room getRoomByRoomPk(int roomPk) {
+    public Room getRoomByRoomPk(String roomPk) {
         return roomRepository.findById(roomPk).orElse(null);
     }
 
-    public RoomMember getRoomMembersByRoomPk(int roomPk) {
+    public RoomMember getRoomMembersByRoomPk(String roomPk) {
         return roomMemberRepository.findById(roomPk).orElse(null);
     }
 
-    public RoomTag getRoomTagByRoomPk(int roomPk) {
+    public RoomTag getRoomTagByRoomPk(String roomPk) {
         return roomTagRepository.findById(roomPk).orElse(null);
     }
 
-    public void addRoomMember(int roomPk, String userPk) {
+    public void addRoomMember(String roomPk, String userPk) {
         RoomMember room = getRoomMembersByRoomPk(roomPk);
         room.getMembers().add(userPk);
         roomMemberRepository.save(room);
     }
 
-    public void deleteRoomMember(int roomPk, String userPk) {
+    public void deleteRoomMember(String roomPk, String userPk) {
         RoomMember room = getRoomMembersByRoomPk(roomPk);
         room.getMembers().remove(userPk);
         roomMemberRepository.save(room);
     }
 
-    public void updateRoomTag(int roomPk, Set<String> tags) {
+    public void updateRoomTag(String roomPk, Set<String> tags) {
         RoomTag room = getRoomTagByRoomPk(roomPk);
         room.setTags(tags);
         roomTagRepository.save(room);

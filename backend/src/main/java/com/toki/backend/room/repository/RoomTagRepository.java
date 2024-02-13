@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface RoomTagRepository extends CrudRepository<RoomTag, Integer> {
+public interface RoomTagRepository extends CrudRepository<RoomTag, String> {
     List<RoomTag> findAllByTagsContains(String tag);
 }

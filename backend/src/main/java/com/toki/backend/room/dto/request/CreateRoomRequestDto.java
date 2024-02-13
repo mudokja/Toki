@@ -18,7 +18,7 @@ public class CreateRoomRequestDto {
     Set<String> tags;
     Boolean isPrivate;
     String roomPassword;
-    Integer parentRoomId;
+    String parentRoomId;
     Object roomOption;
 
 }

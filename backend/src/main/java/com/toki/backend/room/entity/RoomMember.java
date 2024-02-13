@@ -15,7 +15,7 @@ import java.util.Set;
 @RedisHash(value = "room_member")
 public class RoomMember {
     @Id
-    private Integer roomPk;
+    private String roomPk;
 
     @Setter
     private Set<String> members;

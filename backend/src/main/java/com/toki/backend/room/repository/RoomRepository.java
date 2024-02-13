@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface RoomRepository extends JpaRepository<Room, Integer> {
+public interface RoomRepository extends JpaRepository<Room, String> {
 
     Page<Room> findAllByCategory(PageRequest pageRequest, Category category);
 

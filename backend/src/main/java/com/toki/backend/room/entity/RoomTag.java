@@ -13,7 +13,7 @@ import java.util.Set;
 @RedisHash(value = "room_hashtag")
 public class RoomTag {
     @Id
-    private Integer roomPk;
+    private String roomPk;
 
     @Setter
     private Set<String> tags;
