@@ -41,10 +41,10 @@ public class UserController {
             UserDTO result;
             if ("simple".equals(infoType)) {
                 // 간단한 정보 조회 요청일 경우
-                result = userService.getUserSimpleInfo(currentUserTag);
+                result = userService.getUserSimpleInfo(Integer.parseInt(currentUserTag));
             } else {
                 // 상세 정보 조회 요청일 경우
-                result = userService.getUserDetailInfo(currentUserTag);
+                result = userService.getUserDetailInfo(Integer.parseInt(currentUserTag));
             }
 
             return ResponseEntity.ok(CommonResponseDto.<UserDTO>builder()
@@ -81,7 +81,7 @@ public class UserController {
 //     return 조회된 사용자 정보
 
     @GetMapping("/others/{userTag}")
-    public ResponseEntity<CommonResponseDto<OtherUserDTO>> getOtherUserInfo(@PathVariable String userTag) {
+    public ResponseEntity<CommonResponseDto<OtherUserDTO>> getOtherUserInfo(@PathVariable int userTag) {
         //@PathVariable: URL 경로에 있는 변수 값을 메소드의 매개변수로 받아올 때 사용
         try {
             OtherUserDTO result = userService.getOtherUserInfo(userTag);
@@ -116,7 +116,7 @@ public class UserController {
 //     return 수정된 유저 정보
 //
     @PutMapping("/{userTag}")
-    public ResponseEntity<CommonResponseDto<UserDTO>> updateUser(@PathVariable String userTag, @RequestBody UpdateUserRequestDTO request) {
+    public ResponseEntity<CommonResponseDto<UserDTO>> updateUser(@PathVariable int userTag, @RequestBody UpdateUserRequestDTO request) {
         //@PathVariable: URL 경로에 있는 변수 값을 메소드의 매개변수로 받아올 때 사용
         //@RequestBody: HTTP 요청의 본문에 있는 데이터를 메소드의 매개변수로 받아올 때 사용.
         try {

@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 
 
 	// 사용자 태그로 사용자를 찾는 메서드
-	Optional<User> findByUserTag(String userTag);
+	Optional<User> findByUserTag(Integer userTag);
 
 
 	// 사용자 ID와 SNS 타입으로 사용자를 찾는 메서드
