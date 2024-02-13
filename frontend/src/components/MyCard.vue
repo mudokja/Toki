@@ -50,21 +50,6 @@ const props = defineProps({
 
 </template>
 
-<script setup>
-import { onMounted } from "vue"
-
-const props = defineProps({
-  item: {
-    type: [Number, Object],
-    required: true,
-  },
-  index: Number
-})
-
-
-
-</script>
-
 <style lang="scss" scoped>
 
 </style>
