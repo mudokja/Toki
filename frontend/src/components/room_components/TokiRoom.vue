@@ -24,12 +24,12 @@ const roomInfo = ref(props.roomInfo)
 
 const tokiRoomMembers = ref([])
 const tokiRoomVideo=ref({})
-// const wsUrl='wss://i10b205.p.ssafy.io/ws/room'
-const wsUrl='ws://localhost:8081/ws/room'
+const wsUrl='wss://i10b205.p.ssafy.io/ws/room'
+// const wsUrl='ws://localhost:8081/ws/room'
 const { status, data, send, open, close } = useWebSocket(wsUrl, {
   heartbeat: {
     message: JSON.stringify({id:"ping",value:"ping"}),
-    interval: 30000,
+    interval: 50000,
     pongTimeout:30000,
   },
   onConnected:()=> {
