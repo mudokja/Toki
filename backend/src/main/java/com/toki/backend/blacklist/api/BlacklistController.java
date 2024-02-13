@@ -5,6 +5,7 @@ import com.toki.backend.blacklist.dto.request.BlacklistRequestDto;
 import com.toki.backend.blacklist.dto.request.BlacklistSaveRequestDto;
 import com.toki.backend.blacklist.service.BlacklistService;
 import com.toki.backend.common.dto.response.CommonResponseDto;
+import com.toki.backend.common.utils.ConvertUserTag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -42,12 +43,10 @@ public class BlacklistController {
     public ResponseEntity<CommonResponseDto<Object>> addBlacklist(@RequestBody BlacklistSaveRequestDto saveRequestDto,
                                                                   @AuthenticationPrincipal CustomOAuth2User userPrincipal) {
 
-        BlacklistRequestDto requestDto = BlacklistRequestDto.builder()
-                .fromUserPk(userPrincipal.getName())
-                .toUserTag(saveRequestDto.getToUserTag())
-                .build();
+        String fromUserPk = userPrincipal.getName();
+        Integer toUserTag = ConvertUserTag.convertUserTag(saveRequestDto.getToUserTag());
 
-        blacklistService.saveBlacklist(requestDto);
+        blacklistService.saveBlacklist(fromUserPk, toUserTag);
 
         CommonResponseDto<Object> responseDto = CommonResponseDto.builder()
                 .resultCode(200)
@@ -59,16 +58,13 @@ public class BlacklistController {
 
 
     // 블랙리스트에서 유저 삭제
-    @DeleteMapping("/{userPk}")
-    public ResponseEntity<?> deleteBlacklist(@PathVariable String userPk,
+    @DeleteMapping("/{userTag}")
+    public ResponseEntity<?> deleteBlacklist(@PathVariable String userTag,
                                              @AuthenticationPrincipal CustomOAuth2User userPrincipal) {
 
-        BlacklistRequestDto requestDto = BlacklistRequestDto.builder()
-                .fromUserPk(userPrincipal.getName())
-                .toUserTag(userPk)
-                .build();
 
-        blacklistService.deleteBlacklist(requestDto);
+        blacklistService.deleteBlacklist(userPrincipal.getName(),
+                ConvertUserTag.convertUserTag(userTag));
 
         CommonResponseDto<Object> responseDto = CommonResponseDto.builder()
                 .resultCode(200)

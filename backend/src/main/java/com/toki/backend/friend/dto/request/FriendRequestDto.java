@@ -1,10 +1,11 @@
 package com.toki.backend.friend.dto.request;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FriendRequestDto {
     private String toUserTag;
 }
