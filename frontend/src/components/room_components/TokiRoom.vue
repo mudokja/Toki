@@ -154,11 +154,11 @@ const onExistingParticipants = (msg) => {
 }
 const onNewParticipant = (request) => {
   createMember(request.name)
-  setTimeout(()=>receiveVideo(request.name),100)
+  setTimeout(()=>receiveVideo(request.name),1000)
 }
 const participantBatch = (sender) => {
   createMember(sender)
-  setTimeout(()=>receiveVideo(sender),100)
+  setTimeout(()=>receiveVideo(sender),1000)
 }
 
 const createMember = (userName) => {
