@@ -1,3 +1,18 @@
+<script setup>
+import { onMounted } from "vue"
+
+const props = defineProps({
+  item: {
+    type: [Number, Object],
+    required: true,
+  },
+  index: Number
+})
+
+
+
+</script>
+
 <template>
       <v-card
     class="mx-auto"

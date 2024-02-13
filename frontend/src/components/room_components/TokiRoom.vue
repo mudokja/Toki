@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, reactive, ref,h,shallowReactive } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, ref,h,shallowReactive,watch } from 'vue'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiMicrophone, mdiVideo, mdiMonitorShare, mdiRadioboxMarked, mdiEmoticonOutline, mdiCog, mdiChatProcessingOutline } from '@mdi/js'
 import RoomGameModal from '../modal/RoomGameModal.vue'
@@ -8,7 +8,8 @@ import { useWebSocket } from '@vueuse/core'
 import kurentoUtil from 'kurento-utils';
 import RoomUserView from '@/components/room_components/RoomUserView.vue'
 import { toRaw } from 'vue'
-import { useTokiRoomStore } from '@/stores/tokiroom'
+// import { useTokiRoomStore } from '@/stores/tokiroom'
+import user from '@/stores/user'
 ////
 // const testRooms = useTokiRoomStore();
 //JiHoon Jung <mudokja@gmail.com>
@@ -16,16 +17,16 @@ const props = defineProps({
   userInfo: Object,
   roomInfo: Object
 })
-const video2=ref();
 const userInfo = ref(props.userInfo)
 const roomInfo = ref(props.roomInfo)
-const constraints = ref({})
 
 const tokiRoomMembers = ref([])
-
-const { status, data, send, open, close } = useWebSocket('wss://i10b205.p.ssafy.io/ws/room', {
+const tokiRoomVideo=ref({})
+const wsUrl='wss://i10b205.p.ssafy.io/ws/room'
+// const wsUrl='ws://localhost:8443/groupcall'
+const { status, data, send, open, close } = useWebSocket(wsUrl, {
   heartbeat: {
-    message: 'ping',
+    message: JSON.stringify({id:"ping",value:"ping"}),
     interval: 30000,
     pongTimeout:30000,
   },
@@ -34,28 +35,26 @@ const { status, data, send, open, close } = useWebSocket('wss://i10b205.p.ssafy.
   },
   onMessage: (ws,message) => {
     let parsedMessage = JSON.parse(message.data);
-	console.info('Received message: ' + message.data);
-	console.dir("여기온 메세지"+message.data);
-	console.dir(ws.CONNECTING);
 	switch (parsedMessage.id) {
-	case 'existingParticipants':
-		onExistingParticipants(parsedMessage);
+    case 'existingParticipants':
+      createMember(userInfo.value.name);
+    setTimeout(()=>onExistingParticipants(parsedMessage),10)
 		break;
-	case 'newParticipantArrived':
+    case 'newParticipantArrived':
 		onNewParticipant(parsedMessage);
 		break;
 	case 'participantLeft':
 		onParticipantLeft(parsedMessage);
 		break;
 	case 'receiveVideoAnswer':
-    console.log("비디오받기")
 		receiveVideoResponse(parsedMessage);
-		break;
+      break;
+  case 'pong':
+      break;
+
 	case 'iceCandidate':
-    console.log("후보")
-    console.dir(toRaw(tokiRoomMembers.value.find(v=>v.name===parsedMessage.name)))
-		toRaw(tokiRoomMembers.value.find(i=>i.name===parsedMessage.name)).rtcPeer.addIceCandidate(parsedMessage.candidate, function (error) {
-        if (error) {
+		toRaw(tokiRoomMembers.value.find(v=>v.name===parsedMessage.name)).rtcPeer.addIceCandidate(parsedMessage.candidate, function (error) {
+      if (error) {
         console.error("Error adding candidate: " + error);
         return;
         }
@@ -68,7 +67,7 @@ const { status, data, send, open, close } = useWebSocket('wss://i10b205.p.ssafy.
 })
 const sendMessage=(message)=>{
     const msg=JSON.stringify(message)
-    console.dir(`message : ${msg}`)
+    // console.dir(`message : ${msg}`)
     send(msg)
 }
 
@@ -81,77 +80,49 @@ function register() {//room관련 정보 가져옴
 	}
 	sendMessage(message);
 }
-const test=()=>{
+const start=()=>{
     register()
 }
+// watch(tokiRoomVideo, (newVal) => {
+//   console.log("변화!",newVal.value)
+// })
 
 
 function onParticipantLeft(request) {//나머지 참가자 내보내기
 	console.log('Participant ' + request.name + ' left');
-	const participant =tokiRoomMembers.value.find(request.name);//참가자 배열 받기
-	participant.dispose();//참가자 처분
-	delete tokiRoomMembers[request.name];//참가자 배열 삭제
+	const participant =tokiRoomMembers.value.find(v=>v.name===request.name);//참가자 배열 받기
+  participant.rtcPeer.dispose();
+  tokiRoomMembers.value=tokiRoomMembers.value.filter(v => v.name !== request.name)
+  console.log(tokiRoomMembers.value)
+  delete tokiRoomVideo.value[request.name]
 }
 
 function receiveVideoResponse(result) {//참가자 비디오 응답 오는지 확인
-  console.log("비디오")
-  console.dir(toRaw(tokiRoomMembers.value.find(v=>v.name===result.name).rtcPeer))
+  console.dir(toRaw(tokiRoomMembers.value.find(v=>v.name===result.name).rtcPeer.processAnswer))
 	toRaw(tokiRoomMembers.value.find(v=>v.name===result.name).rtcPeer).processAnswer (result.sdpAnswer, function (error) {
 		if (error) return console.error (error);
 	});
 }
 
 function receiveVideo(sender) {
-  
-	tokiRoomMembers.value[sender] = createMember(sender)
-	let video = toRaw(tokiRoomMembers.value[sender].video);
-  console.log("여기서", video)
-    let participant = tokiRoomMembers.value.find(v=>v.name===sender)
-    console.log(participant)
+	let video = toRaw(tokiRoomVideo.value[sender]);
+  const participant = tokiRoomMembers.value.find(v => v.name === sender)
+    participant.video=video
 	let options = {
-      remoteVideo: video,
-      onicecandidate: (candidate)=>{
-        console.log("Local candidate" + JSON.stringify(candidate));
-		const message = {
-        id: 'onIceCandidate',
-        candidate: candidate,
-        name: tokiRoomMembers.value[sender].name
-		};
-		sendMessage(message);
+    remoteVideo: video,
+      onicecandidate:participant.onicecandidate.bind(participant)
       }
-    }
-    console.log("여기",tokiRoomMembers.value[userInfo.value.name])
-	participant.rtcPeer =new kurentoUtil.WebRtcPeer.WebRtcPeerSendonly(options,
+	participant.rtcPeer =new kurentoUtil.WebRtcPeer.WebRtcPeerRecvonly(options,
 		function (error) {
             if(error) {
                 return console.error(error);
             }
-            this.generateOffer (offerToReceiveVideo.bind(tokiRoomMembers.value.find((v,i)=>v.name===sender)))
+            this.generateOffer (participant.offerToReceiveVideo.bind(toRaw(participant)));
 	});
 }
-const offerToReceiveVideo =(error, offerSdp)=>{
-  console.log("offer제안 실행")
-		if (error) return console.error ("sdp offer error")
-  console.log('Invoking SDP offer callback function');
-  console.log()
-		const msg =  { id : "receiveVideoFrom",
-				sender : 'user1',
-				sdpOffer : offerSdp
-			};
-		sendMessage(msg);
-	}
-  // function onicecandidate(candidate) {
-  //           console.log("Local candidate" + JSON.stringify(candidate));
-  //           console.dir("이거안되는듯?")
-  //           const message = {
-  //           id: 'onIceCandidate',
-  //           candidate: candidate,
-  //           name: userInfo.value.name
-  //           };
-  //           sendMessage(message);
-  //       }
+
 const onExistingParticipants = (msg) => {
-    constraints.value = {
+    const constraints = {
     audio: true,
     video: {
       mandatory: {
@@ -162,20 +133,14 @@ const onExistingParticipants = (msg) => {
     }
   }
   console.log(userInfo.value.name + " registered in room " + roomInfo.value.roomPk);
-	createMember(userInfo.value.name);
+
   const participant = tokiRoomMembers.value.find(v=>v.name===userInfo.value.name)
-  console.log("참가자=",participant)
-  participant.video=video2.value
-  console.log(participant.video)
-  console.log(video2.value)
-  console.log("이게")
-	// tokiRoomMembers.value.push(participant)
+  participant.video=tokiRoomVideo.value[userInfo.value.name]
 	let video = participant.video;
-  console.log(video)
 	let options = {
             localVideo: video,
-            mediaConstraints: toRaw(constraints.value),
-            onicecandidate: participant.onicecandidate
+            mediaConstraints: constraints,
+            onicecandidate: participant.onicecandidate.bind(participant)
     }
 		participant.rtcPeer =new kurentoUtil.WebRtcPeer.WebRtcPeerSendonly(options,
 		function (error) {
@@ -183,14 +148,17 @@ const onExistingParticipants = (msg) => {
                 return console.error(error);
       }
             console.log("참가자",participant)
-            this.generateOffer (offerToReceiveVideo.bind(participant));
+            this.generateOffer (participant.offerToReceiveVideo.bind(toRaw(participant)));
 	});
-  console.log(participant)
-console.dir("비디오값"+options.localVideo);
-	msg.data.forEach(receiveVideo);
+	msg.data.forEach(participantBatch);
 }
 const onNewParticipant = (request) => {
-  receiveVideo(request.name);
+  createMember(request.name)
+  setTimeout(()=>receiveVideo(request.name),100)
+}
+const participantBatch = (sender) => {
+  createMember(sender)
+  setTimeout(()=>receiveVideo(sender),100)
 }
 
 const createMember = (userName) => {
@@ -198,21 +166,25 @@ const createMember = (userName) => {
     name: userName,
     video: null,
     rtcPeer: null,
-    onicecandidate: (candidate) =>{
+    onicecandidate: function(candidate){
             console.log("Local candidate" + JSON.stringify(candidate));
-            console.dir("이거안되는듯?")
             const message = {
             id: 'onIceCandidate',
             candidate: candidate,
-            name: userInfo.value.name
-            };
+            name: userName
+      };
             sendMessage(message);
-        }
+    },
+    offerToReceiveVideo:function(error, offerSdp){
+		if (error) return console.error ("sdp offer error")
+		const msg =  { id : "receiveVideoFrom",
+				sender : userName,
+				sdpOffer : offerSdp
+			};
+		sendMessage(msg);
+	}
   })
   tokiRoomMembers.value= [...tokiRoomMembers.value,tokiRoomMember.value]
-  console.dir(tokiRoomMembers.value)
-  console.log("생성중")
-  console.dir(tokiRoomMember.value)
   
 }
 ////
@@ -265,8 +237,7 @@ function handleResize() {
 
 onMounted(() => {
   window.addEventListener('resize', handleResize)
-  console.log(video2.value)
-  test()
+  start()
 })
 
 onUnmounted(() => {
@@ -287,17 +258,10 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
       <v-col id="screen">
         <!-- 위 서브 화면 -->
         <v-row class="mt-1" style="height: 20%;">
-          <v-col :id="`biggBG1`" class="ml-2 mr-2 mb-2 d-flex align-end">
-            <RoomUserView>
-              <template #video>
-                <video :id="`room-test`" ref="video2"></video>
-              </template>
-            </RoomUserView>
-        </v-col>
           <v-col v-for="(member,key,index) in tokiRoomMembers" :id="`biggBG${index}`" :key="member.name" class="ml-2 mr-2 mb-2 d-flex align-end">
-            <RoomUserView>
+            <RoomUserView  :userInfo="member">
               <template #video>
-                <video :id="`room-${member.name}`" ref="video2"></video>
+                <video :id="`room-${member.name}`" class="toki-video" :ref="(el)=>(tokiRoomVideo[member.name]=el)" autoplay></video>
               </template>
             </RoomUserView>
           </v-col>
@@ -829,6 +793,11 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
 }
 #chatt {
   background-color: aqua;
+}
+
+.toki-video{
+  width: 100%;
+	height: auto;
 }
 
 /* 작은 화면 */

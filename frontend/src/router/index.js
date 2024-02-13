@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { jwtDecode } from 'jwt-decode'
 import { useAuthStore } from '@/stores/auth'
-
+import { useRoute } from 'vue-router'
+const route = useRoute()
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -12,8 +13,9 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/room',
+      path: '/room/:roomPk',
       name: 'room',
+      props:true,
       component: () => import('../views/RoomView.vue')
     },
     {

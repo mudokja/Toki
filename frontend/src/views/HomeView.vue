@@ -4,7 +4,7 @@ import HeaderView from '@/views/HeaderView.vue';
 import FooterView from '@/views/FooterView.vue';
 import MyCard from '@/components/MyCard.vue';
 import { commonaxios, postaxios } from '@/js/CommonAxios';
-
+import { useRouter } from 'vue-router';
 
 // 데이터 상태 변수
 const items = ref(Array.from({ length: 48 }, (_, v) => v + 1));
@@ -33,9 +33,17 @@ const load = async ({ done }) => {
   done('ok');
 };
 
+const router=useRouter()
+
+
+const moveRoom = (room) => {
+
+  router.push({ name: 'room', params: { roomPk: room, }  })
+}
 </script>
 
 <template>
+
   <v-app>
     
     
@@ -58,6 +66,7 @@ const load = async ({ done }) => {
             <my-card 
               :item="item"
               :index="index"
+              @click="moveRoom(item)"
               >
             </my-card>
             
