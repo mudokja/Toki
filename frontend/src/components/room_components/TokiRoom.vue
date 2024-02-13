@@ -10,8 +10,6 @@ import RoomUserView from '@/components/room_components/RoomUserView.vue'
 import { toRaw } from 'vue'
 // import { useTokiRoomStore } from '@/stores/tokiroom'
 import user from '@/stores/user'
-import { watchEffect } from 'vue'
-import { watchPostEffect } from 'vue'
 ////
 // const testRooms = useTokiRoomStore();
 //JiHoon Jung <mudokja@gmail.com>
@@ -25,11 +23,11 @@ const roomInfo = ref(props.roomInfo)
 const tokiRoomMembers = ref([])
 const tokiRoomVideo=ref({})
 const wsUrl='wss://i10b205.p.ssafy.io/ws/room'
-// const wsUrl='ws://localhost:8081/ws/room'
+// const wsUrl='ws://localhost:8443/groupcall'
 const { status, data, send, open, close } = useWebSocket(wsUrl, {
   heartbeat: {
     message: JSON.stringify({id:"ping",value:"ping"}),
-    interval: 50000,
+    interval: 30000,
     pongTimeout:30000,
   },
   onConnected:()=> {
@@ -38,17 +36,9 @@ const { status, data, send, open, close } = useWebSocket(wsUrl, {
   onMessage: (ws,message) => {
     let parsedMessage = JSON.parse(message.data);
 	switch (parsedMessage.id) {
-    case 'existingParticipants':{
-      
+    case 'existingParticipants':
       createMember(userInfo.value.name);
-      const receive=watchPostEffect(()=>{
-        if(tokiRoomVideo.value[userInfo.value.name]){
-          onExistingParticipants(parsedMessage)
-        }
-      })
-      receive();
-    }
-      
+    setTimeout(()=>onExistingParticipants(parsedMessage),10)
 		break;
     case 'newParticipantArrived':
 		onNewParticipant(parsedMessage);
@@ -57,7 +47,7 @@ const { status, data, send, open, close } = useWebSocket(wsUrl, {
 		onParticipantLeft(parsedMessage);
 		break;
 	case 'receiveVideoAnswer':
-		receiveVideoResponse(parsedMessage)
+		receiveVideoResponse(parsedMessage);
       break;
   case 'pong':
       break;
@@ -108,13 +98,9 @@ function onParticipantLeft(request) {//나머지 참가자 내보내기
 }
 
 function receiveVideoResponse(result) {//참가자 비디오 응답 오는지 확인
-  // console.log("받음")
-  // console.dir(toRaw(tokiRoomMembers.value.find(v=>v.name===result.name).rtcPeer.processAnswer))
+  console.dir(toRaw(tokiRoomMembers.value.find(v=>v.name===result.name).rtcPeer.processAnswer))
 	toRaw(tokiRoomMembers.value.find(v=>v.name===result.name).rtcPeer).processAnswer (result.sdpAnswer, function (error) {
-		if (error) {
-      console.log("응답에러")
-      return console.error (error);
-    }
+		if (error) return console.error (error);
 	});
 }
 
@@ -141,7 +127,7 @@ const onExistingParticipants = (msg) => {
     video: {
       mandatory: {
         maxWidth: 320,
-        maxFrameRate: 20,
+        maxFrameRate: 15,
         minFrameRate: 15
       }
     }
@@ -168,21 +154,11 @@ const onExistingParticipants = (msg) => {
 }
 const onNewParticipant = (request) => {
   createMember(request.name)
-  const receive=watchPostEffect(()=>{
-    if(tokiRoomVideo.value[request.name]){
-      receiveVideo(request.name)
-    }
-  })
-  receive();
+  setTimeout(()=>receiveVideo(request.name),1000)
 }
 const participantBatch = (sender) => {
   createMember(sender)
-  const receive=watchPostEffect(()=>{
-    if(tokiRoomVideo.value[sender]){
-      receiveVideo(sender)
-    }
-    receive();
-})
+  setTimeout(()=>receiveVideo(sender),1000)
 }
 
 const createMember = (userName) => {
