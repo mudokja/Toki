@@ -23,14 +23,15 @@ import java.util.List;
 @NoArgsConstructor //파라미터가 없는 생성자를 자동으로 생성
 public class User {
 
-	@Id
+	@Id //@Id: 엔티티의 기본 키를 나타내는 어노테이션
 	@UuidGenerator(style = UuidGenerator.Style.TIME)
-	@GeneratedValue(strategy = GenerationType.UUID)
+	@GeneratedValue(strategy = GenerationType.UUID) //@GeneratedValue: 기본 키의 생성 전략을 지정하는 어노테이션
 	String userPk;
 
 	//    배지 정보를 가져오기 위해서 적음.
-//	@OneToMany
-//	private List<Badge> badges;
+//	@OneToMany //일대다 관계를 설정하는 어노테이션으로, 한 명의 사용자는 여러 배지를 가질 수 있다.
+//	private List<Badge> badgges;
+	// 이 부분은 주석 처리하였음.
 
 	@Column(nullable = false,unique = true)
 	String userId;
