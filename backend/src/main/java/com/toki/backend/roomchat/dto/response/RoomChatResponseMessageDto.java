@@ -6,8 +6,9 @@ import lombok.Getter;
 
 @Getter
 public class RoomChatResponseMessageDto extends RoomChatMessageDto {
+
     @Builder
-    public RoomChatResponseMessageDto(String roomChatPk, String fromUser, String content) {
-        super(roomChatPk, fromUser, content);
+    public RoomChatResponseMessageDto(String roomChatPk, String fromUserNickName, String content) {
+        super(roomChatPk, fromUserNickName, content);
     }
 }

@@ -24,8 +24,6 @@ public class RedisRoomChatMessageListener implements MessageListener {
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        log.debug("뭔가왔다아아!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        log.info("Message= {}", message);
         try {
             String publishMessage = redisTemplate.getStringSerializer().deserialize(message.getBody());
 

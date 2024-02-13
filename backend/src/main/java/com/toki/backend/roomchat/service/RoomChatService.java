@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toki.backend.common.utils.TokenProvider;
+import com.toki.backend.member.entity.User;
 import com.toki.backend.member.repository.UserRepository;
 import com.toki.backend.room.entity.Room;
 import com.toki.backend.roomchat.dto.RoomChatType;
@@ -40,15 +41,24 @@ public class RoomChatService {
     private final ObjectMapper objectMapper;
 
     @Transactional(readOnly = true)
-    public void sendMessage(RoomChatRequestMessageDto roomChatRequestDto, String userPk) throws JsonProcessingException {
+    public void sendMessage(RoomChatRequestMessageDto roomChatRequestDto, String userPk,String userName) throws JsonProcessingException {
 
         String roomPk=roomChatRequestDto.getRoomChatPk();
+        // 프론트에서 인증토큰을 잘 보내줄 수 있는 때가 온다면
+//        User user =userRepository.findById(userPk).orElseThrow(()->
+//                new RuntimeException("채팅 유저 조회오류")
+//        );
+        //임시
+        User user= User.builder()
+                .userNickName(userName)
+                .build();
 
         //채팅 생성 및 저장
         RoomChatMessage roomChatMessage = RoomChatMessage.builder()
                 .roomChatPk(roomPk)
                 .chatType(roomChatRequestDto.getChatType())
-                .fromUser(userPk)
+                .fromUserNickName(user.getUserNickName())
+                .fromUserPk(userPk)
                 .content(roomChatRequestDto.getContent())
                 .sendTo(roomChatRequestDto.getSendTo())
                 .roomChatIdx(Objects.requireNonNull(redisTemplate.opsForSet().size("roomchatmessage:roomChatPk:" + roomPk))+1)
@@ -59,7 +69,7 @@ public class RoomChatService {
         String topic = channelTopic.getTopic();
         RoomChatResponseMessageDto roomChatResponseMessageDto = RoomChatResponseMessageDto.builder()
                 .roomChatPk(roomPk)
-                .fromUser(userPk)
+                .fromUserNickName(userPk)
                 .content(roomChatRequestDto.getContent())
                 .build();
 

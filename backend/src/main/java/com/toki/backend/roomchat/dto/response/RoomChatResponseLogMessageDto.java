@@ -17,7 +17,8 @@ public class RoomChatResponseLogMessageDto {
     private String roomChatPk;
 
     private String content;
-    private String fromUser;
+    private String fromUserPk;
+    private String fromUserNickName;
     private String sendTo;
 
     private String crateAt;

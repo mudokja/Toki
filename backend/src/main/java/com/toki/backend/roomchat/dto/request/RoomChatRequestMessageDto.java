@@ -10,14 +10,14 @@ public class RoomChatRequestMessageDto extends RoomChatMessageDto {
     RoomChatType chatType;
     String sendTo;
     @Builder
-    public RoomChatRequestMessageDto(String roomChatPk, String sendTo, String fromUser, String content, RoomChatType chatType) {
-        super(roomChatPk, fromUser, content);
+    public RoomChatRequestMessageDto(String roomChatPk, String sendTo, String fromUserNickName, String content, RoomChatType chatType) {
+        super(roomChatPk, fromUserNickName, content);
         this.chatType = chatType;
         this.sendTo=sendTo;
     }
 
-    public RoomChatRequestMessageDto(String roomChatPk, String fromUser, String content, RoomChatType chatType, String sendTo) {
-        super(roomChatPk, fromUser, content);
+    public RoomChatRequestMessageDto(String roomChatPk, String fromUserNickName, String content, RoomChatType chatType, String sendTo) {
+        super(roomChatPk, fromUserNickName, content);
         this.chatType = chatType;
         this.sendTo = sendTo;
     }

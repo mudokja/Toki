@@ -50,10 +50,12 @@ public class RoomChatMessageController {
         if(!chatRoomPk.equals(roomChatRequestDto.getRoomChatPk())){
             roomChatRequestDto.setRoomChatPk(chatRoomPk);
         }
+        // 때를기다리며
+//        String userPk=principal.getName();
         log.debug("장소 {}",chatRoomPk);
         log.debug("메시지 {}",roomChatRequestDto.toString());
 //        redisTemplate.convertAndSend("roomChat",objectMapper.writeValueAsString(roomChatRequestDto));
-        roomChatService.sendMessage(roomChatRequestDto,"aa");
+        roomChatService.sendMessage(roomChatRequestDto,"tempPk",roomChatRequestDto.getFromUserNickName());
 //                , principal.getName()
 //        );
 

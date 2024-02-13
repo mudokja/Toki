@@ -34,7 +34,9 @@ public class RoomChatMessage {
     private RoomChatType chatType;
     private String content;
     @Column
-    private String fromUser;
+    private String fromUserPk;
+    @Column
+    private String fromUserNickName;
     @Column
     private String sendTo;
 
@@ -42,12 +44,13 @@ public class RoomChatMessage {
     private String crateAt;
 
     @Builder
-    public RoomChatMessage(String roomChatPk, Long roomChatIdx, RoomChatType chatType,String content, String fromUser, String sendTo, String crateAt) {
+    public RoomChatMessage(String roomChatPk, Long roomChatIdx, RoomChatType chatType,String content, String fromUserPk,String fromUserNickName, String sendTo, String crateAt) {
         this.roomChatPk = roomChatPk;
         this.roomChatIdx = roomChatIdx;
         this.chatType = chatType;
         this.content=content;
-        this.fromUser = fromUser;
+        this.fromUserPk = fromUserPk;
+        this.fromUserNickName=fromUserNickName;
         this.sendTo = sendTo;
         this.crateAt = crateAt;
     }
@@ -62,7 +65,8 @@ public class RoomChatMessage {
         return RoomChatResponseLogMessageDto.builder()
                 .crateAt(getCrateAt())
                 .sendTo(getSendTo())
-                .fromUser(getFromUser())
+                .fromUserPk(getFromUserPk())
+                .fromUserNickName(getFromUserNickName())
                 .roomChatPk(getRoomChatPk())
                 .content(getContent())
                 .build();

@@ -1,5 +1,6 @@
 package com.toki.backend.roomchat.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Getter
@@ -9,6 +10,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoomChatMessageDto {
     private String roomChatPk;
-    private String fromUser;
+    @JsonProperty("fromUser")
+    private String fromUserNickName;
     private String content;
 }
