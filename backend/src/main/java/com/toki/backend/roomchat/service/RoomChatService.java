@@ -69,7 +69,7 @@ public class RoomChatService {
         String topic = channelTopic.getTopic();
         RoomChatResponseMessageDto roomChatResponseMessageDto = RoomChatResponseMessageDto.builder()
                 .roomChatPk(roomPk)
-                .fromUserNickName(userPk)
+                .fromUserNickName(userName)
                 .content(roomChatRequestDto.getContent())
                 .build();
 
