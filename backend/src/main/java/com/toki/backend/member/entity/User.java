@@ -2,6 +2,7 @@ package com.toki.backend.member.entity;
 
 import com.toki.backend.auth.dto.Role;
 import com.toki.backend.badge.entity.Badge;
+import com.toki.backend.common.utils.ConvertUserTag;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Columns;
@@ -30,7 +31,7 @@ public class User {
 
 	//    배지 정보를 가져오기 위해서 적음.
 //	@OneToMany //일대다 관계를 설정하는 어노테이션으로, 한 명의 사용자는 여러 배지를 가질 수 있다.
-//	private List<Badge> badgges;
+//	private List<Badge> badges;
 	// 이 부분은 주석 처리하였음.
 
 	@Column(nullable = false,unique = true)
@@ -67,7 +68,7 @@ public class User {
 	@ManyToMany(fetch = FetchType.LAZY) //@ManyToMany: 다대다 관계를 정의하는 어노테이션
 	@JoinTable(name = "user_badges", //@JoinTable: 연결 테이블을 지정 //user_badges : 연결테이블의 이름(다대다)
 			joinColumns = @JoinColumn(name = "user_tag"),// 현재 엔티티의 외래 키 컬럼명 지정
-			inverseJoinColumns = @JoinColumn(name = "badge_idx"))// 대상 엔티티의 외래 키 컬럼명 지정
+			inverseJoinColumns = @JoinColumn(name = "idx"))// 대상 엔티티의 외래 키 컬럼명 지정
 	//유저 테이블의 유저태그를 가져와서 배지테이블의 배지 인덱스와 연결
 	private List<Badge> badge = new ArrayList<>(); //배지들을 반환한다.
 
@@ -86,5 +87,22 @@ public class User {
 		this.snsType= snsType;
 		this.profileImageUrl=profileImageUrl;
 		this.userTag = userTag;
+	}
+
+
+	String hexUserTag; //16진수의 유저태그 변환값 필드
+
+	// 10진수로 표현된 유저 태그를 16진수로 변환하여 hexUserTag 필드에 저장하는 메서드
+	//(백엔드 10진수 -> 프론트엔드 16진수)
+	public void convertToHex(int userTag) {
+		this.userTag = userTag; // userTag 필드에 값을 설정
+		this.hexUserTag = ConvertUserTag.convertUserTag(userTag);
+		// 10진수를 16진수로 변환하여 hexUserTag 필드에 저장
+	}
+
+	// 프론트엔드에서 전달된 16진수를 10진수로 변환하는 메서드
+	public void convertFromHex(String hexUserTag) {
+		this.hexUserTag = hexUserTag;
+		this.userTag = ConvertUserTag.convertUserTag(hexUserTag);
 	}
 }
