@@ -27,7 +27,7 @@ public class TokiRoomManager {
     if(room==null){
 
       rooms.put(roomName,tokiRoomService.createTokiRoom(roomName));
-      rooms.get(roomName);
+      room=rooms.get(roomName);
     }
     log.debug("Room {} found!", roomName);
     return room;
