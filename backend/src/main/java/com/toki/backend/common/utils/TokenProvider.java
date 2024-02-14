@@ -50,7 +50,7 @@ public class TokenProvider {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static String jwtType="Bearer ";
     @Value("${JWT-TIME-ZONE:Asia/Seoul}")
-    public static String TIME_ZONE;
+    public String TIME_ZONE;
 
     private static long accessTokenExipredTime=60*30L;
     private static long refreshTokenExpiredTime=60*60*24*3L;
