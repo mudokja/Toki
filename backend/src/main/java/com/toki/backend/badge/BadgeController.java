@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.toki.backend.common.utils.ConvertUserTag.convertUserTag;
+
 @RestController
 @RequiredArgsConstructor
 public class BadgeController {
@@ -61,7 +63,7 @@ public class BadgeController {
 
     // 4. 회원에게 배지 추가.
     @PostMapping("/api/v1/admin/badges/{userTag}")
-    public ResponseEntity<CommonResponseDto<BadgeDTO>> saveToMember(@PathVariable int userTag, @RequestBody BadgeDTO badgeDTO){
+    public ResponseEntity<CommonResponseDto<BadgeDTO>> saveToMember(@PathVariable String userTag, @RequestBody BadgeDTO badgeDTO){
         BadgeDTO  addBadge = badgeService.saveBadge(badgeDTO);
         return ResponseEntity.ok(CommonResponseDto.<BadgeDTO>builder()
                 .resultCode(200)
@@ -73,9 +75,9 @@ public class BadgeController {
 
     // 5. 특정 회원의 배지 조회하기
     @GetMapping("/api/v1/badges/{userTag}")
-    public ResponseEntity<CommonResponseDto<BadgeDTO>> getBadgeByIdx(@PathVariable int userTag) {
+    public ResponseEntity<CommonResponseDto<BadgeDTO>> getBadgeByIdx(@PathVariable String userTag) {
         // 특정 회원의 배지 조회 메서드 호출
-        BadgeDTO badgeDTO = badgeService.getBadgeByIdx(userTag);
+        BadgeDTO badgeDTO = badgeService.getBadgeByIdx(convertUserTag(userTag));
         return ResponseEntity.ok(CommonResponseDto.<BadgeDTO>builder()
                 .resultCode(200)
                 .resultMessage("배지 조회 성공")
@@ -85,8 +87,8 @@ public class BadgeController {
 
     // 6. 사용자로부터 배지 제거
     @DeleteMapping("/api/v1/admin/badges/{badgeIdx}/users/{userTag}")
-    public ResponseEntity<CommonResponseDto<Void>> deleteBadgeFromUser(@PathVariable int badgeIdx, @PathVariable int userTag) {
-        badgeService.deleteBadgeFromUser(badgeIdx, userTag);
+    public ResponseEntity<CommonResponseDto<Void>> deleteBadgeFromUser(@PathVariable int badgeIdx, @PathVariable String userTag) {
+        badgeService.deleteBadgeFromUser(badgeIdx, convertUserTag(userTag));
         return ResponseEntity.ok(CommonResponseDto.<Void>builder()
                 .resultCode(200)
                 .resultMessage("사용자로부터 배지 제거 성공")
