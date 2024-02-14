@@ -11,7 +11,7 @@ import { commonaxios1 } from '@/js/Click';
 //const ws = new WebSocket('wss://192.168.31.237:8443/groupcall');
 // const ws = new WebSocket('wss://localhost:8443/groupcall');
 //let ws = new WebSocket('ws://localhost:8080/gs-guide-websocket');
-//const ws = new WebSocket('wss://i10b205.p.ssafy.io/ws/room');
+const ws = new WebSocket('wss://i10b205.p.ssafy.io/ws/room');
 //  const stompClient = new Client({
 
 // 	brokerURL:'ws://localhost:8080/gs-guide-websocket',
