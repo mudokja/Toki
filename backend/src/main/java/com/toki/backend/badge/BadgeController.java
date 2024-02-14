@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.toki.backend.common.utils.ConvertUserTag.convertUserTag;
-
+//2024.02.14 다시 업로드합니다.
 @RestController
 @RequiredArgsConstructor
 public class BadgeController {
