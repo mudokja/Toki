@@ -2,6 +2,7 @@
       <v-card
     class="mx-auto"
     max-width="400"
+    @click="goToRoom"
   >
     <v-img
       class="align-end text-white"
@@ -37,6 +38,9 @@
 
 <script setup>
 import { onMounted } from "vue"
+import { useRoute, useRouter } from "vue-router";
+
+const router = useRouter()
 
 const props = defineProps({
   item: {
@@ -46,6 +50,10 @@ const props = defineProps({
   index: Number
 })
 
+
+const goToRoom = () => {
+  router.push({ name: 'roomjoin', params: { roomId: props.item }})
+}
 
 
 </script>

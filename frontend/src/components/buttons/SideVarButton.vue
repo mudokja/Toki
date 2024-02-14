@@ -1,32 +1,23 @@
 <template>
-    <div>
+    <v-btn
+        style="margin-left: 20px;"
+        color="primary"
+        variant="flat"
+        @click.stop="oepnSideVar"
+    >
+    Toggle
+    </v-btn>
 
-        <v-btn
-            color="primary"
-            @click.stop="oepnSideVar"
-        
-        >
-        Toggle
-        </v-btn>
-        
-        <SideVarModal/>
-
-    </div>
-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
-  </template>
+</template>
 <script setup>
 
-import { ref, provide } from 'vue';
-import SideVarModal from '@/components/modal/SideVarModal.vue';
+import { defineEmits } from 'vue';
 
-const drawer = ref(false)
+const emit = defineEmits(['drawer'])
 
 const oepnSideVar = () => {
-    drawer.value = true
-    
+    emit('drawer')
 }
-provide('drawerState', drawer)
-
 
 </script>
 

@@ -4,22 +4,9 @@
 </script>
 
 <template>
-    
-    <v-app
-      style="height: 1000px;"
-    >
-        
-        <v-row
-          class="bg"
-        >                
-          <div 
-            id="bg-image"
-            >         
-
-          </div>
-      </v-row>
-
-      <v-sheet>
+    <v-app class="bg">
+    <v-container>
+      <v-row>
         <v-container id="text1">
           <p>
             Talk? 톡? 토크?
@@ -32,25 +19,28 @@
             시시콜콜한 이야기, 가벼운 이야기를 이곳에서 나눠보세요.
           </p>
         </v-container>
-      </v-sheet>
-      <v-container style="align-content: center;" class="d-flex" id="text2">
+      </v-row>
+      <v-row style="align-content: center;" class="d-flex">
         <v-col
           cols="5"
           offset="1"
         >
-          <p>
-            토키는 토끼와 토크(talk) 의 합성어 입니다.
-          </p>
-          <br>
-          <p>
-            토끼 처럼 자유롭게 뛰놀며,
-          </p>
-          <p>
-            대화를 나누는 모임입니다.
-          </p>
-          <p>
-            이곳에서 자유롭게 뛰다 가세요.
-          </p>
+          <div id="text2">
+
+            <p>
+              토키는 토끼와 토크(talk) 의 합성어 입니다.
+            </p>
+            <br>
+            <p>
+              토끼 처럼 자유롭게 뛰놀며,
+            </p>
+            <p>
+              대화를 나누는 모임입니다.
+            </p>
+            <p>
+              이곳에서 자유롭게 뛰다 가세요.
+            </p>
+          </div>
         </v-col>
         <v-col
           cols="1"
@@ -60,9 +50,10 @@
             id="toki-image" 
             src="@/assets/profile_assets/캡처17.png">
         </v-col>
-      </v-container>
+      </v-row>
 
-    </v-app>
+    </v-container>
+  </v-app>
 </template>
 
 
@@ -72,8 +63,10 @@
   background: linear-gradient(180deg, #E0F5FF 0%, rgba(224, 245, 255, 0) 88.94%);
   background-size: cover;
   background-position: center bottom;
+  background-image: url('@/assets/profile_assets/Footer.png');
   width: 100%;
   height: 100%;
+  position: absolute;
   bottom: 0;
   margin-bottom: 10px;
 }
@@ -90,15 +83,13 @@
 
 #text1 {
   position: absolute;
-  left: 7%;
-  right: 6%;
-  top: 12%;
+  top: 5%;
   
   
   font-family: 'Warhaven';
   font-style: normal;
   font-weight: 700;
-  font-size: 40px;
+  font-size: 33px;
   line-height: 50px;
   text-align: center;
   
@@ -116,7 +107,7 @@
   font-family: 'Gothic A1';
   font-style: normal;
   font-weight: 400;
-  font-size: 30px;
+  font-size: 25px;
   line-height: 50px;
   text-align: center;
 
@@ -125,11 +116,12 @@
 
 #toki-image {
   position: absolute;
-  left: 97.67%;
-  right: 45.62%;
+  top: 40.97%;
+  left: 65%;
   
   
-  height: 350px; 
+  
+  height: 300px; 
   opacity: 70%; 
   border-radius: 11%;  
 }

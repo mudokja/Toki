@@ -46,7 +46,7 @@ const roomData = computed(() => ({
 
 const cllick = () => {
         sessionStorage.setItem('roomData', JSON.stringify(roomData.value))
-        router.push('/room')
+        router.push({ name: 'roomjoin', params: { roomId: 1 }})
 
 }
 
