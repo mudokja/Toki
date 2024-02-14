@@ -4,6 +4,7 @@ package com.toki.backend.badge.service;
 import com.toki.backend.badge.dto.BadgeDTO;
 import com.toki.backend.badge.entity.Badge;
 import com.toki.backend.badge.repository.BadgeRepository;
+import com.toki.backend.common.utils.ConvertUserTag;
 import com.toki.backend.member.dto.UserDTO;
 import com.toki.backend.member.entity.User;
 import com.toki.backend.member.repository.UserRepository;
@@ -102,7 +103,7 @@ public class BadgeService {
     // 사용자 엔티티를 DTO로 변환
     private UserDTO convertUserToDTO(User user) {
         return UserDTO.builder()
-                .userTag(user.getUserTag())
+                .userTag(ConvertUserTag.convertUserTag(user.getUserTag()))
                 .userName(user.getUserName())
                 .userEmail(user.getUserEmail())
                 .badges(user.getBadges().stream()
@@ -118,6 +119,27 @@ public class BadgeService {
                 .name(badge.getName())
                 .imageUrl(badge.getImageUrl())
                 .build();
+    }
+
+    public List<BadgeDTO> getBadgesByUserTag(int userTag) {
+        BadgeDTO badge1 = BadgeDTO.builder()
+                .idx(1) //배지 인덱스
+                .name("활동왕") //배지 이름
+                .imageUrl("사진1") //사진URL
+                .build();
+
+        BadgeDTO badge2 = BadgeDTO.builder()
+                .idx(2)
+                .name("수다쟁이")
+                .imageUrl("사진2")
+                .build();
+
+        BadgeDTO badge3 = BadgeDTO.builder()
+                .idx(3)
+                .name("척척박사")
+                .imageUrl("사진3")  // 예시 지정해주어야 함
+                .build();
+        return Arrays.asList(badge1, badge2, badge3);
     }
 }
 

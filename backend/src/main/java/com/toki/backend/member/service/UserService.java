@@ -3,6 +3,7 @@ package com.toki.backend.member.service;
 
 import com.toki.backend.badge.dto.BadgeDTO;
 import com.toki.backend.badge.service.BadgeService;
+import com.toki.backend.common.utils.ConvertUserTag;
 import com.toki.backend.member.dto.OtherUserDTO;
 import com.toki.backend.member.dto.UserDTO;
 import com.toki.backend.member.dto.UpdateUserRequestDTO;
@@ -73,7 +74,7 @@ public class UserService {
     private UserDTO convertEntityToSimpleDTO(User user) {
         return UserDTO.builder()
                 .userNickName(user.getUserNickName())
-                .userTag(user.getUserTag())
+                .userTag(ConvertUserTag.convertUserTag(user.getUserTag()))
                 .profileImageUrl(user.getProfileImageUrl())
                 .build();
     }
@@ -85,7 +86,7 @@ public class UserService {
                 .userRole(user.getUserRole().toString()) // <- 이 부분이 오류발생하여 toString추가하였습니다.
                 .userName(user.getUserName())
                 .userNickName(user.getUserNickName())
-                .userTag(user.getUserTag())
+                .userTag(ConvertUserTag.convertUserTag(user.getUserTag()))
                 .createAt(user.getCreateAt())
                 .updateAt(user.getUpdateAt())
                 .deleteAt(user.getDeleteAt())

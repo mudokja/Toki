@@ -105,7 +105,7 @@ public class BadgeController {
 
         // UserDTO를 BadgeDTO로 변 환
         List<BadgeDTO> badgeDTOs = usersByBadge.stream()
-                .map(userDTO -> new BadgeDTO(userDTO.getUserTag(), userDTO.getUserName(), userDTO.getUserEmail()))
+                .map(userDTO -> new BadgeDTO(convertUserTag(userDTO.getUserTag()), userDTO.getUserName(), ""))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(CommonResponseDto.<List<BadgeDTO>>builder()
