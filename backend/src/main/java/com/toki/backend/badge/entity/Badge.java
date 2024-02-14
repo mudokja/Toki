@@ -33,7 +33,7 @@ public class Badge {
 
 
 //
-    @ManyToMany(mappedBy = "badges")
+    @ManyToMany(mappedBy = "badges") //123
     // 이렇게 하면 Badge 엔티티와 User 엔티티 간의 다대다 관계가 정의
     private List<User> users = new ArrayList<>();
     ///엔티티가 가진 사용자 목록
