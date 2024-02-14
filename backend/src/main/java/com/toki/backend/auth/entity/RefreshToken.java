@@ -32,13 +32,15 @@ public class RefreshToken {
     @Enumerated(EnumType.STRING)
     Role role;
     String userPk;
+    String userTag;
 
     @Builder
-    public RefreshToken(String refreshToken, LocalDateTime expireTime, Integer snsType, Role role, String userPk) {
+    public RefreshToken(String refreshToken, LocalDateTime expireTime,String userTag, Integer snsType, Role role, String userPk) {
         this.refreshToken = refreshToken;
         this.expireTime = expireTime;
         this.snsType = snsType;
         this.role = role;
         this.userPk = userPk;
+        this.userTag= userTag;
     }
 }

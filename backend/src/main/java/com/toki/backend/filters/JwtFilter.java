@@ -60,7 +60,7 @@ public class JwtFilter extends OncePerRequestFilter {
                             && tokenProvider.validateRefreshToken(refreshTokenCookie)
                             && tokenProvider.isFindRefreshToken(refreshTokenCookie)) {
                         RefreshToken refreshToken = refreshTokenRepository.findById(refreshTokenCookie).orElseThrow(()->new RuntimeException("존재하지 않는 리프레시 토큰"));
-                        response.setHeader(AUTHORIZATION_HEADER, tokenProvider.createAccessToken(refreshToken.getUserPk(),List.of(() -> refreshToken.getRole().toString()), refreshToken.getSnsType()));
+                        response.setHeader(AUTHORIZATION_HEADER, tokenProvider.createAccessToken(refreshToken.getUserPk(),refreshToken.getUserTag(),List.of(() -> refreshToken.getRole().toString()), refreshToken.getSnsType()));
                     }
                 }
 

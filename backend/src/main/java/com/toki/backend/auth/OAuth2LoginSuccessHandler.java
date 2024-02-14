@@ -1,6 +1,7 @@
 package com.toki.backend.auth;
 
 import com.toki.backend.auth.service.CustomOAuth2User;
+import com.toki.backend.common.utils.ConvertUserTag;
 import com.toki.backend.member.entity.User;
 import com.toki.backend.common.utils.TokenProvider;
 import jakarta.servlet.ServletException;
@@ -55,7 +56,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     }
 
     private void loginSuccess(HttpServletResponse response, User oAuth2User, Collection<? extends GrantedAuthority> authorities) throws IOException, URISyntaxException {
-        String accessToken = tokenProvider.createAccessToken(oAuth2User.getUserPk(), authorities, oAuth2User.getSnsType());
+        String accessToken = tokenProvider.createAccessToken(oAuth2User.getUserPk(), ConvertUserTag.convertUserTag(oAuth2User.getUserTag()), authorities, oAuth2User.getSnsType());
         String refreshToken = tokenProvider.createAndSaveRefreshToken(oAuth2User);
         response.addHeader(TokenProvider.AUTHORIZATION_HEADER, "Bearer " + accessToken);
 

@@ -69,8 +69,7 @@ public class TokenProvider {
     public TokenInfoDto createToken(Authentication authentication) {
         User oAuth2User = (User) authentication.getPrincipal();
 
-
-        String accessToken= createAccessToken(authentication.getName(),authentication.getAuthorities(),oAuth2User.getSnsType());
+        String accessToken= createAccessToken(authentication.getName(), ConvertUserTag.convertUserTag(oAuth2User.getUserTag()),authentication.getAuthorities(),oAuth2User.getSnsType());
 
         String refreshToken= createRefreshToken(authentication.getName());
 
@@ -98,7 +97,7 @@ public class TokenProvider {
 
         return null;
     }
-    public String createAccessToken(String userId, Collection<? extends GrantedAuthority> authorities, Integer snsType) {
+    public String createAccessToken(String userId,String userTag, Collection<? extends GrantedAuthority> authorities, Integer snsType) {
         String authoritiesString = authorities.stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -106,6 +105,7 @@ public class TokenProvider {
         return Jwts.builder()
                 .subject("access_token")
                 .claim("userId",userId)
+                .claim("userTag",userTag)
                 .issuedAt(Date.from(now.atZone(ZoneId.of(TIME_ZONE)).toInstant()))
                 .claim("hasGrade", authoritiesString)
                 .claim("snsType",snsType)
@@ -113,6 +113,7 @@ public class TokenProvider {
                 .signWith(key)
                 .compact();
     }
+
 
     public String createRefreshToken(String userId) {
 
@@ -234,6 +235,7 @@ public class TokenProvider {
                 .userPk(oAuth2User.getUserPk())
                         .refreshToken(refreshToekn)
                         .snsType(oAuth2User.getSnsType())
+                        .userTag(ConvertUserTag.convertUserTag(oAuth2User.getUserTag()))
                 .role(oAuth2User.getUserRole())
                 .expireTime(expireTime)
                 .build()
