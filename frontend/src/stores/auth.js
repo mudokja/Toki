@@ -8,7 +8,7 @@ export const useAuthStore = defineStore('auth', () => {
     const accessToken = ref(null)
     const user = ref(null)
 
-    const isAuthenticated = computed(() => !accessToken.value)
+    const isAuthenticated = computed(() => !!accessToken.value)
 
     function setToken(newToken) {
         const decoded = jwtDecode(newToken).userId
@@ -29,6 +29,8 @@ export const useAuthStore = defineStore('auth', () => {
         accessToken.value = null
         user.value = null
         localStorage.removeItem('accessToken')
+        localStorage.removeItem('userId')
+        localStorage.removeItem('auth')
     }
 
   return { accessToken, user, isAuthenticated, setToken, clearToken, }

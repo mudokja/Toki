@@ -60,7 +60,7 @@ const loginWithNaver = () => {
 <template>
     <div>
         <v-dialog v-model="dialogState" width="auto">
-            <v-card width="500" height="700" justify="center">
+            <v-card width="500" height="700" justify="center" style="border-radius: 30px;">
                 <v-sheet 
                     height="300" 
                     class="d-flex mx-auto align-center text-h4 text-light-blue-lighten-2"

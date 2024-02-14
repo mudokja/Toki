@@ -17,6 +17,7 @@ const props = defineProps({
       <v-card
     class="mx-auto"
     max-width="400"
+    @click="goToRoom"
   >
     <v-img
       class="align-end text-white"
@@ -49,6 +50,28 @@ const props = defineProps({
   </v-card>
 
 </template>
+
+<script setup>
+import { onMounted } from "vue"
+import { useRoute, useRouter } from "vue-router";
+
+const router = useRouter()
+
+const props = defineProps({
+  item: {
+    type: [Number, Object],
+    required: true,
+  },
+  index: Number
+})
+
+
+const goToRoom = () => {
+  router.push({ name: 'roomjoin', params: { roomId: props.item }})
+}
+
+
+</script>
 
 <style lang="scss" scoped>
 

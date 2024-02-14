@@ -39,6 +39,31 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue')
     },
     {
+      path: '/rooms',
+      name: 'rooms',
+      component: () => import('../views/DetailView.vue')
+    },
+    {
+      path: '/rooms/:roomId',
+      name: 'roomjoin',
+      component: () => import('../views/RoomView.vue')
+    },
+    {
+      path: '/rooms/:roomId/:roomMeetingId',
+      name: 'roomMeeting',
+      component: () => import('../views/RoomMeetingView.vue')
+    },
+    {
+      path: '/rooms/search',
+      name: 'search',
+      component: () => import('../views/SearchHandlerView.vue')
+    },
+    {
+      path: '/banners',
+      name: 'banners',
+      component: () => import('../views/BannerView.vue')
+    },
+    {
       path: '/test',
       name: 'test',
       component: () => import('../views/MainView.vue')
