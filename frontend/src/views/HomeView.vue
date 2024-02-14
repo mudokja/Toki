@@ -1,9 +1,9 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useUserStore } from '@/stores/user.js';
 import HeaderView from '@/views/HeaderView.vue';
 import FooterView from '@/views/FooterView.vue';
 import MyCard from '@/components/MyCard.vue';
-import { commonaxios, postaxios } from '@/js/CommonAxios';
 
 
 // 데이터 상태 변수
@@ -33,6 +33,19 @@ const load = async ({ done }) => {
   // 로드 완료 신호 전달
   done('ok');
 };
+
+
+
+// user.js 에서 유저 정보 가져오기
+const userStore = useUserStore()
+
+// Axios 요청
+onMounted(() => {
+  // GET 유저 정보 상세 조회
+  userStore.memberDetailAxios(),
+  // GET 유저 정보 간단 조회
+  userStore.memberSimpleAxios()
+})
 
 </script>
 

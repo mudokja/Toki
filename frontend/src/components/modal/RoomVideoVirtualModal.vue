@@ -1,28 +1,28 @@
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue'
-import RoomGameDetailLadderModal from '@/components/modal/RoomGameDetailLadderModal.vue'
-import RoomGameDetailDiceModal from '@/components/modal/RoomGameDetailDiceModal.vue'
-import RoomGameDetailDrawLotsModal from '@/components/modal/RoomGameDetailDrawLotsModal.vue'
-import RoomGameDetailTaboModal from '@/components/modal/RoomGameDetailTaboModal.vue'
+import RoomVideoVirtualDetail1Modal from '@/components/modal/RoomVideoVirtualDetail1Modal.vue';
+import RoomVideoVirtualDetail2Modal from '@/components/modal/RoomVideoVirtualDetail2Modal.vue';
+import RoomVideoVirtualDetail3Modal from '@/components/modal/RoomVideoVirtualDetail3Modal.vue';
+import RoomVideoVirtualDetail4Modal from '@/components/modal/RoomVideoVirtualDetail4Modal.vue';
 
 const props = defineProps({
-    roomGameDialog: {
+    roomVideoVirtualDialog: {
         type: Boolean,
         required: true,
     }
 })
 
-const emit = defineEmits(['update:roomGameDialog'])
-const selectedGame = ref('')
+const emit = defineEmits(['update:roomVideoVirtualDialog'])
+const selectedVirtual = ref('')
 
 function closeModal() {
-  emit('update:roomGameDialog', false)
+  emit('update:roomVideoVirtualDialog', false)
 }
 
-// 자식 RommGameDetail(게임)Modal.vue 에서 오는 emit 수신.
-function selectGame(gameName) {
-    selectedGame.value = gameName
-    console.log(gameName)
+// 자식 RommVoiceChangeDetail(음성변조)Modal.vue 에서 오는 emit 수신.
+function selectVirtual(virtual) {
+    selectedVirtual.value = virtual
+    console.log(virtual)
 }
 
 </script>
@@ -30,7 +30,7 @@ function selectGame(gameName) {
 <template>
     <div>
         <v-dialog
-            v-model="props.roomGameDialog"
+            v-model="props.roomVideoVirtualDialog"
             @click:outside="closeModal"
             width="auto"
             height="1000px"                        
@@ -42,59 +42,59 @@ function selectGame(gameName) {
                 style="border-radius: 20px; border: 1px solid rgb(255, 255, 255);"
             >
 
-                <!-- 게임 상태 표시줄 (맨 위) -->
+                <!-- 버츄얼 적용 상태 표시줄 (맨 위) -->
                 <v-toolbar
                     color="black"                    
                 >
                     <v-toolbar-title                        
                         style="margin-left: 50px;"
                     >
-                        게임
+                        버츄얼 적용
                     </v-toolbar-title>
                 </v-toolbar>
 
-                <!-- 게임 목록 -->
+                <!-- 버츄얼 목록 -->
                 <v-row
                     class="d-flex align-center justify-center"
-                    style="margin-left: 10%; margin-right: 10%; margin-top: 25%; text-align: center;"             
+                    style="margin-left: 10%; margin-right: 10%; margin-top: 30%; text-align: center;"             
                 >
-                    <!-- 사다리 게임 -->
+                    <!-- 버츄얼 1 -->
                     <v-col>
-                        <RoomGameDetailLadderModal @select-game="selectGame"/>
+                        <RoomVideoVirtualDetail1Modal @select-virtual="selectVirtual"/>
                         <br>
                         <br>
                         <p class="text-h6" style="white-space: nowrap;">
-                            사다리 게임
+                            버츄얼 1
                         </p>
                     </v-col>
 
-                    <!-- 주사위 게임 -->
+                    <!-- 버츄얼 2 -->
                     <v-col>
-                        <RoomGameDetailDiceModal @select-game="selectGame"/>
+                        <RoomVideoVirtualDetail2Modal @select-virtual="selectVirtual"/>
                         <br>
                         <br>
                         <p class="text-h6" style="white-space: nowrap;">
-                            주사위 게임
+                            버츄얼 2
                         </p>
                     </v-col>
 
-                    <!-- 제비 뽑기 -->
+                    <!-- 버츄얼 3 -->
                     <v-col>
-                        <RoomGameDetailDrawLotsModal @select-game="selectGame"/>
+                        <RoomVideoVirtualDetail3Modal @select-virtual="selectVirtual"/>
                         <br>
                         <br>
                         <p class="text-h6" style="white-space: nowrap;">
-                            제비 뽑기
+                            버츄얼 3
                         </p>
                     </v-col>
 
-                    <!-- 단어 맞추기 -->
+                    <!-- 버츄얼 4 -->
                     <v-col>
-                        <RoomGameDetailTaboModal @select-game="selectGame"/>
+                        <RoomVideoVirtualDetail4Modal @select-virtual="selectVirtual"/>
                         <br>
                         <br>
                         <p class="text-h6" style="white-space: nowrap;">
-                            단어 맞추기
+                            버츄얼 4
                         </p>
                     </v-col>
                 </v-row>

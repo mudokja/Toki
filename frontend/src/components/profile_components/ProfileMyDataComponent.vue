@@ -3,15 +3,10 @@ import { memberUpdate } from '@/js/Member.js'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.js'
+import { useUserStore } from '@/stores/user.js'
 
-// // 부모 ProfileComponent.vue 에서 보낸 props
-// const memberDetailDataProps = defineProps({
-//   //유저 정보 데이터
-//   memberDetailData: Object,
-// })
-
-// pinia 유저 id 가져오기
-// const userId = useAuthStore().user.userId
+// user.js 에서 유저 정보 가져오기
+const userStore = useUserStore()
 
 // router push 를 위한 인스턴스 생성
 const routerProfile = useRouter()
@@ -41,16 +36,22 @@ const routerProfile = useRouter()
     <v-row>
       <v-col cols="12">
         <v-container id="profile_my_data" class="pl-7 pt-8 pb-10 font-weight-black text-h6 d-flex flex-column">
-          <div>
+          <!-- <div>
+            {{ memberDetailDataProps.memberDetailData }}
               <p class="ml-4 mb-4">닉네임</p>
-              <v-text-field label="닉네임 변경" placeholder="memberDetailData.userNickname"></v-text-field>
-          </div>
-          <div>
+              <v-text-field label="닉네임 변경" :placeholder="memberDetailDataProps.memberDetailData.data.userNickName"></v-text-field>
+          </div> -->
+          <!-- <div>
               <p class="ml-4 mb-4">자기 소개</p>
               <v-textarea model-value="(기존에 써져있는 자기소개)" counter maxlength="120" single-line></v-textarea>
-          </div>
+          </div> -->
+          <!-- <div>
+              <p class="ml-4 mb-4">이메일</p>
+              <v-text-field disabled :label="memberDetailDataProps.memberDetailData.data.userEmail"></v-text-field>
+          </div> -->
           <div>
               <p class="ml-4 mb-4">가입 날짜</p>
+              {{ userStore.memberSimpleData }}
               <v-text-field label="가입 날짜" placeholder="memberDetailData.joinDate"></v-text-field>
           </div>
           

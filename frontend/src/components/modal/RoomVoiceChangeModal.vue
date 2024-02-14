@@ -1,28 +1,28 @@
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue'
-import RoomGameDetailLadderModal from '@/components/modal/RoomGameDetailLadderModal.vue'
-import RoomGameDetailDiceModal from '@/components/modal/RoomGameDetailDiceModal.vue'
-import RoomGameDetailDrawLotsModal from '@/components/modal/RoomGameDetailDrawLotsModal.vue'
-import RoomGameDetailTaboModal from '@/components/modal/RoomGameDetailTaboModal.vue'
+import RoomVoiceChangeDetailOlderModal from '@/components/modal/RoomVoiceChangeDetailOlderModal.vue'
+import RoomVoiceChangeDetailBabyModal from '@/components/modal/RoomVoiceChangeDetailBabyModal.vue';
+import RoomVoiceChangeDetailWomanModal from '@/components/modal/RoomVoiceChangeDetailWomanModal.vue';
+import RoomVoiceChangeDetailManModal from '@/components/modal/RoomVoiceChangeDetailManModal.vue';
 
 const props = defineProps({
-    roomGameDialog: {
+    roomVoiceChangeDialog: {
         type: Boolean,
         required: true,
     }
 })
 
-const emit = defineEmits(['update:roomGameDialog'])
-const selectedGame = ref('')
+const emit = defineEmits(['update:roomVoiceChangeDialog'])
+const selectedVoice = ref('')
 
 function closeModal() {
-  emit('update:roomGameDialog', false)
+  emit('update:roomVoiceChangeDialog', false)
 }
 
-// 자식 RommGameDetail(게임)Modal.vue 에서 오는 emit 수신.
-function selectGame(gameName) {
-    selectedGame.value = gameName
-    console.log(gameName)
+// 자식 RommVoiceChangeDetail(음성변조)Modal.vue 에서 오는 emit 수신.
+function selectVoice(voice) {
+    selectedVoice.value = voice
+    console.log(voice)
 }
 
 </script>
@@ -30,7 +30,7 @@ function selectGame(gameName) {
 <template>
     <div>
         <v-dialog
-            v-model="props.roomGameDialog"
+            v-model="props.roomVoiceChangeDialog"
             @click:outside="closeModal"
             width="auto"
             height="1000px"                        
@@ -42,59 +42,59 @@ function selectGame(gameName) {
                 style="border-radius: 20px; border: 1px solid rgb(255, 255, 255);"
             >
 
-                <!-- 게임 상태 표시줄 (맨 위) -->
+                <!-- 음성 변조 상태 표시줄 (맨 위) -->
                 <v-toolbar
                     color="black"                    
                 >
                     <v-toolbar-title                        
                         style="margin-left: 50px;"
                     >
-                        게임
+                        음성 변조
                     </v-toolbar-title>
                 </v-toolbar>
 
-                <!-- 게임 목록 -->
+                <!-- 음성 변조 목록 -->
                 <v-row
                     class="d-flex align-center justify-center"
                     style="margin-left: 10%; margin-right: 10%; margin-top: 25%; text-align: center;"             
                 >
-                    <!-- 사다리 게임 -->
+                    <!-- 노인 -->
                     <v-col>
-                        <RoomGameDetailLadderModal @select-game="selectGame"/>
+                        <RoomVoiceChangeDetailOlderModal @select-voice="selectVoice"/>
                         <br>
                         <br>
                         <p class="text-h6" style="white-space: nowrap;">
-                            사다리 게임
+                            노인 음성
                         </p>
                     </v-col>
 
-                    <!-- 주사위 게임 -->
+                    <!-- 어린 아이 -->
                     <v-col>
-                        <RoomGameDetailDiceModal @select-game="selectGame"/>
+                        <RoomVoiceChangeDetailBabyModal @select-voice="selectVoice"/>
                         <br>
                         <br>
                         <p class="text-h6" style="white-space: nowrap;">
-                            주사위 게임
+                            아이 음성
                         </p>
                     </v-col>
 
-                    <!-- 제비 뽑기 -->
+                    <!-- 성인 여성 -->
                     <v-col>
-                        <RoomGameDetailDrawLotsModal @select-game="selectGame"/>
+                        <RoomVoiceChangeDetailWomanModal @select-voice="selectVoice"/>
                         <br>
                         <br>
                         <p class="text-h6" style="white-space: nowrap;">
-                            제비 뽑기
+                            여성 음성
                         </p>
                     </v-col>
 
-                    <!-- 단어 맞추기 -->
+                    <!-- 성인 남성 -->
                     <v-col>
-                        <RoomGameDetailTaboModal @select-game="selectGame"/>
+                        <RoomVoiceChangeDetailManModal @select-voice="selectVoice"/>
                         <br>
                         <br>
                         <p class="text-h6" style="white-space: nowrap;">
-                            단어 맞추기
+                            남성 음성
                         </p>
                     </v-col>
                 </v-row>

@@ -1,6 +1,6 @@
 <script setup>
 import RoomComponent from '@/components/room_components/RoomComponent.vue'
-import { defineProps, onMounted } from 'vue';
+import { onMounted } from 'vue';
 
 const roomData = JSON.parse(sessionStorage.getItem('roomData'))
 
