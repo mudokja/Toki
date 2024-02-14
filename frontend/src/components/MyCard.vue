@@ -1,5 +1,8 @@
 <script setup>
 import { onMounted } from "vue"
+import { useRoute, useRouter } from "vue-router";
+
+const router = useRouter()
 
 const props = defineProps({
   item: {
@@ -8,6 +11,11 @@ const props = defineProps({
   },
   index: Number
 })
+
+
+const goToRoom = () => {
+  router.push({ name: 'roomjoin', params: { roomId: props.item }})
+}
 
 
 
@@ -51,27 +59,6 @@ const props = defineProps({
 
 </template>
 
-<script setup>
-import { onMounted } from "vue"
-import { useRoute, useRouter } from "vue-router";
-
-const router = useRouter()
-
-const props = defineProps({
-  item: {
-    type: [Number, Object],
-    required: true,
-  },
-  index: Number
-})
-
-
-const goToRoom = () => {
-  router.push({ name: 'roomjoin', params: { roomId: props.item }})
-}
-
-
-</script>
 
 <style lang="scss" scoped>
 

@@ -24,7 +24,7 @@ const blob = ref(''); // Blob 객체를 저장하는 상태 변수
 const recordedChunks = ref([]); // 녹화된 데이터 청크를 저장하는 배열
 let stream; // 미디어 스트림 객체
 let mediaRecorder; // 미디어 레코더 객체
-const previewCtx=ref('');
+let previewCtx=ref('');
 // 녹화 시작/중지 토글 함수
 const toggleRecording = async () => {
   if (recording.value) {
