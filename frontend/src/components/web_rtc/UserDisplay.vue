@@ -4,12 +4,12 @@ import adapter from 'webrtc-adapter';
 import kurentoUtils from 'kurento-utils';
 import { ref,watch,onMounted } from 'vue';
 import {Client} from '@stomp/stompjs';
-// import {sendName,disconnect,connect,showGreeting} from './WebChat'
+import {sendName,disconnect,connect,showGreeting} from './WebChat'
 import { commonaxios1 } from '@/js/Click';
 //const ws = new WebSocket('wss://192.168.31.237:8443/groupcall');
 // const ws = new WebSocket('wss://localhost:8443/groupcall');
 //let ws = new WebSocket('ws://localhost:8080/gs-guide-websocket');
-const ws = new WebSocket('wss://i10b205.p.ssafy.io/ws/room');
+//const ws = new WebSocket('wss://i10b205.p.ssafy.io/ws/room');
 //  const stompClient = new Client({
 
 // 	brokerURL:'ws://localhost:8080/gs-guide-websocket',
@@ -57,8 +57,27 @@ const click3=()=>{
 	register(data.value);
 	
 }
-const click4=()=>{
-	leaveRoom(); 
+const click4=async()=>{
+	let stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true }) // 다른 비디오 소스로 변경하려면 적절한 constraints를 전달합니다.
+    // 캔버스 크기 설정
+    previewCanvas.value.width = stream.getVideoTracks()[0].getSettings().width;
+    previewCanvas.value.height = stream.getVideoTracks()[0].getSettings().height;
+
+    // 캔버스에 비디오 프레임 그리기
+    previewCtx.value = previewCanvas.value.getContext('2d');
+    // 미리 보기용 캔버스에 스트림 프레임을 그립니다.
+    const videoElement = document.createElement('video');
+    videoElement.srcObject = stream;
+    videoElement.play();
+    videoElement.onplay = () => {
+      const drawFrame = () => {
+        previewCtx.value.drawImage(videoElement, 0, 0, previewCanvas.value.width, previewCanvas.value.height);
+       
+          requestAnimationFrame(drawFrame);
+        
+      };
+      drawFrame();
+    };
 	
 }
 onMounted(()=>{
@@ -68,10 +87,14 @@ onMounted(()=>{
 	//ws.onopen=()=>register(data.value);
 	//click3();
 })
+const previewCanvas = ref(null); // 미리 보기용 캔버스 요소의 참조
+let previewCtx=ref('');
 
 </script>
 
 <template>
+	<div><canvas ref="previewCanvas" controls style="max-width: 100%;" width="100" height="60"></canvas>
+  </div> 
 <button @click="soclick">connect</button>
 <button @click="soclick1">disconnect</button>
 <div>메세지<input type="text" v-model="text" v-on:keyup.enter="soclick2(text)">
