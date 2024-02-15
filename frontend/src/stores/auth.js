@@ -33,8 +33,10 @@ export const useAuthStore = defineStore('auth', () => {
     function clearToken() {
         accessToken.value = null
         user.value = null
+        userTag.value = null
         localStorage.removeItem('accessToken')
         localStorage.removeItem('userId')
+        localStorage.removeItem('userTag')
         localStorage.removeItem('auth')
     }
 
