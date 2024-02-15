@@ -13,6 +13,7 @@ import user from '@/stores/user'
 import { watchEffect } from 'vue'
 import { watchPostEffect } from 'vue'
 import ScreenRecord from '@/components/screenRecord/ScreenRecord.vue'
+import * as Tone from 'tone';
 ////
 // const testRooms = useTokiRoomStore();
 //JiHoon Jung <mudokja@gmail.com>
@@ -140,6 +141,27 @@ function receiveVideo(sender) {
             this.generateOffer (participant.offerToReceiveVideo.bind(toRaw(participant)));
 	});
 }
+const mic =ref();
+// 마이크 입력을 처리하고 피치 쉬프트를 적용하는 함수
+const startAudioProcessing=async()=> {
+  await Tone.start(); // 사용자의 상호작용에 응답하여 Tone.js 오디오 컨텍스트를 시작합니다.
+
+
+  // PitchShift 인스턴스를 생성하고 마이크 입력에 연결합니다.
+  const pitchShift = new Tone.PitchShift({
+    pitch: 12, // 피치를 올릴 반음의 수, 예: 12는 한 옥타브 상승을 의미합니다.
+  }).toDestination();
+
+  // 마이크의 출력을 PitchShift로 라우팅합니다.
+  // 노이즈 필터링을 위한 저역 통과 필터 설정
+const lowPassFilter = new Tone.Filter({
+  frequency: 1500, // 저역 통과 필터의 컷오프 주파수를 설정합니다. 이 값은 조정 가능합니다.
+  type: 'lowpass', // 필터 유형을 'lowpass'로 설정하여 고주파수 노이즈를 줄입니다.
+}).toDestination();
+
+// 마이크 입력을 저역 통과 필터에 연결한 후 피치 쉬프트 처리를 합니다.
+mic.value.connect(lowPassFilter).connect(pitchShift);
+}
 
 const onExistingParticipants = async(msg) => {
     const constraints = {
@@ -161,16 +183,27 @@ const onExistingParticipants = async(msg) => {
   /////////////////////////////////////////////////////////
 let stream = await navigator.mediaDevices.getDisplayMedia({ video: true }) // 다른 비디오 소스로 변경하려면 적절한 constraints를 전달합니다.
     const videoElement = document.createElement('video');
-    videoElement.srcObject = stream;    
-   let audioStream =await navigator.mediaDevices.getUserMedia({ audio: true })
-        // 오디오 스트림을 얻었습니다. 이제 이를 사용할 수 있습니다.
-        console.log("오디오 스트림을 얻었습니다:", audioStream);
+    videoElement.srcObject = stream; 
+    // 마이크 입력을 생성합니다.
+   mic.value = new Tone.UserMedia()
+  
+  // 마이크 입력을 활성화합니다.
+   mic.value.open().then(()=>{
+    console.dir(mic.value.stream);
+   }).catch(()=>{
+    console.log("sasf");
+   });
+     
+  //  let audioStream =await navigator.mediaDevices.getUserMedia({ audio: true })
+  //       // 오디오 스트림을 얻었습니다. 이제 이를 사용할 수 있습니다.
+  //       console.log("오디오 스트림을 얻었습니다:", audioStream);
 
-        // Web Audio API를 사용하여 오디오 스트림의 볼륨을 조절합니다.
-        const audioContext = new AudioContext();
-        const source = audioContext.createMediaStreamSource(audioStream);
-        const gainNode = audioContext.createGain();
-        const filter = audioContext.createBiquadFilter();//필터
+  //       // Web Audio API를 사용하여 오디오 스트림의 볼륨을 조절합니다.
+  //       const audioContext = new AudioContext();
+  //       const source = audioContext.createMediaStreamSource(audioStream);
+  //       const gainNode = audioContext.createGain();
+  //       const filter = audioContext.createBiquadFilter();//필터
+  //       const highpassFilter = audioContext.createBiquadFilter();
         // 필터 유형을 피치 이동으로 설정
         //filter.type = "peaking";1
         // 중심 주파수 설정 (1000Hz를 기준으로 피치를 변경)
@@ -184,16 +217,36 @@ let stream = await navigator.mediaDevices.getDisplayMedia({ video: true }) // �
         // source.connect(audioContext.destination);
         //filter.connect(gainNode);
 
+        // ES 모듈 시스템을 사용하는 경우
+
+
+
+
+
+
+
+
+
+
+
         // 오디오 스트림에 gainNode 연결
-        source.connect(gainNode);
-        gainNode.connect(audioContext.destination);
+        // source.connect(highpassFilter);
+        // highpassFilter.connect(gainNode);
+        // gainNode.connect(audioContext.destination);
         
-        filter.type = "highshelf";
-        //filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
-        //filter.gain.setValueAtTime(0, audioCtx.currentTime);
+        // highpassFilter.type="highpass"
+        // filter.type = "peaking";
+        // console.log(filter.frequency.maxValue,"___",filter.frequency.minValue,"____",filter.frequency.defaultValue);
         
-        // 볼륨 조절 
-        gainNode.gain.value = 120; 
+        // console.log(highpassFilter.frequency.maxValue,"___",highpassFilter.frequency.minValue,"____",highpassFilter.frequency.defaultValue);
+        // highpassFilter.frequency.value=7000;
+        // //filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
+        // //filter.gain.setValueAtTime(0, audioCtx.currentTime);
+        
+        // // 볼륨 조절 
+        // gainNode.gain.value = 120;
+        // console.log(gainNode.gain.maxValue,"___",gainNode.gain.minValue,"____",gainNode.gain.defaultValue);
+         
     // 캔버스 크기 설정
     // previewCanvas.value.width = stream.getVideoTracks()[0].getSettings().width;
     // previewCanvas.value.height = stream.getVideoTracks()[0].getSettings().height;
@@ -214,13 +267,13 @@ let stream = await navigator.mediaDevices.getDisplayMedia({ video: true }) // �
     // };
     recordedVideoElement.value.srcObject = stream; // 미리 보기 비디오 요소에 스트림 설정
     recordedVideoElement.value.play(); // 비디오 재생
-
+      console.dir(toRaw(mic.value));
 ////////////////////////////////////////////////////////////////
 
         const options = {
             localVideo: video,
             videoStream: stream, // 새로운 비디오 스트림을 전달합니다.
-            audioStream:audioContext.destination.stream,
+            audioStream: mic.value.stream,
             onicecandidate: participant.onicecandidate.bind(participant)
         };
 
@@ -330,9 +383,10 @@ function handleResize() {
   screenWidth.value = window.innerWidth
 }
 
-onMounted(() => {
+onMounted(async() => {
   window.addEventListener('resize', handleResize)
   start()
+  
 })
 
 onUnmounted(() => {
@@ -450,6 +504,7 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                 <v-list-item 
                   link 
                   value="마이크-on-off"
+                  @click="startAudioProcessing"
                 >
                   마이크 on/off
                 </v-list-item>

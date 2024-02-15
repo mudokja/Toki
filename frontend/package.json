@@ -19,6 +19,7 @@
     "kurento-utils": "^7.0.0",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
+    "tone": "^14.7.77",
     "vite-plugin-node-polyfills": "^0.21.0",
     "vite-plugin-require": "^1.1.14",
     "vue": "^3.3.11",
