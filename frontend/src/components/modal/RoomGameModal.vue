@@ -84,7 +84,7 @@ function selectGame(gameName) {
                         <br>
                         <br>
                         <p class="text-h6" style="white-space: nowrap;">
-                            제비 뽑기
+                            룰렛
                         </p>
                     </v-col>
 

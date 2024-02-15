@@ -1,6 +1,6 @@
 <script setup>
 import { ref, defineEmits } from 'vue'
-
+import dice from '@/components/game/dice.vue';
 // 부모 RoomGameModal.vue 으로 emit 발신
 const emit = defineEmits(['selectGame'])
 
@@ -47,15 +47,15 @@ const selectGame = function(gameName){
           max-width="auto"
           color="black"
         >
-          <v-img
+          <!-- <v-img
             class="align-end text-white"
             height="auto"
             src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
             cover
           >
             <v-card-title>주사위 게임</v-card-title>
-          </v-img>
-  
+          </v-img> -->
+          <div ><dice/></div>
           <v-card-actions>
           </v-card-actions>
           <v-btn 

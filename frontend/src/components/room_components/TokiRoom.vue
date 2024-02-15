@@ -3,6 +3,7 @@ import { computed, onMounted, onUnmounted, reactive, ref,h,shallowReactive,watch
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiMicrophone, mdiVideo, mdiMonitorShare, mdiRadioboxMarked, mdiEmoticonOutline, mdiCog, mdiChatProcessingOutline } from '@mdi/js'
 import RoomGameModal from '../modal/RoomGameModal.vue'
+import RoomChatComponent from '@/components/room_components/RoomChatComponent.vue'
 import { useWebSocket } from '@vueuse/core'
 import kurentoUtil from 'kurento-utils';
 import RoomUserView from '@/components/room_components/RoomUserView.vue'
@@ -12,17 +13,7 @@ import { toRaw } from 'vue'
 import { watchEffect } from 'vue'
 import { watchPostEffect } from 'vue'
 import ScreenRecord from '@/components/screenRecord/ScreenRecord.vue'
-import RoomMeetingModal from '../modal/RoomMeetingModal.vue';
-import { useRouter } from 'vue-router'
-import RoomSubMeetingModal from '@/components/modal/RoomSubMeetingModal.vue'
-import RoomVoiceChangeModal from '@/components/modal/RoomVoiceChangeModal.vue'
-import RoomVoteModal from '@/components/modal/RoomVoteModal.vue'
-import RoomInviteModal from '@/components/modal/RoomInviteModal.vue'
-import RoomConfigModal from '@/components/modal/RoomConfigModal.vue'
-import RoomVideoBackgroundModal from '@/components/modal/RoomVideoBackgroundModal.vue'
-import RoomVideoVirtualModal from '@/components/modal/RoomVideoVirtualModal.vue'
-import RoomSettingModal from '@/components/modal/RoomSettingModal.vue'
-import RoomChatComponent from '@/components/room_components/RoomChatComponent.vue'
+import * as Tone from 'tone';
 ////
 // const testRooms = useTokiRoomStore();
 //JiHoon Jung <mudokja@gmail.com>
@@ -138,6 +129,7 @@ function receiveVideo(sender) {
 	let video = toRaw(tokiRoomVideo.value[sender]);
   const participant = tokiRoomMembers.value.find(v => v.name === sender)
     participant.video=video
+    
 	let options = {
     remoteVideo: video,
       onicecandidate:participant.onicecandidate.bind(participant)
@@ -149,6 +141,38 @@ function receiveVideo(sender) {
             }
             this.generateOffer (participant.offerToReceiveVideo.bind(toRaw(participant)));
 	});
+}
+const mic =ref();
+// 마이크 입력을 처리하고 피치 쉬프트를 적용하는 함수
+const startAudioProcessing=async()=> {
+  await Tone.start(); // 사용자의 상호작용에 응답하여 Tone.js 오디오 컨텍스트를 시작합니다.
+
+
+  // PitchShift 인스턴스를 생성하고 마이크 입력에 연결합니다.
+  const pitchShift = new Tone.PitchShift({
+    pitch: 12, // 피치를 올릴 반음의 수, 예: 12는 한 옥타브 상승을 의미합니다.
+  }).toDestination();
+
+  // 마이크의 출력을 PitchShift로 라우팅합니다.
+  // 노이즈 필터링을 위한 저역 통과 필터 설정
+const lowPassFilter = new Tone.Filter({
+  frequency: 1500, // 저역 통과 필터의 컷오프 주파수를 설정합니다. 이 값은 조정 가능합니다.
+  type: 'lowpass', // 필터 유형을 'lowpass'로 설정하여 고주파수 노이즈를 줄입니다.
+}).toDestination();
+
+// 마이크 입력을 저역 통과 필터에 연결한 후 피치 쉬프트 처리를 합니다.
+mic.value.connect(lowPassFilter).connect(pitchShift);
+}
+
+let stream =ref();
+let cha =ref('1');
+const newStream=async()=>{
+  if(cha.value=='1'){
+stream.value=await navigator.mediaDevices.getUserMedia({ video: true , audio:true }) 
+  }
+  else if(cha.value=='2'){
+    stream.value=await navigator.mediaDevices.getDisplayMedia({ video: true , audio:true }) 
+  }
 }
 
 const onExistingParticipants = async(msg) => {
@@ -162,25 +186,35 @@ const onExistingParticipants = async(msg) => {
       }
     }
   }
-  
   console.log(userInfo.value.name + " registered in room " + roomInfo.value.roomPk);
-
+await newStream();
   const participant = tokiRoomMembers.value.find(v=>v.name===userInfo.value.name)
   participant.video=tokiRoomVideo.value[userInfo.value.name]
 	let video = participant.video;
   /////////////////////////////////////////////////////////
-let stream = await navigator.mediaDevices.getDisplayMedia({ video: true }) // 다른 비디오 소스로 변경하려면 적절한 constraints를 전달합니다.
+ //await navigator.mediaDevices.getUserMedia({ video: true , audio:true }) // 다른 비디오 소스로 변경하려면 적절한 constraints를 전달합니다.
     const videoElement = document.createElement('video');
-    videoElement.srcObject = stream;    
-   let audioStream =await navigator.mediaDevices.getUserMedia({ audio: true })
-        // 오디오 스트림을 얻었습니다. 이제 이를 사용할 수 있습니다.
-        console.log("오디오 스트림을 얻었습니다:", audioStream);
+    videoElement.srcObject = stream.value; 
+    // 마이크 입력을 생성합니다.
+   mic.value = new Tone.UserMedia()
+  
+  // 마이크 입력을 활성화합니다.
+   mic.value.open().then(()=>{
+    console.dir(mic.value.stream);
+   }).catch(()=>{
+    console.log("sasf");
+   });
+     
+  //  let audioStream =await navigator.mediaDevices.getUserMedia({ audio: true })
+  //       // 오디오 스트림을 얻었습니다. 이제 이를 사용할 수 있습니다.
+  //       console.log("오디오 스트림을 얻었습니다:", audioStream);
 
-        // Web Audio API를 사용하여 오디오 스트림의 볼륨을 조절합니다.
-        const audioContext = new AudioContext();
-        const source = audioContext.createMediaStreamSource(audioStream);
-        const gainNode = audioContext.createGain();
-        const filter = audioContext.createBiquadFilter();//필터
+  //       // Web Audio API를 사용하여 오디오 스트림의 볼륨을 조절합니다.
+  //       const audioContext = new AudioContext();
+  //       const source = audioContext.createMediaStreamSource(audioStream);
+  //       const gainNode = audioContext.createGain();
+  //       const filter = audioContext.createBiquadFilter();//필터
+  //       const highpassFilter = audioContext.createBiquadFilter();
         // 필터 유형을 피치 이동으로 설정
         //filter.type = "peaking";1
         // 중심 주파수 설정 (1000Hz를 기준으로 피치를 변경)
@@ -194,16 +228,25 @@ let stream = await navigator.mediaDevices.getDisplayMedia({ video: true }) // �
         // source.connect(audioContext.destination);
         //filter.connect(gainNode);
 
+        // ES 모듈 시스템을 사용하는 경우
         // 오디오 스트림에 gainNode 연결
-        source.connect(gainNode);
-        gainNode.connect(audioContext.destination);
+        // source.connect(highpassFilter);
+        // highpassFilter.connect(gainNode);
+        // gainNode.connect(audioContext.destination);
         
-        filter.type = "highshelf";
-        //filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
-        //filter.gain.setValueAtTime(0, audioCtx.currentTime);
+        // highpassFilter.type="highpass"
+        // filter.type = "peaking";
+        // console.log(filter.frequency.maxValue,"___",filter.frequency.minValue,"____",filter.frequency.defaultValue);
         
-        // 볼륨 조절 
-        gainNode.gain.value = 100; 
+        // console.log(highpassFilter.frequency.maxValue,"___",highpassFilter.frequency.minValue,"____",highpassFilter.frequency.defaultValue);
+        // highpassFilter.frequency.value=7000;
+        // //filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
+        // //filter.gain.setValueAtTime(0, audioCtx.currentTime);
+        
+        // // 볼륨 조절 
+        // gainNode.gain.value = 120;
+        // console.log(gainNode.gain.maxValue,"___",gainNode.gain.minValue,"____",gainNode.gain.defaultValue);
+         
     // 캔버스 크기 설정
     // previewCanvas.value.width = stream.getVideoTracks()[0].getSettings().width;
     // previewCanvas.value.height = stream.getVideoTracks()[0].getSettings().height;
@@ -222,15 +265,16 @@ let stream = await navigator.mediaDevices.getDisplayMedia({ video: true }) // �
     //   };
     //   drawFrame();
     // };
-    recordedVideoElement.value.srcObject = stream; // 미리 보기 비디오 요소에 스트림 설정
-    recordedVideoElement.value.play(); // 비디오 재생
-
+    // recordedVideoElement.value.srcObject = stream; // 미리 보기 비디오 요소에 스트림 설정
+    // recordedVideoElement.value.play(); // 비디오 재생
+      console.dir(toRaw(mic.value));
 ////////////////////////////////////////////////////////////////
 
         const options = {
             localVideo: video,
-            videoStream: stream, // 새로운 비디오 스트림을 전달합니다.
-            audioStream:audioContext.destination.stream,
+            videoStream: stream.value, // 새로운 비디오 스트림을 전달합니다.
+            //audioStream: stream,
+            //constraints ,
             onicecandidate: participant.onicecandidate.bind(participant)
         };
 
@@ -323,72 +367,166 @@ const openGameDialog = () => {
   roomGameDialog.value = !roomGameDialog.value
 }
 
-const roomMeetingDialog = ref(false)
 
-const oepnMeetingDialog = () => {
-  roomMeetingDialog.value = !roomMeetingDialog.value
-}
 
-// 음성 변조 모달창 on / off
-const roomVoiceChangeDialog = ref(false)
-const openVoiceChangeDialog = () => {
-  roomVoiceChangeDialog.value = !roomVoiceChangeDialog.value
-}
-// 비디오 on / off
-const videoOnOff = ref(false)
 
-// 가상 배경 모달창 on / off
-const roomVideoBackgroundDialog = ref(false)
-const openVideoBackgroundDialog = () => {
-  roomVideoBackgroundDialog.value = !roomVideoBackgroundDialog.value
-}
 
-// 버츄얼 적용 모달창 on / off
-const roomVideoVirtualDialog = ref(false)
-const openVideoVirtualDialog = () => {
-  roomVideoVirtualDialog.value = !roomVideoVirtualDialog.value
-}
+const recording = ref(false); // 녹화 중인지 여부를 나타내는 상태 변수
+const url = ref(''); // 녹화된 비디오의 URL
+const blob = ref(''); // Blob 객체를 저장하는 상태 변수
+const recordedChunks = ref([]); // 녹화된 데이터 청크를 저장하는 배열
+ // 미디어 스트림 객체
+let mediaRecorder; // 미디어 레코더 객체
+// 녹화 시작/중지 토글 함수
+const toggleRecording = async () => {
+  if (recording.value) {
+    stopRecording();
+  } else {
+    startRecording();
+  }
+};
+const updateVideoStream = async () => {
+  // 1. 새로운 비디오 스트림 얻기
+  const newStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 
-// 화면 공유 on / off
-const shareOnOff = ref(false)
+  // 2. 기존 참가자의 비디오 스트림 업데이트
+  tokiRoomMembers.value.forEach(participant => {
+    participant.video = newStream;
+    if (participant.rtcPeer) {
+      // WebRTC 연결 재설정
+      participant.rtcPeer.dispose(); // 기존 WebRTC 피어 삭제
+      const options = {
+        localVideo: participant.video,
+        videoStream: newStream,
+        onicecandidate: participant.onicecandidate.bind(participant)
+      };
+      participant.rtcPeer = new kurentoUtil.WebRtcPeer.WebRtcPeerSendonly(options, function (error) {
+        if (error) {
+          return console.error(error);
+        }
+        console.log("참가자", participant);
+        this.generateOffer(participant.offerToReceiveVideo.bind(toRaw(participant)));
+      });
+    }
+  });
+};
+// 녹화 시작 함수
+const startRecording = async () => {
+  try {
+    cha.value='2';
+   // if (participant.rtcPeer) {
+      // WebRTC 연결 재설정
+     // participant.rtcPeer.dispose();}
+    //participant.rtcPeer.dispose(); 
+    //onExistingParticipants();
+    //updateVideoStream();
+    //stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
 
-// 녹화  on / off
-const recordOnOff = ref(false)
+    // // 캔버스 크기 설정
+    // previewCanvas.value.width = stream.getVideoTracks()[0].getSettings().width;
+    // previewCanvas.value.height = stream.getVideoTracks()[0].getSettings().height;
 
-// 이모티콘 클릭 할 때, 함수
-const selectEmoticon = (emt) => {
-  console.log(`${emt} 출력`)
-}
+    // // 캔버스에 비디오 프레임 그리기
+    // previewCtx.value = previewCanvas.value.getContext('2d');
+    // previewCtx.value.drawImage(recordedVideoElement.value, 0, 0, previewCanvas.value.width, previewCanvas.value.height);
 
-// 투표 모달창 on / off
-const roomVotegDialog = ref(false)
-const openVoteDialog = () => {
-  roomVotegDialog.value = !roomVotegDialog.value
-}
+    // // 미리 보기용 캔버스에 스트림 프레임을 그립니다.
+    // const videoElement = document.createElement('video');
+    // videoElement.srcObject = stream;
+    // videoElement.play();
+    // videoElement.onplay = () => {
+    //   const drawFrame = () => {
+    //     previewCtx.value.drawImage(videoElement, 0, 0, previewCanvas.value.width, previewCanvas.value.height);
+    //     if (recording.value) {
+    //       requestAnimationFrame(drawFrame);
+    //     }
+    //   };
+    //   drawFrame();
+    // };
+    recordedVideoElement.value.srcObject = stream.value; // 미리 보기 비디오 요소에 스트림 설정
+    recordedVideoElement.value.play(); // 비디오 재생
+    
 
-// 초대 모달창 on / off
-const roomInviteDialog = ref(false)
-const openInvitDialog = () => {
-  roomInviteDialog.value = !roomInviteDialog.value
-}
 
-// 환경설정 모달창 on / off
-const roomConfigDialog = ref(false)
-const openConfigDialog = () => {
-  roomConfigDialog.value = !roomConfigDialog.value
-}
+    mediaRecorder = new MediaRecorder(stream.value);
+    recording.value = true;
 
-// 나가기 버튼 클릭 시, 함수
-const router = useRouter()
-const exitRoom = () => {
-  sessionStorage.removeItem('roomData')
-  router.push({ name: 'home' })
-}
+    mediaRecorder.ondataavailable = handleDataAvailable;
+    mediaRecorder.onstop = handleStopRecording;
 
-const roomSettingDialog = ref(false)
-const openRoomSettingDialog = () => {
-  roomSettingDialog.value = !roomSettingDialog.value
-}
+    mediaRecorder.start(); // Start recording
+  } catch (error) {
+    console.error('Error accessing user media:', error);
+  }
+};
+
+// 녹화 중지 함수
+const stopRecording = () => {
+  if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+    mediaRecorder.stop();
+  }
+};
+
+// 데이터가 사용 가능할 때 호출되는 이벤트 핸들러
+const handleDataAvailable = (event) => {
+  if (event.data.size > 0) {
+    recordedChunks.value.push(event.data);
+  }
+};
+
+// 녹화 중지 시 호출되는 이벤트 핸들러
+const handleStopRecording = () => {
+  blob.value = new Blob(recordedChunks.value, { type: 'video/webm' });
+  url.value = window.URL.createObjectURL(blob.value);
+  recordedVideoElement.value.src = url.value;
+  recording.value = false;
+  previewCtx = previewCanvas.value.getContext('2d');
+  previewCtx.value.clearRect(0, 0, previewCanvas.value.width, previewCanvas.value.height);
+};
+
+// Clean up resources
+const cleanupResources = () => {
+  if (stream.value) {
+    stream.getTracks().forEach(track => track.stop());
+  }
+  if (url.value) {
+    window.URL.revokeObjectURL(url.value);
+  }
+};
+
+import { onBeforeUnmount } from 'vue';
+onBeforeUnmount(cleanupResources);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const menuState = reactive({
+//   mic: false,
+//   video: false,
+//   share: false,
+//   record: false,
+//   emoticon: false,
+//   setting: false,
+//   chat: false,
+
+// })
 
 const screenWidth = ref(window.innerWidth)
 
@@ -396,18 +534,15 @@ function handleResize() {
   screenWidth.value = window.innerWidth
 }
 
-onMounted(() => {
+onMounted(async() => {
   window.addEventListener('resize', handleResize)
   start()
+  
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
 })
-
-
-
-
 
 const isLagerScreen = computed(() => screenWidth.value >= 1280)
 
@@ -417,7 +552,7 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
 </script>
 <template>
    <div>
-    <video ref="recordedVideoElement" controls style="max-width: 100%; " width="500" height="300"></video>
+    
     <!-- <canvas ref="previewCanvas" controls style="max-width: 100%;" width="100" height="60"></canvas> -->
   </div>    
   <v-container id="enter" class="h-100" style="min-width: 600px">
@@ -430,39 +565,61 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
           <v-col v-for="(member,key,index) in tokiRoomMembers" :id="`biggBG${index}`" :key="member.name" class="ml-2 mr-2 mb-2 d-flex align-end">
             <RoomUserView  :userInfo="member">
               <template #video>
-                <video :id="`room-${member.name}`" class="toki-video" :ref="(el)=>(tokiRoomVideo[member.name]=el)" autoplay></video>
+                <video :id="`room-${member.name}`" class="toki-video" :ref="(el)=>(tokiRoomVideo[member.name]=el)" autoplay ></video>
               </template>
             </RoomUserView>
           </v-col>
         </v-row>
         <!-- 메인 화면 -->
         <v-row id="main-screen" class="h-50">
-          <v-col cols="12">
-            메인 화면
+          <v-col cols="12" >
+            
+            <!-- <canvas v-if=recording ref="previewCanvas" controls style="max-width: 100%;" width="100" height="60"></canvas>
+     -->
+            <video  ref="recordedVideoElement" controls style="max-width: 100%; " width="500" height="300"></video>
           </v-col>
         </v-row>
         <!-- 아래 서브 화면 -->
         <v-row class="mb-1" style="height: 20%;">
           <v-col id="biggBG1" class="ml-2 mr-2 mt-2 d-flex align-end">
-            <v-sheet>아이디 or 닉네임</v-sheet>
+            <v-sheet></v-sheet>
           </v-col>
           <v-col id="biggBG2" class="ml-2 mr-2 mt-2 d-flex align-end">
-            <v-sheet>아이디 or 닉네임</v-sheet>
+            <v-sheet></v-sheet>
           </v-col>
           <v-col id="biggBG3" class="ml-2 mr-2 mt-2 d-flex align-end">
-            <v-sheet>아이디 or 닉네임</v-sheet>
+            <v-sheet></v-sheet>
           </v-col>
           <v-col id="biggBG4" class="ml-2 mr-2 mt-2 d-flex align-end">
-            <v-sheet>아이디 or 닉네임</v-sheet>
+            <v-sheet></v-sheet>
           </v-col>
           <v-col id="biggBG5" class="ml-2 mr-2 mt-2 d-flex align-end">
-            <v-sheet>아이디 or 닉네임</v-sheet>
+            <v-sheet></v-sheet>
           </v-col>
         </v-row>
 
 
-       <!-- 영상 옵션 바 -->
-       <v-row class="mt-1 ml-1 mr-1" >
+        <!-- 영상 옵션 바 -->
+        <v-row class="mt-1 ml-1 mr-1" >
+          
+          <!-- 마이크 설정-->
+          <!-- <v-col>
+            <v-expansion-panels>
+              <v-expansion-panel bg-color="black" style="border-radius: 30px; border: 1px solid white;">
+                <v-expansion-panel-title expand-icon="mdi-menu-down">
+                  <svg-icon type="mdi" :path="pathMicrophone"></svg-icon>
+                  <p class="ml-5">마이크</p>
+                </v-expansion-panel-title>
+                <v-expansion-panel-text>
+                  <v-list bg-color="black">
+                    <v-list-item value="마이크-on-off">마이크 on/off</v-list-item>
+                    <v-list-item value="음성변조">음성 변조</v-list-item>
+                  </v-list>
+                </v-expansion-panel-text>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </v-col> -->
+
           <v-col
             justify="center"
             :cols="colSize"
@@ -474,10 +631,10 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
               <template v-slot:activator="{ props }">
                 <v-btn
                   v-if="isLagerScreen"
-                  :prepend-icon="micOnOff? 'mdi-microphone' : 'mdi-microphone-off'"
+                  prepend-icon="mdi-microphone"
                   :append-icon="menuMicOpen ? 'mdi-menu-down' : 'mdi-menu-up'"
-                  :color="micOnOff? 'green-lighten-1' : 'black'"
-                  class="ma-2"
+                  color="black"
+                  class="ma-2 "
                   v-bind="props"
                   size="x-large"
                   style="border-radius: 30px; border: 1px solid white;"
@@ -487,20 +644,21 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                 <v-btn
                   v-else
                   class="ma-2"
-                  :color="micOnOff? 'green-lighten-1' : 'black'"
-                  :icon="micOnOff? 'mdi-microphone' : 'mdi-microphone-off'"
+                  color="black"
+                  icon="mdi-microphone"
                   v-bind="props"
                   width="100%"
                   size="large"
                   style="border: 1px solid white;"
                 >
+
                 </v-btn>
               </template>
               <v-list bg-color="black" style="text-align: center;">
                 <v-list-item 
                   link 
                   value="마이크-on-off"
-                  @click="micOnOff = !micOnOff"
+                  @click="startAudioProcessing"
                 >
                   마이크 on/off
                 </v-list-item>
@@ -508,7 +666,6 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                 <v-list-item 
                   link 
                   value="음성변조"
-                  @click="openVoiceChangeDialog"
                 >
                   음성 변조
                 </v-list-item>
@@ -547,9 +704,9 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
               <template v-slot:activator="{ props }">
                 <v-btn
                   v-if="isLagerScreen"
-                  :prepend-icon="videoOnOff? 'mdi-video' : 'mdi-video-off'"
+                  prepend-icon="mdi-video"
                   :append-icon="menuVideoOpen ? 'mdi-menu-down' : 'mdi-menu-up'"
-                  :color="videoOnOff? 'green-lighten-1' : 'black'"
+                  color="black"
                   class="ma-2 "
                   v-bind="props"
                   size="x-large"
@@ -560,9 +717,9 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                 <v-btn
                   v-else
                   class="ma-2"
-                  :color="videoOnOff? 'green-lighten-1' : 'black'"
-                  :icon="videoOnOff? 'mdi-video' : 'mdi-video-off'"
+                  color="black"
                   v-bind="props"
+                  icon="mdi-video"
                   size="large"
                   style="border: 1px solid white;"
                 >
@@ -570,15 +727,15 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                 </v-btn>
               </template>
               <v-list bg-color="black" style="text-align: center;">
-                <v-list-item link value="캠-on-off" @click="videoOnOff = !videoOnOff">
-                캠 on/off
+                <v-list-item link value="캠-on-off">
+                  캠 on/off
                 </v-list-item>
 
-                <v-list-item link value="가상배경" @click="openVideoBackgroundDialog">
+                <v-list-item link value="가상배경">
                   가상 배경
                 </v-list-item>
 
-                <v-list-item link value="버츄얼" @click="openVideoVirtualDialog">
+                <v-list-item link value="버츄얼">
                   버츄얼 적용
                 </v-list-item>
               </v-list>
@@ -613,9 +770,9 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
               <template v-slot:activator="{ props }">
                 <v-btn
                   v-if="isLagerScreen"
-                  :prepend-icon="shareOnOff? 'mdi-monitor-share' : 'mdi-monitor-off'"
+                  prepend-icon="mdi-monitor-share"
                   :append-icon="menuShareOpen ? 'mdi-menu-down' : 'mdi-menu-up'"
-                  :color="shareOnOff? 'red-lighten-1' : 'black'"
+                  color="black"
                   class="ma-2 "
                   v-bind="props"
                   size="x-large"
@@ -626,9 +783,9 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                 <v-btn
                   v-else
                   class="ma-2"
-                  :color="shareOnOff? 'red-lighten-1' : 'black'"
-                  :icon="shareOnOff? 'mdi-monitor-share' : 'mdi-monitor-off'"
+                  color="black"
                   v-bind="props"
+                  icon="mdi-monitor-share"
                   size="large"
                   style="border: 1px solid white;"
                 >
@@ -636,7 +793,7 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                 </v-btn>
               </template>
               <v-list bg-color="black" style="text-align: center;">                  
-                <v-list-item value="화면공유" @click="shareOnOff = !shareOnOff">
+                <v-list-item value="화면공유">
                   화면 공유하기
                 </v-list-item>
               </v-list>
@@ -674,18 +831,18 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                   v-if="isLagerScreen"
                   prepend-icon="mdi-radiobox-marked"
                   :append-icon="menuRecordOpen ? 'mdi-menu-down' : 'mdi-menu-up'"
-                  :color="recordOnOff? 'red-lighten-1' : 'black'"
+                  color="black"
                   class="ma-2 "
                   v-bind="props"
                   size="x-large"
                   style="border-radius: 30px; border: 1px solid white;"
-                >
+                  @click="toggleRecording">{{ recording ? 'Stop Recording' : 'Start Recording' }}
                   녹화
                 </v-btn>
                 <v-btn
                   v-else
                   class="ma-2"
-                  :color="recordOnOff? 'red-lighten-1' : 'black'"
+                  color="black"
                   v-bind="props"
                   icon="mdi-radiobox-marked"
                   size="large"
@@ -695,7 +852,7 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                 </v-btn>
               </template>
               <v-list bg-color="black" style="text-align: center;">                  
-                <v-list-item value="화면녹화" @click="recordOnOff = !recordOnOff">
+                <v-list-item value="화면녹화">
                   화면 녹화
                 </v-list-item>
               </v-list>
@@ -819,7 +976,6 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                   prepend-icon="mdi-account-group"
                   style="margin-left: 10px;"
                   value="소회의실"
-                  @click="oepnMeetingDialog"
                 >
                   소회의실
                 </v-list-item>
@@ -827,7 +983,6 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                   prepend-icon="mdi-vote"
                   style="margin-left: 10px;"
                   value="투표"
-                  @click="openVoteDialog"
                 >
                   투표
                 </v-list-item>
@@ -835,33 +990,15 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                   prepend-icon="mdi-send"
                   style="margin-left: 10px;"
                   value="초대"
-                  @click="openInvitDialog"
                 >
                   초대
-                </v-list-item>
-                <v-list-item 
-                  prepend-icon="mdi-rabbit"
-                  style="margin-left: 10px;"
-                  value="방정보변경"
-                  @click="openRoomSettingDialog"
-                >
-                  방 정보 변경
-                </v-list-item>
+                </v-list-item>               
                 <v-list-item 
                   prepend-icon="mdi-cog"
                   style="margin-left: 10px;"
                   value="환경설정"
-                  @click="openConfigDialog"
                 >
                   환경 설정
-                </v-list-item>
-                <v-list-item 
-                  prepend-icon="mdi-exit-to-app"
-                  style="margin-left: 10px;"
-                  value="나가기"
-                  @click="exitRoom"
-                >
-                  방 나가기
                 </v-list-item>
               </v-list>
               
@@ -947,51 +1084,15 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
       @update:roomGameDialog="roomGameDialog = $event"
     />
 
-    <RoomMeetingModal
-      :roomMeetingDialog="roomMeetingDialog"
-      @update:roomMeetingDialog="roomMeetingDialog = $event"
-    />
-    <!-- Modal (투표) 화면 -->
-    <RoomVoteModal
-      :roomVotegDialog="roomVotegDialog"
-      @update:roomVotegDialog="roomVotegDialog = $event"
-    />
-    <!-- Modal (초대) 화면 -->
-    <RoomInviteModal
-      :roomInviteDialog="roomInviteDialog"
-      @update:roomInviteDialog="roomInviteDialog = $event"
-    />
-    <!-- Modal (환경 설정) 화면 -->
-    <RoomConfigModal
-      :roomConfigDialog="roomConfigDialog"
-      @update:roomConfigDialog="roomConfigDialog = $event"
-    />
-    <!-- Modal (음성 변조) 화면 -->
-    <RoomVoiceChangeModal
-      :roomVoiceChangeDialog="roomVoiceChangeDialog"
-      @update:roomVoiceChangeDialog="roomVoiceChangeDialog = $event"
-    />
-    <!-- Modal (가상 배경) 화면 -->
-    <RoomVideoBackgroundModal
-      :roomVideoBackgroundDialog="roomVideoBackgroundDialog"
-      @update:roomVideoBackgroundDialog="roomVideoBackgroundDialog = $event"
-    />
-    <!-- Modal (버츄얼) 화면 -->
-    <RoomVideoVirtualModal
-      :roomVideoVirtualDialog="roomVideoVirtualDialog"
-      @update:roomVideoVirtualDialog="roomVideoVirtualDialog = $event"
-    />
-
-    <RoomSettingModal 
-      :roomSettingDialog="roomSettingDialog"
-      @update:roomSettingDialog="roomSettingDialog = $event"
-    />
   </v-container>
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
 </template>
+
+
+
 <style scoped>
 #main-screen {
-  background-color: rgb(167, 111, 169);
+  background-color: rgb(10, 66, 48);
 }
 
 #screen {
@@ -1005,10 +1106,14 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
 .toki-video{
   width: 100%;
 	height: auto;
-}
+}video {
+      width: 100%; /* 자식 요소인 video 태그의 너비를 100%로 설정하여 부모 요소에 맞춥니다. */
+      height: 100%; /* 자식 요소인 video 태그의 높이를 100%로 설정하여 부모 요소에 맞춥니다. */
+      object-fit: cover; /* video 요소가 부모 요소에 꽉 차도록 합니다. */
+    }
 
 /* 작은 화면 */
-#biggBG1 {
+/* #biggBG1 {
   background-color: antiquewhite;
 }
 #biggBG2 {
@@ -1022,6 +1127,6 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
 }
 #biggBG5 {
   background-color: rgb(255, 163, 127);
-}
+} */
 
 </style>
