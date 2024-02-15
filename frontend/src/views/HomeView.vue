@@ -4,9 +4,11 @@ import { useRouter } from "vue-router";
 import MyCard from "@/components/MyCard.vue";
 import { bannerCheck } from "@/js/Banner";
 import { useAuthStore } from "@/stores/auth";
+import { useUserStore } from "@/stores/user";
 
 const router = useRouter()
 const authStore = useAuthStore()
+const userStore = useUserStore()
 
 const banners = ref([])
 const items = ref(Array.from({ length: 4 }, (_, i) => ({ id: i + 1 })));
@@ -20,6 +22,10 @@ const cycleCheck = (newValue) => {
     cycle.value = true;
   }
 };
+
+onMounted(() => {
+  console.log(userStore)
+})
 
 onMounted(async () => {
   bannerCheck(
