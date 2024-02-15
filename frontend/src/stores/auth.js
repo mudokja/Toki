@@ -31,13 +31,19 @@ export const useAuthStore = defineStore('auth', () => {
 
 
     function clearToken() {
-        accessToken.value = null
-        user.value = null
-        userTag.value = null
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('userId')
-        localStorage.removeItem('userTag')
-        localStorage.removeItem('auth')
+
+        try {
+            accessToken.value = null
+            user.value = null
+            userTag.value = null
+            localStorage.removeItem('accessToken')
+            localStorage.removeItem('userId')
+            localStorage.removeItem('userTag')
+            localStorage.removeItem('auth')
+        }   catch (error) {
+            console.error('에러: ', error)
+        }
+
     }
 
   return { accessToken, user, isAuthenticated, setToken, clearToken, userTag}
