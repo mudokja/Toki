@@ -3,7 +3,9 @@ import RoomComponent from '@/components/room_components/RoomComponent.vue'
 import TokiRoom from '@/components/room_components/TokiRoom.vue';
 import { ref } from 'vue';
 import { onMounted } from 'vue';
+import { useAuthStore } from '@/stores/auth';
 
+const authStore = useAuthStore()
 const roomData = JSON.parse(sessionStorage.getItem('roomData'))
 
 const props = defineProps(
@@ -11,7 +13,7 @@ const props = defineProps(
     roomPk:String,
   }
 )
-const userName = ref('')
+const userName = ref(authStore.user)
 console.log(props.roomPk)
 const roomInfoData = ref({roomPk:props.roomPk})
 const userInfo = ref({name:null})
@@ -44,12 +46,12 @@ onMounted(() => {
             <v-form
             @submit.prevent="enterRoom">
             <v-text-field
-            v-model="userName"
+            
             class="mb-2"
             clearable
 
             label="userName"
-            ></v-text-field>
+            >{{ userName }}</v-text-field>
 
             <!-- <v-text-field
               v-model="password"
