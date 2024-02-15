@@ -1,93 +1,98 @@
 <script setup>
-import { ref } from 'vue';
-import HeaderView from '@/views/HeaderView.vue';
-import FooterView from '@/views/FooterView.vue';
-import MyCard from '@/components/MyCard.vue';
-import { commonaxios, postaxios } from '@/js/CommonAxios';
-import { useRouter } from 'vue-router';
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+import MyCard from "@/components/MyCard.vue";
+import { bannerCheck } from "@/js/Banner";
 
-// 데이터 상태 변수
-const items = ref(Array.from({ length: 48 }, (_, v) => v + 1));
+const router = useRouter()
 
+const banners = ref([])
+const items = ref(Array.from({ length: 4 }, (_, i) => ({ id: i + 1 })));
+const cycle = ref(true)
 
-
-// 비동기 API 호출 함수
-const api = async () => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      // 마지막 항목 값 계산
-      const lastItem = items.value.length ? items.value[items.value.length - 1] : 0;
-      // 새로운 데이터 생성 및 반환
-      resolve(Array.from({ length: 12 }, (_, v) => v + lastItem + 1));
-    }, 1000);
-  });
+const cycleCheck = (newValue) => {
+  if (newValue.type === 'mouseenter') {
+    cycle.value = false;
+  }
+  else if (newValue.type === 'mouseleave') {
+    cycle.value = true;
+  }
 };
 
-// 데이터 로드 함수
-const load = async ({ done }) => {
-  // API 호출하여 데이터 가져오기
-  const res = await api();
-  // 가져온 데이터를 items 배열에 추가
-  items.value.push(...res);
-  // 로드 완료 신호 전달
-  done('ok');
-};
+onMounted(async () => {
+  bannerCheck(
+    (res) => {
+      banners.value = res.data
+    },
+    (err) => {
+      console.error(err)
+    }
+  )
+})
 
-const router=useRouter()
-
-
-const moveRoom = (room) => {
-
-  router.push({ name: 'room', params: { roomPk: room, }  })
-}
 </script>
 
 <template>
-
-  <v-app>
-    
-    
-    <v-container 
-      fluid 
-      style="margin-top: 80px; padding-top: 60px; margin-bottom: 200px;"
+  <v-carousel 
+    :cycle="cycle"
+    interval="4500"
+    :showArrows="false"
+    hideDelimiterBackground
+    height="300"
+    @mouseenter="cycleCheck"
+    @mouseleave="cycleCheck"
+  >
+    <v-carousel-item
+      v-for="banner in banners"
+      :key="banner.id"
     >
-      <v-infinite-scroll
-        :items="items"
-        :onLoad="load"
+      <v-img
+        :src="banner.imageUrl"
+        alt="배너 이미지"
+        style="width: 100%; height: 100%; object-fit: cover;"
       >
-        <v-row>
 
-          <v-col 
-            v-for="(item, index) in items"
-            :key="item" 
-            cols="12" sm="6" md="4" lg="3"
-          >
+      </v-img>
+    </v-carousel-item>
+  </v-carousel>
 
-            <my-card 
-              :item="item"
-              :index="index"
-              @click="moveRoom(item)"
-              >
-            </my-card>
-            
-          </v-col>
-        </v-row>
-        
-      </v-infinite-scroll>
-    </v-container>
-    
+  <v-container
+    style="margin: 50px; padding-bottom: 500px; max-width: 90%;"
+  >
 
+    <div v-text="'추천 토키'" class="text-h5"></div>
 
-    
-  </v-app>
-  <main>
-  </main>
-  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <v-row style="padding-top: 2%;">
+      <v-col 
+        v-for="(item, index) in items"
+        :key="item.id"
+        cols="3"
+      >
+        <MyCard 
+          style="height: 200px;"
+          :item="item.id"
+          :index="index"
+        />
+      </v-col>
+    </v-row>
+    <v-spacer></v-spacer>
+    <div v-text="'현재 진행 중인 토키'" class="text-h5"></div>
+    <v-row style="padding-top: 2%;">
+      <v-col 
+        v-for="(item, index) in items"
+        :key="item.id"
+        cols="3"
+      >
+        <MyCard 
+          style="height: 200px;"
+          :item="item.id"
+          :index="index"
+        />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 <style>
-.content {
-  margin-top: 80px;
-  margin-bottom: auto;
-}
+
 
 </style>
