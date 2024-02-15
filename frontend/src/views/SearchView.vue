@@ -9,6 +9,7 @@ const searchQuery = ref('')
 const searchResults = ref([])
 
 function fetchSearchResults() {
+  console.log(searchQuery.value)
   roomSearchByTag(
     searchQuery.value,
     (res) => {

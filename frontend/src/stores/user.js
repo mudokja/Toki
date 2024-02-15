@@ -9,7 +9,7 @@ export const useUserStore = defineStore('user', () => {
   if (useAuthStore().user === null || useAuthStore().user === undefined) {
     console.log('로그인 되지 않았습니다. / user.js')
   } else {
-    userTags = useAuthStore().user.userTag
+    userTags = useAuthStore().userTag
   }
 
   // GET 유저 정보 상세 조회
