@@ -23,7 +23,7 @@ function closeModal() {
 // 반응형 참조 변수들
 const roomName = ref('')
 const ageLimit = ref('')
-const rooomPassword = ref('')
+const roomPassword = ref('')
 const genderDisabled = ref(true)
 const genderCatch = ref('')
 const categoryCatch = ref('')
@@ -47,7 +47,7 @@ const roomData = computed(() => ({
     categoryPk: categoryIndex.value,
     tags: tags.value,
     isPrivate: isPrivate.value,
-    rooomPassword: rooomPassword.value,
+    roomPassword: roomPassword.value,
     parentRoomId: null,
     roomOption: {
         ageLimit: ageLimit.value,
@@ -108,7 +108,7 @@ watch(() => props.broadcastDialog, (newValue) => {
     if (!newValue) {
         roomName.value = null
         ageLimit.value = null
-        rooomPassword.value = null
+        roomPassword.value = null
         tags.value = []
         newHashtag.value = ''
         genderCatch.value = ''
@@ -304,7 +304,7 @@ watch(categoryCatch, updateCategoryIndex)
                             maxlength="20"
                             :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                             :type="show ? 'text' : 'password'"
-                            v-model="rooomPassword"
+                            v-model="roomPassword"
                             @click:append-inner="show = !show"
                         >
                         </v-text-field>
