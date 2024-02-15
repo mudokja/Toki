@@ -18,13 +18,11 @@ export const useAuthStore = defineStore('auth', () => {
             
             const decoded = jwtDecode(newToken).userId
             user.value = decoded
-            accessToken.value = decoded.accessToken
+            accessToken.value = newToken
             localStorage.setItem('accessToken', newToken)
-            localStorage.setItem('userId', decoded)
-            console.log('user: ', user.value)
-            console.log('userTag: ', userTag.value)
-            console.log('accessToken: ', accessToken.value)
-            console.log('isAuthenticated: ', isAuthenticated.value)
+            localStorage.setItem('userId', user.value)
+            localStorage.setItem('userTag', userTag.value)
+            console.log('isAuthenticated: ', isAuthenticated)
 
         } catch (error) {
             console.error('Token decoding failed:', error)
