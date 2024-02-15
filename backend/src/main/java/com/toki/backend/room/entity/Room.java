@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 import java.util.ArrayList;
@@ -23,10 +24,16 @@ public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @UuidGenerator(style = UuidGenerator.Style.TIME)
+    @Column(name="room_pk")
     private String roomPk;
 
-    @ManyToOne
-    private Room parentRoomPk;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_room_pk",referencedColumnName = "room_pk")
+    private Room parent;
+
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+    private List<Room> children = new ArrayList<>();
 
     @Column(nullable = false)
     private String title;
