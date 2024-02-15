@@ -24,7 +24,7 @@ const cycleCheck = (newValue) => {
 };
 
 onMounted(() => {
-  console.log(userStore)
+  console.log(userStore.memberDetailData.data.userName)
 })
 
 onMounted(async () => {
