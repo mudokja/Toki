@@ -14,9 +14,10 @@ import java.util.Set;
 @RedisHash(value = "room_hashtag")
 public class RoomTag {
     @Id
+    private Long idx;
+    @Indexed
     private String roomPk;
 
-    @Setter
     @Indexed
     private String tags;
 }

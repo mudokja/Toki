@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,5 +15,5 @@ public class RoomInfoDto {
     String categoryName;
     Boolean isPrivate;
     Integer currentCount;
-    Set<String> tags;
+    List<String> tags;
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 import java.util.Set;
 
@@ -15,9 +16,10 @@ import java.util.Set;
 @RedisHash(value = "room_member")
 public class RoomMember {
     @Id
+    private Long idx;
+    @Indexed
     private String roomPk;
 
-    @Setter
-    private Set<String> members;
+    private String members;
 
 }
