@@ -3,17 +3,26 @@ import { computed, onMounted, onUnmounted, reactive, ref,h,shallowReactive,watch
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiMicrophone, mdiVideo, mdiMonitorShare, mdiRadioboxMarked, mdiEmoticonOutline, mdiCog, mdiChatProcessingOutline } from '@mdi/js'
 import RoomGameModal from '../modal/RoomGameModal.vue'
-import RoomChatComponent from '@/components/room_components/RoomChatComponent.vue'
 import { useWebSocket } from '@vueuse/core'
 import kurentoUtil from 'kurento-utils';
 import RoomUserView from '@/components/room_components/RoomUserView.vue'
 import { toRaw } from 'vue'
 // import { useTokiRoomStore } from '@/stores/tokiroom'
-import user from '@/stores/user'
+//import user from '@/stores/user'
 import { watchEffect } from 'vue'
 import { watchPostEffect } from 'vue'
 import ScreenRecord from '@/components/screenRecord/ScreenRecord.vue'
 import RoomMeetingModal from '../modal/RoomMeetingModal.vue';
+import { useRouter } from 'vue-router'
+import RoomSubMeetingModal from '@/components/modal/RoomSubMeetingModal.vue'
+import RoomVoiceChangeModal from '@/components/modal/RoomVoiceChangeModal.vue'
+import RoomVoteModal from '@/components/modal/RoomVoteModal.vue'
+import RoomInviteModal from '@/components/modal/RoomInviteModal.vue'
+import RoomConfigModal from '@/components/modal/RoomConfigModal.vue'
+import RoomVideoBackgroundModal from '@/components/modal/RoomVideoBackgroundModal.vue'
+import RoomVideoVirtualModal from '@/components/modal/RoomVideoVirtualModal.vue'
+
+import RoomChatComponent from '@/components/room_components/RoomChatComponent.vue'
 ////
 // const testRooms = useTokiRoomStore();
 //JiHoon Jung <mudokja@gmail.com>
@@ -314,21 +323,69 @@ const openGameDialog = () => {
   roomGameDialog.value = !roomGameDialog.value
 }
 
-// const menuState = reactive({
-//   mic: false,
-//   video: false,
-//   share: false,
-//   record: false,
-//   emoticon: false,
-//   setting: false,
-//   chat: false,
-
-// })
 const roomMeetingDialog = ref(false)
 
 const oepnMeetingDialog = () => {
   roomMeetingDialog.value = !roomMeetingDialog.value
 }
+
+// 음성 변조 모달창 on / off
+const roomVoiceChangeDialog = ref(false)
+const openVoiceChangeDialog = () => {
+  roomVoiceChangeDialog.value = !roomVoiceChangeDialog.value
+}
+// 비디오 on / off
+const videoOnOff = ref(false)
+
+// 가상 배경 모달창 on / off
+const roomVideoBackgroundDialog = ref(false)
+const openVideoBackgroundDialog = () => {
+  roomVideoBackgroundDialog.value = !roomVideoBackgroundDialog.value
+}
+
+// 버츄얼 적용 모달창 on / off
+const roomVideoVirtualDialog = ref(false)
+const openVideoVirtualDialog = () => {
+  roomVideoVirtualDialog.value = !roomVideoVirtualDialog.value
+}
+
+// 화면 공유 on / off
+const shareOnOff = ref(false)
+
+// 녹화  on / off
+const recordOnOff = ref(false)
+
+// 이모티콘 클릭 할 때, 함수
+const selectEmoticon = (emt) => {
+  console.log(`${emt} 출력`)
+}
+
+// 투표 모달창 on / off
+const roomVotegDialog = ref(false)
+const openVoteDialog = () => {
+  roomVotegDialog.value = !roomVotegDialog.value
+}
+
+// 초대 모달창 on / off
+const roomInviteDialog = ref(false)
+const openInvitDialog = () => {
+  roomInviteDialog.value = !roomInviteDialog.value
+}
+
+// 환경설정 모달창 on / off
+const roomConfigDialog = ref(false)
+const openConfigDialog = () => {
+  roomConfigDialog.value = !roomConfigDialog.value
+}
+
+// 나가기 버튼 클릭 시, 함수
+const router = useRouter()
+const exitRoom = () => {
+  router.go(-1)
+}
+
+
+
 const screenWidth = ref(window.innerWidth)
 
 function handleResize() {
@@ -343,6 +400,10 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
 })
+
+
+
+
 
 const isLagerScreen = computed(() => screenWidth.value >= 1280)
 
@@ -443,6 +504,7 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                 <v-list-item 
                   link 
                   value="음성변조"
+                  @click="openVoiceChangeDialog"
                 >
                   음성 변조
                 </v-list-item>
@@ -481,9 +543,9 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
               <template v-slot:activator="{ props }">
                 <v-btn
                   v-if="isLagerScreen"
-                  prepend-icon="mdi-video"
+                  :prepend-icon="videoOnOff? 'mdi-video' : 'mdi-video-off'"
                   :append-icon="menuVideoOpen ? 'mdi-menu-down' : 'mdi-menu-up'"
-                  color="black"
+                  :color="videoOnOff? 'green-lighten-1' : 'black'"
                   class="ma-2 "
                   v-bind="props"
                   size="x-large"
@@ -494,9 +556,9 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                 <v-btn
                   v-else
                   class="ma-2"
-                  color="black"
+                  :color="videoOnOff? 'green-lighten-1' : 'black'"
+                  :icon="videoOnOff? 'mdi-video' : 'mdi-video-off'"
                   v-bind="props"
-                  icon="mdi-video"
                   size="large"
                   style="border: 1px solid white;"
                 >
@@ -504,15 +566,15 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                 </v-btn>
               </template>
               <v-list bg-color="black" style="text-align: center;">
-                <v-list-item link value="캠-on-off">
-                  캠 on/off
+                <v-list-item link value="캠-on-off" @click="videoOnOff = !videoOnOff">
+                캠 on/off
                 </v-list-item>
 
-                <v-list-item link value="가상배경">
+                <v-list-item link value="가상배경" @click="openVideoBackgroundDialog">
                   가상 배경
                 </v-list-item>
 
-                <v-list-item link value="버츄얼">
+                <v-list-item link value="버츄얼" @click="openVideoVirtualDialog">
                   버츄얼 적용
                 </v-list-item>
               </v-list>
@@ -547,9 +609,9 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
               <template v-slot:activator="{ props }">
                 <v-btn
                   v-if="isLagerScreen"
-                  prepend-icon="mdi-monitor-share"
+                  :prepend-icon="shareOnOff? 'mdi-monitor-share' : 'mdi-monitor-off'"
                   :append-icon="menuShareOpen ? 'mdi-menu-down' : 'mdi-menu-up'"
-                  color="black"
+                  :color="shareOnOff? 'red-lighten-1' : 'black'"
                   class="ma-2 "
                   v-bind="props"
                   size="x-large"
@@ -560,9 +622,9 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                 <v-btn
                   v-else
                   class="ma-2"
-                  color="black"
+                  :color="shareOnOff? 'red-lighten-1' : 'black'"
+                  :icon="shareOnOff? 'mdi-monitor-share' : 'mdi-monitor-off'"
                   v-bind="props"
-                  icon="mdi-monitor-share"
                   size="large"
                   style="border: 1px solid white;"
                 >
@@ -570,7 +632,7 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                 </v-btn>
               </template>
               <v-list bg-color="black" style="text-align: center;">                  
-                <v-list-item value="화면공유">
+                <v-list-item value="화면공유" @click="shareOnOff = !shareOnOff">
                   화면 공유하기
                 </v-list-item>
               </v-list>
@@ -608,7 +670,7 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                   v-if="isLagerScreen"
                   prepend-icon="mdi-radiobox-marked"
                   :append-icon="menuRecordOpen ? 'mdi-menu-down' : 'mdi-menu-up'"
-                  color="black"
+                  :color="recordOnOff? 'red-lighten-1' : 'black'"
                   class="ma-2 "
                   v-bind="props"
                   size="x-large"
@@ -619,7 +681,7 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                 <v-btn
                   v-else
                   class="ma-2"
-                  color="black"
+                  :color="recordOnOff? 'red-lighten-1' : 'black'"
                   v-bind="props"
                   icon="mdi-radiobox-marked"
                   size="large"
@@ -629,7 +691,7 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                 </v-btn>
               </template>
               <v-list bg-color="black" style="text-align: center;">                  
-                <v-list-item value="화면녹화">
+                <v-list-item value="화면녹화" @click="recordOnOff = !recordOnOff">
                   화면 녹화
                 </v-list-item>
               </v-list>
@@ -761,6 +823,7 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                   prepend-icon="mdi-vote"
                   style="margin-left: 10px;"
                   value="투표"
+                  @click="openVoteDialog"
                 >
                   투표
                 </v-list-item>
@@ -768,6 +831,7 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                   prepend-icon="mdi-send"
                   style="margin-left: 10px;"
                   value="초대"
+                  @click="openInvitDialog"
                 >
                   초대
                 </v-list-item>               
@@ -775,8 +839,17 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                   prepend-icon="mdi-cog"
                   style="margin-left: 10px;"
                   value="환경설정"
+                  @click="openConfigDialog"
                 >
                   환경 설정
+                </v-list-item>
+                <v-list-item 
+                  prepend-icon="mdi-exit-to-app"
+                  style="margin-left: 10px;"
+                  value="나가기"
+                  @click="exitRoom"
+                >
+                  방 나가기
                 </v-list-item>
               </v-list>
               
@@ -866,7 +939,36 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
       :roomMeetingDialog="roomMeetingDialog"
       @update:roomMeetingDialog="roomMeetingDialog = $event"
     />
-
+    <!-- Modal (투표) 화면 -->
+    <RoomVoteModal
+      :roomVotegDialog="roomVotegDialog"
+      @update:roomVotegDialog="roomVotegDialog = $event"
+    />
+    <!-- Modal (초대) 화면 -->
+    <RoomInviteModal
+      :roomInviteDialog="roomInviteDialog"
+      @update:roomInviteDialog="roomInviteDialog = $event"
+    />
+    <!-- Modal (환경 설정) 화면 -->
+    <RoomConfigModal
+      :roomConfigDialog="roomConfigDialog"
+      @update:roomConfigDialog="roomConfigDialog = $event"
+    />
+    <!-- Modal (음성 변조) 화면 -->
+    <RoomVoiceChangeModal
+      :roomVoiceChangeDialog="roomVoiceChangeDialog"
+      @update:roomVoiceChangeDialog="roomVoiceChangeDialog = $event"
+    />
+    <!-- Modal (가상 배경) 화면 -->
+    <RoomVideoBackgroundModal
+      :roomVideoBackgroundDialog="roomVideoBackgroundDialog"
+      @update:roomVideoBackgroundDialog="roomVideoBackgroundDialog = $event"
+    />
+    <!-- Modal (버츄얼) 화면 -->
+    <RoomVideoVirtualModal
+      :roomVideoVirtualDialog="roomVideoVirtualDialog"
+      @update:roomVideoVirtualDialog="roomVideoVirtualDialog = $event"
+    />
   </v-container>
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
 </template>
