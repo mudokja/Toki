@@ -13,42 +13,30 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
 
-export default {
-  setup() {
-    const currentNumber = ref(1);
-    const rolling = ref(false);
-    const result = ref(null);
+const currentNumber = ref(1);
+const rolling = ref(false);
+const result = ref(null);
 
-    const startGame = () => {
-      if (rolling.value || result.value !== null) return;
+const startGame = () => {
+  if (rolling.value || result.value !== null) return;
 
-      rolling.value = true;
-      let number = 1;
-      const rollInterval = setInterval(() => {
-        number++;
-        if (number > 6) {
-          number = 1;
-        }
-        currentNumber.value = number;
-      }, 300); // 0.3초마다 숫자가 변함
-
-      setTimeout(() => {
-        clearInterval(rollInterval);
-        rolling.value = false;
-        result.value = currentNumber.value;
-      }, 3000); // 3초 후에 애니메이션이 멈추고 결과가 출력됨
-    };
-
-    return {
-      currentNumber,
-      rolling,
-      result,
-      startGame
-    };
-  }
+  rolling.value = true;
+  let number = 1;
+  let count = 0;
+  const rollInterval = setInterval(() => {
+    count++;
+    if (count >= 10) { // 숫자가 랜덤하게 변화할 시간을 조정할 수 있습니다.
+      clearInterval(rollInterval);
+      rolling.value = false;
+      result.value = currentNumber.value;
+      return;
+    }
+    number = Math.floor(Math.random() * 6) + 1;
+    currentNumber.value = number;
+  }, 100); // 0.1초마다 숫자가 변함 (숫자 변화 속도)
 };
 </script>
 
