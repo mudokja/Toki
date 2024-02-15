@@ -85,7 +85,7 @@ onMounted(async () => {
       >
         <MyCard 
           style="height: 200px;"
-          :item="item.id"
+          :item="item.id + 5"
           :index="index"
         />
       </v-col>
