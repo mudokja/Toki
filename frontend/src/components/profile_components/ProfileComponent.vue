@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { useUserStore } from '@/stores/user.js'
 import ProfileMyDataComponent from '@/components/profile_components/ProfileMyDataComponent.vue'
 import ProfileMyFriendsComponent from '@/components/profile_components/ProfileMyFriendsComponent.vue'
@@ -19,9 +19,6 @@ const uploadToggle = ref(false)
 // user.js 에서 유저 정보 가져오기
 const userStore = useUserStore()
 
-onMounted(() => {
-  console.log(userStore.userTags)
-})
 </script>
 
 <style scoped>
