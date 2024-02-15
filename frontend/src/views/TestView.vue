@@ -15,7 +15,7 @@ const userId = ref('')
 
 const testPk = 
     {    
-        toUserPk: 'c0a81fbc-8d7c-1947-818d-7c69b2180000'
+        toUserTag: '3e9'
     }
 
 const friendRequestAcception = 
