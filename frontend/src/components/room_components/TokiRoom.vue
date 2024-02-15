@@ -10,6 +10,9 @@ import RoomUserView from '@/components/room_components/RoomUserView.vue'
 import { toRaw } from 'vue'
 // import { useTokiRoomStore } from '@/stores/tokiroom'
 import user from '@/stores/user'
+import { watchEffect } from 'vue'
+import { watchPostEffect } from 'vue'
+import ScreenRecord from '@/components/screenRecord/ScreenRecord.vue'
 ////
 // const testRooms = useTokiRoomStore();
 //JiHoon Jung <mudokja@gmail.com>
@@ -20,14 +23,19 @@ const props = defineProps({
 const userInfo = ref(props.userInfo)
 const roomInfo = ref(props.roomInfo)
 
+const recordedVideoElement = ref(null);
+const previewCanvas = ref(null); // 미리 보기용 캔버스 요소의 참조
+let previewCtx=ref('');
+
+
 const tokiRoomMembers = ref([])
 const tokiRoomVideo=ref({})
 const wsUrl='wss://i10b205.p.ssafy.io/ws/room'
-// const wsUrl='ws://localhost:8443/groupcall'
+// const wsUrl='ws://localhost:8081/ws/room'
 const { status, data, send, open, close } = useWebSocket(wsUrl, {
   heartbeat: {
     message: JSON.stringify({id:"ping",value:"ping"}),
-    interval: 30000,
+    interval: 50000,
     pongTimeout:30000,
   },
   onConnected:()=> {
@@ -36,9 +44,17 @@ const { status, data, send, open, close } = useWebSocket(wsUrl, {
   onMessage: (ws,message) => {
     let parsedMessage = JSON.parse(message.data);
 	switch (parsedMessage.id) {
-    case 'existingParticipants':
+    case 'existingParticipants':{
+      
       createMember(userInfo.value.name);
-    setTimeout(()=>onExistingParticipants(parsedMessage),10)
+      const receive=watchPostEffect(()=>{
+        if(tokiRoomVideo.value[userInfo.value.name]){
+          onExistingParticipants(parsedMessage)
+        }
+      })
+      receive();
+    }
+      
 		break;
     case 'newParticipantArrived':
 		onNewParticipant(parsedMessage);
@@ -47,7 +63,7 @@ const { status, data, send, open, close } = useWebSocket(wsUrl, {
 		onParticipantLeft(parsedMessage);
 		break;
 	case 'receiveVideoAnswer':
-		receiveVideoResponse(parsedMessage);
+		receiveVideoResponse(parsedMessage)
       break;
   case 'pong':
       break;
@@ -98,9 +114,13 @@ function onParticipantLeft(request) {//나머지 참가자 내보내기
 }
 
 function receiveVideoResponse(result) {//참가자 비디오 응답 오는지 확인
-  console.dir(toRaw(tokiRoomMembers.value.find(v=>v.name===result.name).rtcPeer.processAnswer))
+  // console.log("받음")
+  // console.dir(toRaw(tokiRoomMembers.value.find(v=>v.name===result.name).rtcPeer.processAnswer))
 	toRaw(tokiRoomMembers.value.find(v=>v.name===result.name).rtcPeer).processAnswer (result.sdpAnswer, function (error) {
-		if (error) return console.error (error);
+		if (error) {
+      console.log("응답에러")
+      return console.error (error);
+    }
 	});
 }
 
@@ -121,44 +141,119 @@ function receiveVideo(sender) {
 	});
 }
 
-const onExistingParticipants = (msg) => {
+const onExistingParticipants = async(msg) => {
     const constraints = {
     audio: true,
     video: {
       mandatory: {
         maxWidth: 320,
-        maxFrameRate: 15,
+        maxFrameRate: 20,
         minFrameRate: 15
       }
     }
   }
+  
   console.log(userInfo.value.name + " registered in room " + roomInfo.value.roomPk);
 
   const participant = tokiRoomMembers.value.find(v=>v.name===userInfo.value.name)
   participant.video=tokiRoomVideo.value[userInfo.value.name]
 	let video = participant.video;
-	let options = {
+  /////////////////////////////////////////////////////////
+let stream = await navigator.mediaDevices.getDisplayMedia({ video: true }) // 다른 비디오 소스로 변경하려면 적절한 constraints를 전달합니다.
+    const videoElement = document.createElement('video');
+    videoElement.srcObject = stream;    
+   let audioStream =await navigator.mediaDevices.getUserMedia({ audio: true })
+        // 오디오 스트림을 얻었습니다. 이제 이를 사용할 수 있습니다.
+        console.log("오디오 스트림을 얻었습니다:", audioStream);
+
+        // Web Audio API를 사용하여 오디오 스트림의 볼륨을 조절합니다.
+        const audioContext = new AudioContext();
+        const source = audioContext.createMediaStreamSource(audioStream);
+        const gainNode = audioContext.createGain();
+        const filter = audioContext.createBiquadFilter();//필터
+        // 필터 유형을 피치 이동으로 설정
+        //filter.type = "peaking";1
+        // 중심 주파수 설정 (1000Hz를 기준으로 피치를 변경)
+       // filter.frequency.value = 3000;
+ 
+        // 피치 조절 (음성의 높낮이를 변경)
+        //filter.detune.value = -100; // 100 cents (1 반음)만큼 올림
+        // filter.detune.value = -100; // 100 cents (1 반음)만큼 내림
+
+        // 오디오 소스와 필터 연결
+        // source.connect(audioContext.destination);
+        //filter.connect(gainNode);
+
+        // 오디오 스트림에 gainNode 연결
+        source.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        filter.type = "highshelf";
+        //filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
+        //filter.gain.setValueAtTime(0, audioCtx.currentTime);
+        
+        // 볼륨 조절 
+        gainNode.gain.value = 120; 
+    // 캔버스 크기 설정
+    // previewCanvas.value.width = stream.getVideoTracks()[0].getSettings().width;
+    // previewCanvas.value.height = stream.getVideoTracks()[0].getSettings().height;
+
+    // // 캔버스에 비디오 프레임 그리기
+    // previewCtx.value = previewCanvas.value.getContext('2d');
+    // // 미리 보기용 캔버스에 스트림 프레임을 그립니다.
+    
+    // videoElement.play();
+    // videoElement.onplay = () => {
+    //   const drawFrame = () => {
+    //     previewCtx.value.drawImage(videoElement, 0, 0, previewCanvas.value.width, previewCanvas.value.height);
+        
+    //       requestAnimationFrame(drawFrame);
+        
+    //   };
+    //   drawFrame();
+    // };
+    recordedVideoElement.value.srcObject = stream; // 미리 보기 비디오 요소에 스트림 설정
+    recordedVideoElement.value.play(); // 비디오 재생
+
+////////////////////////////////////////////////////////////////
+
+        const options = {
             localVideo: video,
-            mediaConstraints: constraints,
+            videoStream: stream, // 새로운 비디오 스트림을 전달합니다.
+            audioStream:audioContext.destination.stream,
             onicecandidate: participant.onicecandidate.bind(participant)
-    }
-		participant.rtcPeer =new kurentoUtil.WebRtcPeer.WebRtcPeerSendonly(options,
-		function (error) {
-            if(error) {
-                return console.error(error);
-      }
-            console.log("참가자",participant)
-            this.generateOffer (participant.offerToReceiveVideo.bind(toRaw(participant)));
-	});
+        };
+
+        // WebRTC 피어 생성
+        participant.rtcPeer = new kurentoUtil.WebRtcPeer.WebRtcPeerSendonly(options,
+            function (error) {
+                if (error) {
+                    return console.error(error);
+                }
+                console.log("참가자", participant);
+                this.generateOffer(participant.offerToReceiveVideo.bind(toRaw(participant)));
+            });
+    
+
 	msg.data.forEach(participantBatch);
 }
 const onNewParticipant = (request) => {
   createMember(request.name)
-  setTimeout(()=>receiveVideo(request.name),1000)
+  const receive=watchPostEffect(()=>{
+    if(tokiRoomVideo.value[request.name]){
+      receiveVideo(request.name)
+    }
+  })
+  receive();
 }
 const participantBatch = (sender) => {
   createMember(sender)
-  setTimeout(()=>receiveVideo(sender),1000)
+  const receive=watchPostEffect(()=>{
+    if(tokiRoomVideo.value[sender]){
+      receiveVideo(sender)
+    }
+    receive();
+})
 }
 
 const createMember = (userName) => {
@@ -251,6 +346,10 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
 
 </script>
 <template>
+   <div>
+    <video ref="recordedVideoElement" controls style="max-width: 100%; " width="500" height="300"></video>
+    <!-- <canvas ref="previewCanvas" controls style="max-width: 100%;" width="100" height="60"></canvas> -->
+  </div>    
   <v-container id="enter" class="h-100" style="min-width: 600px">
     
     <v-row class="h-100">
