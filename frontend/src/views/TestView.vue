@@ -15,7 +15,7 @@ const userId = ref('')
 
 const testPk = 
     {    
-        toUserPk: 'c0a81fbc-8d7c-1947-818d-7c69b2180000'
+        toUserTag: '3e9'
     }
 
 const friendRequestAcception = 
@@ -64,7 +64,7 @@ const blacklistaddd = () => {
 const blacklistdeletee = () => {
     
     blacklistRemove(
-        testPk,
+        testPk.toUserTag,
         (success) => {
             console.log(success)
         },
@@ -122,6 +122,20 @@ const blacklistdeletee = () => {
 
 
 ///
+
+
+
+const memberCheck = () => {
+    memberDetail(
+        authStore.userTag,
+        (success) => {
+            console.log(success)
+        },
+        (error) => {
+            console.error(error)
+        }
+    )
+}
 
 
 </script>
@@ -215,7 +229,7 @@ const blacklistdeletee = () => {
         <v-row>
             <v-col>
                 
-                <v-btn>
+                <v-btn @click="memberCheck">
                     memberDetail
                 </v-btn>
             </v-col>

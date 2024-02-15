@@ -1,23 +1,23 @@
 <script setup>
 import { commonaxios, postaxios } from '@/js/CommonAxios';
-import { roomCreate } from '@/js/Room';
-import { ref, watch, onMounted, inject, defineProps, computed } from 'vue';
+import { roomUpdate } from '@/js/Room';
+import { ref, watch, onMounted, inject, defineProps, computed, watchEffect } from 'vue';
 import router from '@/router';
+import { useRoute } from 'vue-router';
+const route = useRoute()
 
-// 상태 주입
-// const broadcastDialog = inject('broadcastState')
 
 const props = defineProps({
-  broadcastDialog: {
+    roomSettingDialog: {
     type: Boolean,
     required: true,
   }
 });
 
-const emit = defineEmits(['update:broadcastDialog'])
+const emit = defineEmits(['update:roomSettingDialog'])
 
 function closeModal() {
-  emit('update:broadcastDialog', false)
+  emit('update:roomSettingDialog', false)
 }
 
 // 반응형 참조 변수들
@@ -43,6 +43,7 @@ const updateCategoryIndex = (newValue) => {
 }
 
 const roomData = computed(() => ({
+    roomId: route.params.roomPk,
     roomName: roomName.value,
     categoryPk: categoryIndex.value,
     tags: tags.value,
@@ -51,14 +52,14 @@ const roomData = computed(() => ({
     parentRoomId: null,
     roomOption: {
         ageLimit: ageLimit.value,
-        genderCatch: genderCatch.value
+        isPrivate: isPrivate.value,
     }
 
 }))
 
 const cllick = () => {
-        sessionStorage.setItem('roomData', JSON.stringify(roomData.value))
-        roomCreate(
+        roomUpdate(
+            route.params.roomPk,
             roomData.value,
             (success) => {
                 console.log(success)
@@ -67,8 +68,6 @@ const cllick = () => {
                 console.log(error)
             }
         )
-
-        router.push({ name: 'roomjoin', params: { roomPk: 1 }})
 
 }
 
@@ -104,7 +103,7 @@ const removeHashtag = (removeTag) => {
 }
 //----------------------오류때문에주석처리함---------------------------------
 // Dialog 상태 변경 감시
-watch(() => props.broadcastDialog, (newValue) => {
+watch(() => props.roomSettingDialog, (newValue) => {
     if (!newValue) {
         roomName.value = null
         ageLimit.value = null
@@ -125,7 +124,7 @@ watch(categoryCatch, updateCategoryIndex)
 <template>
     <div>
         <v-dialog 
-            v-model="props.broadcastDialog" 
+            v-model="props.roomSettingDialog" 
             width="auto"
             @click:outside="closeModal"
         >
@@ -155,7 +154,7 @@ watch(categoryCatch, updateCategoryIndex)
                             <p 
                                 class="font-weight-bold text-h2 text-light-blue-lighten-2"
                             >                                
-                                토키 만들기
+                                방 정보 변경
                             </p>
                         </v-col>
                     </v-container>           
@@ -371,7 +370,7 @@ watch(categoryCatch, updateCategoryIndex)
                         @click="cllick()"
                         
                     >
-                        토키 생성
+                        정보 변경
                     </v-btn>
 
                     <v-btn

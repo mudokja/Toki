@@ -24,7 +24,7 @@ const toggleDrawer = () => {
 
 const logoutAccount = () => {
   // 로그아웃 후 홈으로 리디렉션
-  authStore.clearToken
+  authStore.clearToken()
   logout(
     (success) => {
       console.log(success)

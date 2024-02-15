@@ -30,7 +30,7 @@ const goToRoom = () => {
     <v-img
       class="align-end text-white"
       height="300"
-      src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+      :src="`https://picsum.photos/500/300?image=${props.item * 5 + 10}`"
       cover
     >
       

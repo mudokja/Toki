@@ -124,6 +124,7 @@ const addUser = (user) => {
 
                         <v-btn
                             style="border-radius: 30px; border: 1px solid white; margin-inline-start: 5%;"
+                            @click="closeModal"
                         >
                         취소
                         </v-btn>

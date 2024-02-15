@@ -178,7 +178,7 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                 <v-btn
                   v-if="isLagerScreen"
                   :prepend-icon="recordOnOff? 'mdi-radiobox-marked' : 'mdi-radiobox-blank'"
-                  :color="recordOnOff? 'green-lighten-1' : 'black'"
+                  :color="recordOnOff? 'red-lighten-1' : 'black'"
                   class="ma-2 "
                   @click="recordOnOff = !recordOnOff"
                   size="x-large"
@@ -189,7 +189,7 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                 <v-btn
                   v-else
                   class="ma-2"
-                  color="black"
+                  :color="recordOnOff? 'red-lighten-1' : 'black'"
                   :icon="recordOnOff? 'mdi-radiobox-marked' : 'mdi-radiobox-blank'"
                   @click="recordOnOff = !recordOnOff"
                   size="large"

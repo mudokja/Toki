@@ -13,17 +13,16 @@ export const useAuthStore = defineStore('auth', () => {
 
     function setToken(newToken) {
         // 유저 태그 가져오기
-        userTag.value = jwtDecode(newToken).userTag
-        
-        const decoded = jwtDecode(newToken).userId
-        user.value = decoded
-        accessToken.value = decoded.accessToken
-        localStorage.setItem('accessToken', newToken)
-        localStorage.setItem('userId', decoded)
-        
-        
         try {
-            user.value = jwtDecode(newToken)
+            userTag.value = jwtDecode(newToken).userTag
+            
+            const decoded = jwtDecode(newToken).userId
+            user.value = decoded
+            accessToken.value = newToken
+            localStorage.setItem('accessToken', newToken)
+            localStorage.setItem('userId', user.value)
+            localStorage.setItem('userTag', userTag.value)
+
         } catch (error) {
             console.error('Token decoding failed:', error)
         }
@@ -31,11 +30,19 @@ export const useAuthStore = defineStore('auth', () => {
 
 
     function clearToken() {
-        accessToken.value = null
-        user.value = null
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('userId')
-        localStorage.removeItem('auth')
+
+        try {
+            accessToken.value = null
+            user.value = null
+            userTag.value = null
+            localStorage.removeItem('accessToken')
+            localStorage.removeItem('userId')
+            localStorage.removeItem('userTag')
+            localStorage.removeItem('auth')
+        }   catch (error) {
+            console.error('에러: ', error)
+        }
+
     }
 
   return { accessToken, user, isAuthenticated, setToken, clearToken, userTag}
