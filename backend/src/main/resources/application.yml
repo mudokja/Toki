@@ -22,7 +22,7 @@ logging:
   level:
     root: info
     org:
-      apache: debug
-      kurento: debug
+      apache: info
+      kurento: info
       springframework: info
       AbstractHandshakeHandler: trace
