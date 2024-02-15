@@ -18,7 +18,7 @@ public class BannerController {//1. 배너 전체 조회  2. 특정 배너 조�
 
 
 
-    private BannerService bannerService;
+    private final BannerService bannerService;
 
 
 
