@@ -3,6 +3,8 @@ import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import MyCard from "@/components/MyCard.vue";
 import { bannerCheck } from "@/js/Banner";
+import { useUserStore } from "@/stores/user";
+import { useFriendsStore } from "@/stores/friends";
 
 const router = useRouter()
 
@@ -19,6 +21,12 @@ const cycleCheck = (newValue) => {
   }
 };
 
+// user.js 에서 유저 상세 간단 조회 axios 함수 가져오기
+const storeUser = useUserStore()
+
+// friends.js 에서 친구 조회 axios 함수 가져오기
+const storeFriend = useFriendsStore()
+
 onMounted(async () => {
   bannerCheck(
     (res) => {
@@ -27,7 +35,11 @@ onMounted(async () => {
     (err) => {
       console.error(err)
     }
-  )
+  ),
+  storeUser.memberDetailAxios()
+  storeUser.memberSimpleAxios()
+  storeUser.otherMemberDetailAxios('3e8')
+  storeFriend.friendListSearchAxios(true)
 })
 
 </script>

@@ -1,13 +1,22 @@
 <script setup>
 import { ref } from 'vue'
+import { useFriendsStore } from '@/stores/friends';
+import { useUserStore } from '@/stores/user'
+
+// friends.js store 접근
+const storeFriend = useFriendsStore()
+
+// user.js store 접근
+const storeUser = useUserStore()
+
 
 // 전체 유저 목록 GET axios
 const userList = ref([
-  { text: '싸', icon: 'mdi-account' },
-  { text: '싸피', icon: 'mdi-account' },
-  { text: 'ssafy', icon: 'mdi-account' },
-  { text: 'SSAFY', icon: 'mdi-account' },
-  { text: 'sa', icon: 'mdi-account' },
+  { text: storeUser.otherMemberDetailData.data.userNickName, icon: 'mdi-account', tag: storeUser.otherMemberDetailData.data.userTag },
+  { text: '싸피', icon: 'mdi-account', tag: '1' },
+  { text: 'ssafy', icon: 'mdi-account', tag: '2'},
+  { text: 'SSAFY', icon: 'mdi-account', tag: '3' },
+  { text: 'sa', icon: 'mdi-account', tag: '4' },
 ])
 
 // 유저 검색할 때, 키워드
@@ -20,8 +29,11 @@ const dialogData = ref('')
 const dialog = ref(false)
 
 // 유저 검색 모달창 '친구 추가' 클릭
-const dialogOk = function(dialogData){
-  console.log(dialogData, '친구 추가 됨')
+const dialogOk = function(tag){
+  console.log(tag, '친구 추가 됨')
+  if (tag == 1001 ) {
+    storeFriend.friendListAddAxios('3e9')
+  }
   dialog.value = false
 }
 
@@ -43,6 +55,7 @@ const searchUser = function(inputValue) {
   }
 }
 
+// 유저 검색 함수
 const loaded = ref(false)
 const loading = ref(false)
 
@@ -65,6 +78,7 @@ const onSearch = function(user) {
       </template>
       <v-card style="width: 500px;">
         <v-card-title class="ml-3 mt-3">유저 검색</v-card-title>
+        {{ storeUser.otherMemberDetailData }}
 
         <!-- 검색 창 -->
         <v-card-text>
@@ -91,7 +105,7 @@ const onSearch = function(user) {
             :key="i"
             :value="item"
             color="primary"
-            @click="dialogData=item.text"
+            @click="dialogData=item.tag"
           >
             <template v-slot:prepend>
               <v-icon :icon="item.icon"></v-icon>

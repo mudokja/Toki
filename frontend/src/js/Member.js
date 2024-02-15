@@ -20,8 +20,15 @@ async function memberUpdate(userId, userData, success, fail) {
         .catch(fail)
 }
 
+async function otherMemberDetail(userId, success, fail) {
+    await local.get(`/api/v1/users/others/${userId}`)
+        .then(success)
+        .catch(fail)
+}
+
 export {
     memberDetail,
     memberSimple,
     memberUpdate,
+    otherMemberDetail,
 }

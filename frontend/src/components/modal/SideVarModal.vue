@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch, defineProps, defineEmits } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
 
 const props = defineProps({
   drawer: {
@@ -48,6 +49,8 @@ watch(drawer, (newValue) => {
   }
 })
 
+// auth.js 에서 유저 태그
+const storeAuth = useAuthStore()
 
 </script>
 
@@ -68,11 +71,19 @@ watch(drawer, (newValue) => {
       
       >
       </v-btn>
+
+      <RouterLink v-if="storeAuth.userTag === null || storeAuth.userTag === undefined" :to="{ name: 'home'}">
         <img src="@/assets/profile_assets/프로필.png" style="width: 40px; height: 40px; border-radius: 50%; margin-left: 1px;">
         <div>
             <h4 style="margin-left: 10px;">5반 유저</h4>
         </div>
-
+      </RouterLink>
+      <RouterLink v-else :to="{ name: 'profile', params: { tag: storeAuth.userTag}}">
+        <img src="@/assets/profile_assets/프로필.png" style="width: 40px; height: 40px; border-radius: 50%; margin-left: 1px;">
+        <div>
+            <h4 style="margin-left: 10px;">5반 유저</h4>
+        </div>
+      </RouterLink>
 
     </div>
 

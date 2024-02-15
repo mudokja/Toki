@@ -1,7 +1,10 @@
 <script setup>
 import { ref } from 'vue'
-// import { friendDelete } from '@/js/Friend.js'
 import ProfileFiendsCreateModal from '@/components/modal/ProfileFiendsCreateModal.vue'
+import { useFriendsStore } from '@/stores/friends';
+
+// friends.js store 접근
+const storeFriend = useFriendsStore()
 
 // // 부모 ProfileComponent.vue 에서 보낸 props
 // const friendListSearchProps = defineProps({
@@ -76,6 +79,7 @@ const items = ref([
       <v-col offset="1" cols="10">
         <v-card class="mx-auto">
           <div class="mt-7 mb-4 mr-10">
+            {{ storeFriend.friendListSearchData.data }}
             <!-- 친구 추가 버튼 -->
             <ProfileFiendsCreateModal/>
           </div>

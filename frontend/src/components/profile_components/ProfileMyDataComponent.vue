@@ -20,17 +20,18 @@ const userData = ref({
 })
 
 // 유저 정보 수정 함수
-const memberUpdateAxios = ()=> {
-  memberUpdate(
+const memberUpdateAxios = async()=> {
+  await memberUpdate(
     authStore.userTag,
     userData.value,
     ({data}) => {console.log(data, '[Success] ProfileMyDataComponent.vue : memberUpdateAxios');},
     (fail) => {console.log(fail, '[Error] ProfileMyDataComponent.vue : memberUpdateAxios');}
-    )
+    ),
+    goHome.push({ name: 'home' })
   }
 
 // router push 를 위한 인스턴스 생성
-const routerProfile = useRouter()
+const goHome = useRouter()
 
 </script>
 

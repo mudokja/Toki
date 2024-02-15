@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useAuthStore } from '@/stores/auth.js'
-import { memberDetail, memberSimple, memberUpdate } from '@/js/Member.js'
+import { memberDetail, memberSimple, otherMemberDetail } from '@/js/Member.js'
 
 export const useUserStore = defineStore('user', () => {
   // pinia 유저 Tag 가져오기
@@ -44,5 +44,16 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  return { memberDetailAxios, memberDetailData, memberSimpleAxios, memberSimpleData }
+  // GET 다른 유저 정보 조회
+    // 다른 유저 정보 할당
+  const otherMemberDetailData = ref()
+  const otherMemberDetailAxios = function(toUserTags) {
+    otherMemberDetail(
+      toUserTags,
+      ({data}) => {console.log(data, '[Success] user.js : otherMemberDetailAxios'); otherMemberDetailData.value = data},
+      (fail) => {console.log(fail, '[Error] user.js : otherMemberDetailAxios');}
+    )
+  }
+
+  return { memberDetailAxios, memberDetailData, memberSimpleAxios, memberSimpleData, otherMemberDetailAxios, otherMemberDetailData }
 }, { persist: true })
