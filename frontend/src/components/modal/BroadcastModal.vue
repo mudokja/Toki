@@ -27,6 +27,8 @@ const rooomPassword = ref('')
 const genderDisabled = ref(true)
 const genderCatch = ref('')
 const categoryCatch = ref('')
+const categoryIndex = ref(null)
+
 const show = ref(false)
 const tags = ref([])
 const newHashtag = ref('')
@@ -35,9 +37,14 @@ const btn2 = ref(false)
 const btn3 = ref(false)
 const btn4 = ref(false)
 
+const updateCategoryIndex = (newValue) => {
+    const index = category.findIndex(c => c === newValue)
+    categoryIndex.value = index >= 0 ? index : null
+}
+
 const roomData = computed(() => ({
     roomName: roomName.value,
-    categoryPk: categoryCatch.value,
+    categoryPk: categoryIndex.value,
     tags: tags.value,
     isPrivate: isPrivate.value,
     rooomPassword: rooomPassword.value,
@@ -46,7 +53,17 @@ const roomData = computed(() => ({
 
 const cllick = () => {
         sessionStorage.setItem('roomData', JSON.stringify(roomData.value))
-        router.push({ name: 'roomjoin', params: { roomId: 1 }})
+        roomCreate(
+            roomData.value,
+            (success) => {
+                console.log(success)
+            },
+            (error) => {
+                console.log(error)
+            }
+        )
+
+        router.push({ name: 'roomjoin', params: { roomPk: 1 }})
 
 }
 
@@ -97,6 +114,7 @@ watch(() => props.broadcastDialog, (newValue) => {
     }
 })
 
+watch(categoryCatch, updateCategoryIndex)
 </script>
 
 <template>
@@ -169,6 +187,7 @@ watch(() => props.broadcastDialog, (newValue) => {
                             base-color="blue"
                             color="light-blue-lighten-1"
                             v-model.trim="categoryCatch"
+                            @change="updateCategoryIndex(categoryCatch)"
                         >
         
                         </v-combobox>

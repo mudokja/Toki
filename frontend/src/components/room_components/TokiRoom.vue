@@ -381,6 +381,7 @@ const openConfigDialog = () => {
 // 나가기 버튼 클릭 시, 함수
 const router = useRouter()
 const exitRoom = () => {
+  sessionStorage.removeItem('roomData')
   router.go(-1)
 }
 
