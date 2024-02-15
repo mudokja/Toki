@@ -51,7 +51,7 @@ public class RoomService {
 
     @Transactional
     public Stream<RoomInfoDto> getRoomListByTag(String tagName) {
-        List<RoomTag> roomTags = roomTagRepository.findAllByTagsContains(tagName);
+        List<RoomTag> roomTags = roomTagRepository.findAllByTags(tagName);
         List<String> roomTagsPk = roomTags.stream().map(RoomTag::getRoomPk).toList();
         List<Room> rooms = roomRepository.findAllById(roomTagsPk);
 

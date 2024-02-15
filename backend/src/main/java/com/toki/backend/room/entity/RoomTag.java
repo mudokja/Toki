@@ -3,6 +3,7 @@ package com.toki.backend.room.entity;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 import java.util.Set;
 
@@ -16,5 +17,6 @@ public class RoomTag {
     private String roomPk;
 
     @Setter
-    private Set<String> tags;
+    @Indexed
+    private String tags;
 }

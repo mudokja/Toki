@@ -10,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.TimeToLive;
 
 import java.time.LocalDateTime;
 
@@ -27,7 +28,8 @@ public class RefreshToken {
     String refreshToken;
     @CreatedDate
     LocalDateTime createAt;
-    LocalDateTime expireTime;
+    @TimeToLive
+    Long expireTime;
     Integer snsType;
     @Enumerated(EnumType.STRING)
     Role role;
@@ -35,7 +37,7 @@ public class RefreshToken {
     String userTag;
 
     @Builder
-    public RefreshToken(String refreshToken, LocalDateTime expireTime,String userTag, Integer snsType, Role role, String userPk) {
+    public RefreshToken(String refreshToken, Long expireTime,String userTag, Integer snsType, Role role, String userPk) {
         this.refreshToken = refreshToken;
         this.expireTime = expireTime;
         this.snsType = snsType;

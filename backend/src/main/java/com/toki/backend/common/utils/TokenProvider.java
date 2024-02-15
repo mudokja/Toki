@@ -237,7 +237,7 @@ public class TokenProvider {
                         .snsType(oAuth2User.getSnsType())
                         .userTag(ConvertUserTag.convertUserTag(oAuth2User.getUserTag()))
                 .role(oAuth2User.getUserRole())
-                .expireTime(expireTime)
+                .expireTime(TokenProvider.refreshTokenExpiredTime)
                 .build()
         );
         return refreshToekn;
