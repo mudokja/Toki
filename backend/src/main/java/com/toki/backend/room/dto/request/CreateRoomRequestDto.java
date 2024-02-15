@@ -16,6 +16,12 @@ public class CreateRoomRequestDto {
     Boolean isPrivate;
     String roomPassword;
     String parentRoomId;
-    Object roomOption;
+    RoomOption roomOption;
+
+    public static class RoomOption{
+        String ageLimit;
+
+        String genderCatch;
+    }
 
 }
