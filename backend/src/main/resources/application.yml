@@ -1,7 +1,10 @@
 
 # -Dspring.profiles.active=
 
-
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
 
 spring:
   profiles:
