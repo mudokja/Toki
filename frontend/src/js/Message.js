@@ -9,7 +9,7 @@ async function messageSend(messageData, success, fail) {
 }
 
 async function messageCheck(typeData, success, fail) {
-    await local.get(`/api/v1/messages?type=${typeData}`)
+    await local.get(`/api/v1/messages?page=${typeData}`)
         .then(success)
         .catch(fail)
 }

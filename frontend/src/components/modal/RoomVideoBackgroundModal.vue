@@ -1,28 +1,28 @@
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue'
-import RoomGameDetailLadderModal from '@/components/modal/RoomGameDetailLadderModal.vue'
-import RoomGameDetailDiceModal from '@/components/modal/RoomGameDetailDiceModal.vue'
-import RoomGameDetailDrawLotsModal from '@/components/modal/RoomGameDetailDrawLotsModal.vue'
-import RoomGameDetailTaboModal from '@/components/modal/RoomGameDetailTaboModal.vue'
+import RoomVideoBackgroundDetailCityModal from '@/components/modal/RoomVideoBackgroundDetailCityModal.vue';
+import RoomVideoBackgroundDetailOfficeModal from '@/components/modal/RoomVideoBackgroundDetailOfficeModal.vue';
+import RoomVideoBackgroundDetailHomeModal from '@/components/modal/RoomVideoBackgroundDetailHomeModal.vue';
+import RoomVideoBackgroundDetailNatureModal from '@/components/modal/RoomVideoBackgroundDetailNatureModal.vue';
 
 const props = defineProps({
-    roomGameDialog: {
+    roomVideoBackgroundDialog: {
         type: Boolean,
         required: true,
     }
 })
 
-const emit = defineEmits(['update:roomGameDialog'])
-const selectedGame = ref('')
+const emit = defineEmits(['update:roomVideoBackgroundDialog'])
+const selectedBackground = ref('')
 
 function closeModal() {
-  emit('update:roomGameDialog', false)
+  emit('update:roomVideoBackgroundDialog', false)
 }
 
-// 자식 RommGameDetail(게임)Modal.vue 에서 오는 emit 수신.
-function selectGame(gameName) {
-    selectedGame.value = gameName
-    console.log(gameName)
+// 자식 RoomVideoBackgroundDetail(가상배경)Modal.vue 에서 오는 emit 수신.
+function selectBackground(background) {
+    selectedBackground.value = background
+    console.log(background)
 }
 
 </script>
@@ -30,7 +30,7 @@ function selectGame(gameName) {
 <template>
     <div>
         <v-dialog
-            v-model="props.roomGameDialog"
+            v-model="props.roomVideoBackgroundDialog"
             @click:outside="closeModal"
             width="auto"
             height="1000px"                        
@@ -42,59 +42,59 @@ function selectGame(gameName) {
                 style="border-radius: 20px; border: 1px solid rgb(255, 255, 255);"
             >
 
-                <!-- 게임 상태 표시줄 (맨 위) -->
+                <!-- 가상 배경 상태 표시줄 (맨 위) -->
                 <v-toolbar
                     color="black"                    
                 >
                     <v-toolbar-title                        
                         style="margin-left: 50px;"
                     >
-                        게임
+                        가상 배경
                     </v-toolbar-title>
                 </v-toolbar>
 
-                <!-- 게임 목록 -->
+                <!-- 가상 배경 목록 -->
                 <v-row
                     class="d-flex align-center justify-center"
-                    style="margin-left: 10%; margin-right: 10%; margin-top: 25%; text-align: center;"             
+                    style="margin-left: 10%; margin-right: 10%; margin-top: 30%; text-align: center;"             
                 >
-                    <!-- 사다리 게임 -->
+                    <!-- 도시 가상 배경 -->
                     <v-col>
-                        <RoomGameDetailLadderModal @select-game="selectGame"/>
+                        <RoomVideoBackgroundDetailCityModal @select-background="selectBackground"/>
                         <br>
                         <br>
                         <p class="text-h6" style="white-space: nowrap;">
-                            사다리 게임
+                            도시 배경
                         </p>
                     </v-col>
 
-                    <!-- 주사위 게임 -->
+                    <!-- 사무실 배경 -->
                     <v-col>
-                        <RoomGameDetailDiceModal @select-game="selectGame"/>
+                        <RoomVideoBackgroundDetailOfficeModal @select-background="selectBackground"/>
                         <br>
                         <br>
                         <p class="text-h6" style="white-space: nowrap;">
-                            주사위 게임
+                            사무실 배경
                         </p>
                     </v-col>
 
-                    <!-- 제비 뽑기 -->
+                    <!-- 가정집 배경 -->
                     <v-col>
-                        <RoomGameDetailDrawLotsModal @select-game="selectGame"/>
+                        <RoomVideoBackgroundDetailHomeModal @select-background="selectBackground"/>
                         <br>
                         <br>
                         <p class="text-h6" style="white-space: nowrap;">
-                            제비 뽑기
+                            가정집 배경
                         </p>
                     </v-col>
 
-                    <!-- 단어 맞추기 -->
+                    <!-- 자연 배경 -->
                     <v-col>
-                        <RoomGameDetailTaboModal @select-game="selectGame"/>
+                        <RoomVideoBackgroundDetailNatureModal @select-background="selectBackground"/>
                         <br>
                         <br>
                         <p class="text-h6" style="white-space: nowrap;">
-                            단어 맞추기
+                            자연 배경
                         </p>
                     </v-col>
                 </v-row>

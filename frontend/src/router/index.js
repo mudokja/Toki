@@ -19,7 +19,7 @@ const router = createRouter({
       component: () => import('../views/RoomView.vue')
     },
     {
-      path: '/profile',
+      path: '/profile/:tag',
       name: 'profile',
       component: () => import('../views/ProfileView.vue')
     },
@@ -43,7 +43,7 @@ const router = createRouter({
       name: 'rooms',
       component: () => import('../views/DetailView.vue')
     },
-    
+
     {
       path: '/room/:roomId/:roomMeetingId',
       name: 'roomMeeting',

@@ -1,8 +1,6 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-// import { memberDetail } from '@/js/Member.js'
-// import { friendListSearch } from '@/js/Friend.js'
-// import { useAuthStore } from '@/stores/auth.js'
+import { ref } from 'vue'
+import { useUserStore } from '@/stores/user.js'
 import ProfileMyDataComponent from '@/components/profile_components/ProfileMyDataComponent.vue'
 import ProfileMyFriendsComponent from '@/components/profile_components/ProfileMyFriendsComponent.vue'
 import ProfileMyBlacklistComponent from '@/components/profile_components/ProfileMyBlacklistComponent.vue'
@@ -18,37 +16,8 @@ const gaze = ref(25);
 // 파일 업로드 on/off 토글
 const uploadToggle = ref(false)
 
-// pinia 유저 id 가져오기
-// const userId = useAuthStore().user.userId
-
-// GET 유저 정보 상세 조회
-  // 유저 정보 할당
-// const memberDetailData = ref()
-// const memberDetailAxios = function() {
-//   memberDetail(
-//     userId,
-//     ({data}) => {console.log(data, '[Success] ProfileComponent.vue : memberDetailAxios'); memberDetailData.value = data;},
-//     (fail) => {console.log(fail, '[Error] ProfileComponent.vue : memberDetailAxios');}
-//     )
-//   }
-
-// GET 친구 목록 조회
-  // 친구 인가? 친구가 아닌가? 변수 설정
-  const isFriend = ref(true)
-  // 친구 목록 정보 할당
-  const friendListSearchData = ref() 
-// const friendListSearchAxios = function() {
-//   friendListSearch(
-//     isFriend.value,
-//     ({data}) => {console.log(data, '[Success] ProfileComponent.vue : friendListSearchAxios'); friendListSearchData.value = data;},
-//     (fail) => {console.log(fail, '[Error] ProfileComponent.vue : friendListSearchAxios');}
-//     )
-//   }
-
-// onMounted(() => {
-//   memberDetailAxios(),
-//   friendListSearchAxios()
-// })
+// user.js 에서 유저 정보 가져오기
+const userStore = useUserStore()
 
 </script>
 
@@ -68,8 +37,8 @@ const uploadToggle = ref(false)
           <v-row>
             <v-col cols="3" align-self="center"><img src="@/assets/profile_assets/프로필.png" style="width: 200px; height: 200px;" alt="프로필 사진"></v-col>
               <v-col cols="9" align-self="center" class="profile_info_content">
-                <p class="pb-5 font-weight-black text-h4">싸피토키  <img src="@/assets/profile_assets/보석.png" style="width: 30px; height: 30px;" alt="뱃지"></p>
-                <p class="pb-10 font-weight-black text-h4">LEVEL 99</p>
+                <p class="pb-5 font-weight-black text-h4">{{ userStore.memberDetailData.data.userName }}  <img src="@/assets/profile_assets/보석.png" style="width: 30px; height: 30px;" alt="뱃지"></p>
+                <p class="pb-10 font-weight-black text-h4">{{ userStore.memberDetailData.data.userRole }}</p>
                   <div class="pb-2 pr-5 font-weight-black d-flex flex-row-reverse">80.17%</div>
                 <div class="pb-10 bg-indigo-lighten-5 rounded-pill" style="position: relative; z-index: 1;">
                   <div v-bind:class="`pb-10 bg-light-green-accent-3 rounded-pill w-${gaze}`" style="position: absolute;"></div>
@@ -96,7 +65,7 @@ const uploadToggle = ref(false)
   
   <v-window v-model="tab">
     <v-window-item v-for="n in 4" :key="n" :value="n">
-      <!-- 유저 정보 데이터 ProfileMyDataComponent 로 보냄 -->
+      <!-- 유저 정보 / 친구 / 블랙리스트 / 쪽지 -->
       <template v-if="n === 1"><ProfileMyDataComponent/></template>
       <template v-else-if="n === 2"><ProfileMyFriendsComponent/></template>
       <template v-else-if="n === 3"><ProfileMyBlacklistComponent/></template>

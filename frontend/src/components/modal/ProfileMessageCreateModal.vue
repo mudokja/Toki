@@ -15,16 +15,10 @@ const userList = ref([
 const inputValue = ref()
 
 // 유저 검색 후, 선택한 유저
-const dialogData = ref('')
+const dialogData = ref()
 
 // 유저 검색 모달창, On / Off 변수
 const dialog = ref(false)
-
-// 유저 검색 모달창 '친구 추가' 클릭
-const dialogOk = function(dialogData){
-  console.log(dialogData, '친구 추가 됨')
-  dialog.value = false
-}
 
 // 유저 검색 모달창 '닫기' 클릭
 const dialogClose = function(){
@@ -34,6 +28,7 @@ const dialogClose = function(){
 // 검색된 유저 목록
 const items = ref([])
 
+// 유저 검색 함수
 const searchUser = function(inputValue) {
   for (const user of userList.value) {
     if (user.text.indexOf(inputValue)) {
@@ -44,12 +39,13 @@ const searchUser = function(inputValue) {
   }
 }
 
+// 로딩 변수
 const loaded = ref(false)
 const loading = ref(false)
 
+// 유저 검색할 때, 로딩 함수
 const onSearch = function(user) {
   loading.value = true
-
   setTimeout(() => {
     loading.value = false
     loaded.value = true
@@ -97,7 +93,6 @@ const onSearch = function(user) {
             <template v-slot:prepend>
               <v-icon :icon="item.icon"></v-icon>
             </template>
-
             <v-list-item-title v-text="item.text"></v-list-item-title>
           </v-list-item>
           <v-divider></v-divider>
@@ -106,10 +101,10 @@ const onSearch = function(user) {
             <v-btn color="purple-darken-1" variant="text" @click="dialogClose()">
               닫기
             </v-btn>
-            <ProfileMessageSendModal/>
-            <v-btn color="purple-darken-1" variant="text" @click="dialogOk(dialogData)">
-              쪽지 보내기
-            </v-btn>
+            <template v-if="dialogData === null"></template>
+            <template v-else>
+              <ProfileMessageSendModal :dialogData="dialogData"/>
+            </template>
           </v-card-actions>
         </v-list>
       </v-card>
