@@ -21,7 +21,7 @@ import RoomInviteModal from '@/components/modal/RoomInviteModal.vue'
 import RoomConfigModal from '@/components/modal/RoomConfigModal.vue'
 import RoomVideoBackgroundModal from '@/components/modal/RoomVideoBackgroundModal.vue'
 import RoomVideoVirtualModal from '@/components/modal/RoomVideoVirtualModal.vue'
-
+import RoomSettingModal from '@/components/modal/RoomSettingModal.vue'
 import RoomChatComponent from '@/components/room_components/RoomChatComponent.vue'
 ////
 // const testRooms = useTokiRoomStore();
@@ -382,10 +382,13 @@ const openConfigDialog = () => {
 const router = useRouter()
 const exitRoom = () => {
   sessionStorage.removeItem('roomData')
-  router.go(-1)
+  router.push({ name: 'home' })
 }
 
-
+const roomSettingDialog = ref(false)
+const openRoomSettingDialog = () => {
+  roomSettingDialog.value = !roomSettingDialog.value
+}
 
 const screenWidth = ref(window.innerWidth)
 
@@ -835,7 +838,15 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                   @click="openInvitDialog"
                 >
                   초대
-                </v-list-item>               
+                </v-list-item>
+                <v-list-item 
+                  prepend-icon="mdi-rabbit"
+                  style="margin-left: 10px;"
+                  value="방정보변경"
+                  @click="openRoomSettingDialog"
+                >
+                  방 정보 변경
+                </v-list-item>
                 <v-list-item 
                   prepend-icon="mdi-cog"
                   style="margin-left: 10px;"
@@ -969,6 +980,11 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
     <RoomVideoVirtualModal
       :roomVideoVirtualDialog="roomVideoVirtualDialog"
       @update:roomVideoVirtualDialog="roomVideoVirtualDialog = $event"
+    />
+
+    <RoomSettingModal 
+      :roomSettingDialog="roomSettingDialog"
+      @update:roomSettingDialog="roomSettingDialog = $event"
     />
   </v-container>
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
