@@ -14,7 +14,7 @@ const instance = axios.create({
     withCredentials:true
 })
 //request시  아래
-instance.defaults.headers.common["Authorization"]=`bearer ${token}`;
+instance.defaults.headers.common["Authorization"]=`Bearer ${token}`;
 instance.defaults.headers.post["Content-Type"]="application/json";
 instance.defaults.headers.put["Content-Type"]="appication/json"
 return instance;
