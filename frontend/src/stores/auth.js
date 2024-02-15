@@ -13,17 +13,19 @@ export const useAuthStore = defineStore('auth', () => {
 
     function setToken(newToken) {
         // 유저 태그 가져오기
-        userTag.value = jwtDecode(newToken).userTag
-        
-        const decoded = jwtDecode(newToken).userId
-        user.value = decoded
-        accessToken.value = decoded.accessToken
-        localStorage.setItem('accessToken', newToken)
-        localStorage.setItem('userId', decoded)
-        
-        
         try {
-            user.value = jwtDecode(newToken)
+            userTag.value = jwtDecode(newToken).userTag
+            
+            const decoded = jwtDecode(newToken).userId
+            user.value = decoded
+            accessToken.value = decoded.accessToken
+            localStorage.setItem('accessToken', newToken)
+            localStorage.setItem('userId', decoded)
+            console.log('user: ', user.value)
+            console.log('userTag: ', userTag.value)
+            console.log('accessToken: ', accessToken.value)
+            console.log('isAuthenticated: ', isAuthenticated.value)
+
         } catch (error) {
             console.error('Token decoding failed:', error)
         }
