@@ -133,18 +133,30 @@ public class RoomService {
 
 //    @Transactional
     public CreateRoomResponseDto saveRoom(CreateRoomRequestDto createRoomRequestDto, String hostUserPk) {
+        Room room=null;
+        if(createRoomRequestDto.getParentRoomId()==null){
+            room = Room.builder()
+                    .title(createRoomRequestDto.getRoomName())
+                    .category(categoryRepository.findById(createRoomRequestDto.getCategoryPk()).orElse(Category.builder().categoryPk(1).build()))
+                    .isPrivate(createRoomRequestDto.getIsPrivate())
+                    .password(createRoomRequestDto.getRoomPassword())
+                    .build();
+        }
+        if(createRoomRequestDto.getParentRoomId()!=null&&!createRoomRequestDto.getParentRoomId().isBlank()){
+            Room pRoom=roomRepository.findById(createRoomRequestDto.getParentRoomId()).get();
+            room = Room.builder()
+                    .parent(pRoom)
+                    .title(createRoomRequestDto.getRoomName())
+                    .category(categoryRepository.findById(createRoomRequestDto.getCategoryPk()).orElse(Category.builder().categoryPk(1).build()))
+                    .isPrivate(createRoomRequestDto.getIsPrivate())
+                    .password(createRoomRequestDto.getRoomPassword())
+                    .build();
+        }
 
-        Room room = Room.builder()
-                .parent(Room.builder().roomPk(createRoomRequestDto.getParentRoomId()).build())
-                .title(createRoomRequestDto.getRoomName())
-                .category(categoryRepository.findById(createRoomRequestDto.getCategoryPk()).get())
-                .isPrivate(createRoomRequestDto.getIsPrivate())
-                .password(createRoomRequestDto.getRoomPassword())
-                .build();
 
         roomRepository.save(room);
 
-        rooms.put(room.getRoomPk(),tokiRoomService.createTokiRoom(room.getRoomPk()));
+//        rooms.put(room.getRoomPk(),tokiRoomService.createTokiRoom(room.getRoomPk()));
 
         RoomMember roomMember = RoomMember.builder()
                         .roomPk(room.getRoomPk())
