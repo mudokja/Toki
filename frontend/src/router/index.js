@@ -17,7 +17,7 @@ const router = createRouter({
       component: () => import('../views/RoomView.vue')
     },
     {
-      path: '/profile',
+      path: '/profile/:tag',
       name: 'profile',
       component: () => import('../views/ProfileView.vue')
     },

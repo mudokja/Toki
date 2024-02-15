@@ -1,53 +1,11 @@
 <script setup>
-import { ref, onBeforeMount } from 'vue'
+import { ref } from 'vue'
 import { useUserStore } from '@/stores/user.js'
-
-import { blackListsearch, blackListAdd, blacklistRemove} from '@/js/Blacklist.js'
-import { friendListSearch, friendListAdd, friendAcceptanceRejection, friendDelete } from '@/js/Friend.js'
-
 import ProfileMyDataComponent from '@/components/profile_components/ProfileMyDataComponent.vue'
 import ProfileMyFriendsComponent from '@/components/profile_components/ProfileMyFriendsComponent.vue'
 import ProfileMyBlacklistComponent from '@/components/profile_components/ProfileMyBlacklistComponent.vue'
 import ProfileFileinputComponent from '@/components/profile_components/ProfileFileinputComponent.vue'
 import ProfileMessageComponent from '@/components/profile_components/ProfileMessageComponent.vue'
-
-
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-const friendListSearchData = ref()
-const friendListSearchAxios = function() {
-  friendListSearch(
-    true,
-    ({data}) => {console.log(data, '[Success] ProfileComponent.vue : friendListSearchAxios'); friendListSearchData.value = data;},
-    (fail) => {console.log(fail, '[Error] ProfileComponent.vue : friendListSearchAxios');}
-    )
-  }
-
-const msgPOST = function() {
-  friendListAdd(
-    {toUserTag : '3e9'},
-
-    ({data}) => {console.log(data, '[Success] mesg.vue : friendListSearchAxios');},
-    (fail) => {console.log(fail, '[Error] msg.vue : friendListSearchAxios');}
-  )
-}
-
-const msgDELETE = function() {
-  friendDelete(
-      '3e9',
-     ({data}) => {console.log(data, '[Success] mesg.vue : friendListSearchAxios');},
-    (fail) => {console.log(fail, '[Error] msg.vue : friendListSearchAxios');}
-  )
-}
-
-
-
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-
-
 
 // css 정보-친구-블랙리스트 탭
 const tab = ref(null)
@@ -61,11 +19,6 @@ const uploadToggle = ref(false)
 // user.js 에서 유저 정보 가져오기
 const userStore = useUserStore()
 
-
-onBeforeMount(() => {
-  friendListSearchAxios()
-})
-
 </script>
 
 <style scoped>
@@ -76,9 +29,6 @@ onBeforeMount(() => {
     
     <div id="profile_title">
       <p class="ml-14 mt-5 font-weight-black text-h5">프로필</p>
-      {{ userStore.memberDetailData.data }}
-      <v-btn @click="msgPOST">msg POST</v-btn>
-      <v-btn @click="msgDELETE">msg DLETET</v-btn>
     </div>
     
     <v-row>

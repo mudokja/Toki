@@ -1,11 +1,12 @@
 <script setup>
 import { inject } from 'vue';
+import { useAuthStore } from '@/stores/auth';
 
 const drawerState = inject('drawerState')
 
 const category = ['게임', '공부', '스포츠', '잡담', '음악', '자유(기타)', ]
 
-
+const useStore = useAuthStore()
 
 
 
@@ -29,12 +30,19 @@ const category = ['게임', '공부', '스포츠', '잡담', '음악', '자유(�
       
       >
       </v-btn>
+      <router-link v-if="useStore.userTag === null || useStore.userTag === undefined" :to="{ name: 'home'}">
         <img src="@/assets/profile_assets/프로필.png" style="width: 40px; height: 40px; border-radius: 50%; margin-left: 1px;">
         <div>
             <h4 style="margin-left: 10px;">5반 유저</h4>
         </div>
+      </router-link>
 
-
+      <router-link v-else :to="{ name: 'profile', params: { tag: useStore.userTag}}">
+        <img src="@/assets/profile_assets/프로필.png" style="width: 40px; height: 40px; border-radius: 50%; margin-left: 1px;">
+        <div>
+            <h4 style="margin-left: 10px;">5반 유저</h4>
+        </div>
+      </router-link>
     </div>
 
     <v-divider></v-divider>
