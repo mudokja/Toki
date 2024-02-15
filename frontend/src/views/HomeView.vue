@@ -32,10 +32,6 @@ onMounted(async () => {
   )
 })
 
-onMounted(() => {
-  console.log(authStore.accessToken)
-})
-
 </script>
 
 <template>

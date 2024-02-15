@@ -22,7 +22,6 @@ export const useAuthStore = defineStore('auth', () => {
             localStorage.setItem('accessToken', newToken)
             localStorage.setItem('userId', user.value)
             localStorage.setItem('userTag', userTag.value)
-            console.log('isAuthenticated: ', isAuthenticated)
 
         } catch (error) {
             console.error('Token decoding failed:', error)
