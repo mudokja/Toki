@@ -14,7 +14,7 @@ const props = defineProps({
 
 
 const goToRoom = () => {
-  router.push({ name: 'roomjoin', params: { roomId: props.item }})
+  router.push({ name: 'roomjoin', params: { roomPk: props.item }})
 }
 
 

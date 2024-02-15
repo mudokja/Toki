@@ -32,7 +32,8 @@ const roomData = computed(() => ({
 
 const cllick = () => {
         sessionStorage.setItem('roomData', JSON.stringify(roomData.value))
-        router.push({ name: 'roomMeeting', params: { roomId: route.params.roomId, roomMeetingId: 1 }})
+        //console.log('////////////////////////////////////////',route.params);
+        router.push({ name: 'roomMeeting', params: { roomId: route.params.roomPk, roomMeetingId: 1 }})
 
 }
 

@@ -14,7 +14,7 @@ const router = createRouter({
     },
     {
       path: '/room/:roomPk',
-      name: 'room',
+      name: 'roomjoin',
       props:true,
       component: () => import('../views/RoomView.vue')
     },
@@ -43,18 +43,14 @@ const router = createRouter({
       name: 'rooms',
       component: () => import('../views/DetailView.vue')
     },
+    
     {
-      path: '/rooms/:roomId',
-      name: 'roomjoin',
-      component: () => import('../views/RoomView.vue')
-    },
-    {
-      path: '/rooms/:roomId/:roomMeetingId',
+      path: '/room/:roomId/:roomMeetingId',
       name: 'roomMeeting',
       component: () => import('../views/RoomMeetingView.vue')
     },
     {
-      path: '/rooms/search',
+      path: '/room/search',
       name: 'search',
       component: () => import('../views/SearchHandlerView.vue')
     },

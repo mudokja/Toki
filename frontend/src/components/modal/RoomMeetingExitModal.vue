@@ -19,7 +19,7 @@ function closeModal() {
 }
 
 function leaveRoom() {
-    router.push({ name: 'roomjoin', params: { roomId: 1 }})
+    router.push({ name: 'roomjoin', params: { roomPk: 1 }})
 }
 
 
