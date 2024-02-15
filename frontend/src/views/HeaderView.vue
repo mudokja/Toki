@@ -33,6 +33,7 @@ const logoutAccount = () => {
       console.log(error)
     }
   )
+  router.go(0)
 }
 
 const searching = () => {
