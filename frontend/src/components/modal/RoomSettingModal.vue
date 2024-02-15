@@ -52,7 +52,7 @@ const roomData = computed(() => ({
     parentRoomId: null,
     roomOption: {
         ageLimit: ageLimit.value,
-        genderCatch: genderCatch.value
+        isPrivate: isPrivate.value,
     }
 
 }))
