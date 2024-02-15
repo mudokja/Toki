@@ -124,6 +124,20 @@ const blacklistdeletee = () => {
 ///
 
 
+
+const memberCheck = () => {
+    memberDetail(
+        authStore.userTag,
+        (success) => {
+            console.log(success)
+        },
+        (error) => {
+            console.error(error)
+        }
+    )
+}
+
+
 </script>
 
 <template>
@@ -215,7 +229,7 @@ const blacklistdeletee = () => {
         <v-row>
             <v-col>
                 
-                <v-btn>
+                <v-btn @click="memberCheck">
                     memberDetail
                 </v-btn>
             </v-col>
