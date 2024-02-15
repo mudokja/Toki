@@ -64,7 +64,7 @@ const blacklistaddd = () => {
 const blacklistdeletee = () => {
     
     blacklistRemove(
-        testPk,
+        testPk.toUserTag,
         (success) => {
             console.log(success)
         },
