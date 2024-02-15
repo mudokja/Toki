@@ -4,11 +4,9 @@ import { useRouter } from "vue-router";
 import MyCard from "@/components/MyCard.vue";
 import { bannerCheck } from "@/js/Banner";
 import { useAuthStore } from "@/stores/auth";
-import { useUserStore } from "@/stores/user";
 
 const router = useRouter()
 const authStore = useAuthStore()
-const userStore = useUserStore()
 
 const banners = ref([])
 const items = ref(Array.from({ length: 4 }, (_, i) => ({ id: i + 1 })));
@@ -34,10 +32,6 @@ onMounted(async () => {
   )
 })
 
-onMounted(() => {
-  console.log(userStore)
-  console.log(authStore.userTag)
-})
 </script>
 
 <template>
