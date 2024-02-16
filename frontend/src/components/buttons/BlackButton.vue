@@ -11,9 +11,8 @@ if(name.value==null){
 </script>
 
 <template>
-      <BaseButton v-bind:type=name v-bind:id="'black'"></BaseButton>
-    
-    
+      <BaseButton v-bind:type=name v-bind:id="'black'"></BaseButton>  
+      <video src=""></video>
 </template>
 
 <style scoped>

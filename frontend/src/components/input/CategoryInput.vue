@@ -1,10 +1,10 @@
 <script setup>
-
+import axios from 'axios';
 </script>
 
 <template>
     <div>
-        sidebar입니다
+        
     </div>
 </template>
 
