@@ -87,8 +87,8 @@ onMounted(async () => {
         />
       </v-col>
     </v-row>
-    <v-spacer></v-spacer>
-    <div v-text="'현재 진행 중인 토키'" class="text-h5"></div>
+    
+    <div v-text="'현재 진행 중인 토키'" style="padding-top: 50px;" class="text-h5"></div>
     <v-row style="padding-top: 2%;">
       <v-col 
         v-for="(item, index) in items"

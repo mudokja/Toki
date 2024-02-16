@@ -61,47 +61,21 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
 
 </script>
 <template>
-  <v-container id="enter" class="h-100" style="min-width: 600px">
+  <v-container id="enter" class="h-100" style="min-width: 600px;">
     <v-row class="h-100">
       <!-- 화면 -->
-      <v-col id="screen">
+      <v-col id="screen" style="border-radius: 10px;">
         <!-- 위 서브 화면 -->
-        <v-row class="mt-1" style="height: 45%;">
-          <v-col id="biggBG1" class="ml-2 mr-2 mb-2 d-flex align-end">
-            <v-sheet>아이디 or 닉네임</v-sheet>
-          </v-col>
-          <v-col id="biggBG2" class="ml-2 mr-2 mb-2 d-flex align-end">
-            <v-sheet>아이디 or 닉네임</v-sheet>
-          </v-col>
-          <v-col id="biggBG3" class="ml-2 mr-2 mb-2 d-flex align-end">
-            <v-sheet>아이디 or 닉네임</v-sheet>
-          </v-col>
-          <v-col id="biggBG4" class="ml-2 mr-2 mb-2 d-flex align-end">
-            <v-sheet>아이디 or 닉네임</v-sheet>
-          </v-col>
-          <v-col id="biggBG5" class="ml-2 mr-2 mb-2 d-flex align-end">
-            <v-sheet>아이디 or 닉네임</v-sheet>
-          </v-col>
+        <v-row class="mt-1" style="height: 40%;">
+          
         </v-row>
         <!-- 메인 화면 -->
+        <v-row style="height: 10%;">
 
+        </v-row>
         <!-- 아래 서브 화면 -->
-        <v-row class="mb-1" style="height: 45%;">
-          <v-col id="biggBG1" class="ml-2 mr-2 mt-2 d-flex align-end">
-            <v-sheet>아이디 or 닉네임</v-sheet>
-          </v-col>
-          <v-col id="biggBG2" class="ml-2 mr-2 mt-2 d-flex align-end">
-            <v-sheet>아이디 or 닉네임</v-sheet>
-          </v-col>
-          <v-col id="biggBG3" class="ml-2 mr-2 mt-2 d-flex align-end">
-            <v-sheet>아이디 or 닉네임</v-sheet>
-          </v-col>
-          <v-col id="biggBG4" class="ml-2 mr-2 mt-2 d-flex align-end">
-            <v-sheet>아이디 or 닉네임</v-sheet>
-          </v-col>
-          <v-col id="biggBG5" class="ml-2 mr-2 mt-2 d-flex align-end">
-            <v-sheet>아이디 or 닉네임</v-sheet>
-          </v-col>
+        <v-row class="mb-1" style="height: 40%;">
+          
         </v-row>
 
 
