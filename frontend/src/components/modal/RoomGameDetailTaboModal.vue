@@ -45,7 +45,7 @@ const selectGame = function(gameName){
         <v-card
           class="mx-auto"
           max-width="auto"
-          color="black"
+          color="white"
         >
           <v-img
             class="align-end text-white"

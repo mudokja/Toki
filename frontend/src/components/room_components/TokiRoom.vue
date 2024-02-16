@@ -555,7 +555,7 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
     
     <!-- <canvas ref="previewCanvas" controls style="max-width: 100%;" width="100" height="60"></canvas> -->
   </div>    
-  <v-container id="enter" class="h-100" style="min-width: 600px">
+  <v-container id="enter" class="h-100" style="min-width: 2000px">
     
     <v-row class="h-100">
       <!-- 화면 -->
@@ -1092,8 +1092,13 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
 
 <style scoped>
 #main-screen {
-  background-color: rgb(10, 66, 48);
+    background-color: #063b17; /* 칠판의 배경색을 흰색으로 설정합니다. */
+    border: 30px solid rgb(145, 68, 23); /* 칠판의 테두리를 그립니다. */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* 흰색 칠판에 회색 그림자를 추가합니다. */
+    position: relative; /* 내부 요소의 위치를 상대적으로 설정합니다. */
+    overflow: hidden; /* 내부 컨텐츠가 칠판 영역을 벗어나지 않도록 설정합니다. */
 }
+
 
 #screen {
   background-color: rgb(0, 0, 0);

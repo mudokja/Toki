@@ -44,7 +44,7 @@ onMounted(() => {
   <div>
     <v-container
     class="d-flex align-center justify-center flex-wrap text-center"
-      style="width: 1000px;"
+      style="min-width: 3000px;"
     >
 
       <v-dialog
@@ -79,17 +79,17 @@ onMounted(() => {
     </v-dialog>
     </v-container>
   </div>
-  <div class="room-view">
+  
     <TokiRoom v-if="userInfo&&userInfo.name!==null" :roomInfo="roomInfoData" :userInfo="userInfo"/>
-  </div>
+  
   <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/neodgm/neodgm-pro-webfont@latest/neodgm_pro/style.css">
 </template>
 
 <style scoped>
-.room-view {
+/* .room-view {
   height: 1000px;
   width: 1000px;
-}
+} */
 .font-neodgm-pro { 
     font-family: 'NeoDunggeunmo Pro'; 
 }

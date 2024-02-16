@@ -104,7 +104,7 @@ watch(items.value, () => {
       </v-container>
     </v-form>
     <!-- {{ items }} -->
-    <input type="text" v-model="chatU" >
+    <!-- <input type="text" v-model="chatU" > -->
   </v-card>
 </template>
   
