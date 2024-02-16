@@ -77,9 +77,13 @@ const storeAuth = useAuthStore()
       
       >
       </v-btn>
-
-
-      <RouterLink  :to="{ name: 'home'}">
+      <RouterLink v-if="storeAuth.userTag === null || storeAuth.userTag === undefined" :to="{ name: 'home'}">
+        <img src="@/assets/profile_assets/프로필.png" style="width: 40px; height: 40px; border-radius: 50%; margin-left: 1px;">
+        <div>
+            <h4 style="margin-left: 10px;">5반 유저</h4>
+        </div>
+      </RouterLink>
+      <RouterLink v-else :to="{ name: 'profile', params: { tag: storeAuth.userTag}}">
         <img src="@/assets/profile_assets/프로필.png" style="width: 40px; height: 40px; border-radius: 50%; margin-left: 1px;">
         <div>
             <h4 style="margin-left: 10px;">5반 유저</h4>
