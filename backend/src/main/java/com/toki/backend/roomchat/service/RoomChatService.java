@@ -40,7 +40,7 @@ public class RoomChatService {
     private final ChannelTopic channelTopic;
     private final ObjectMapper objectMapper;
 
-    @Transactional(readOnly = true)
+
     public void sendMessage(RoomChatRequestMessageDto roomChatRequestDto, String userPk,String userName) throws JsonProcessingException {
 
         String roomPk=roomChatRequestDto.getRoomChatPk();
