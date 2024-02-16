@@ -40,11 +40,11 @@ watch(() => route.query.tag, (newValue) => {
     <div>
         '{{ searchQuery }}' 의 검색 결과 입니다.
 
-        <!-- <ul>
+        <ul>
           <li v-for="result in searchResults" :key="result.id">
             {{ result }}
           </li>
-        </ul> -->
+        </ul>
     </div>
 </template>
 

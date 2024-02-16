@@ -3,8 +3,10 @@ import RoomComponent from '@/components/room_components/RoomComponent.vue'
 import TokiRoom from '@/components/room_components/TokiRoom.vue';
 import { ref } from 'vue';
 import { onMounted } from 'vue';
-
+import { useRoute } from 'vue-router';
+const route = useRoute()
 const roomData = JSON.parse(sessionStorage.getItem('roomData'))
+const roomPk = route.params.roomPk
 
 const props = defineProps(
   {
@@ -36,7 +38,7 @@ onMounted(() => {
   <div>
     <v-container
     class="d-flex align-center justify-center flex-wrap text-center"
-      style="width: 1000px; height: 0px;"
+      style="width: 1000px;"
     >
 
       <v-dialog
@@ -46,6 +48,11 @@ onMounted(() => {
         <v-card class="align-center justify-center flex-wrap text-center" style="border-radius: 20px; border: 1px solid white;" color="black" width="600" height="600">
           <v-row align="center" justify="center" class="fill-height">
             <v-col cols="12">
+              <v-img
+                height="290"
+                :src="`https://picsum.photos/900/600?image=${roomPk * 5 + 10}`"
+              >
+              </v-img>
               <v-card-title id="font-check">
                 <span>입장 하기</span>
               </v-card-title>

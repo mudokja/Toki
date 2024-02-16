@@ -1,6 +1,11 @@
 <script setup>
-import { ref, watch, defineProps, defineEmits } from 'vue';
+import { ref, watch, defineProps, defineEmits, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+
+const authStore = useAuthStore()
+
+const isLoggedIn = computed(() => authStore.isAuthenticated)
 
 const props = defineProps({
   drawer: {
@@ -68,11 +73,16 @@ watch(drawer, (newValue) => {
       
       >
       </v-btn>
+      <template v-if="isLoggedIn">
+
         <img src="@/assets/profile_assets/프로필.png" style="width: 40px; height: 40px; border-radius: 50%; margin-left: 1px;">
         <div>
             <h4 style="margin-left: 10px;">5반 유저</h4>
         </div>
-
+      </template>
+      <template v-else>
+        로그인이 필요합니다!
+      </template>
 
     </div>
 
