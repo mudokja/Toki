@@ -77,7 +77,6 @@ const storeAuth = useAuthStore()
       
       >
       </v-btn>
-      <template v-if="isLoggedIn">
 
 
       <RouterLink v-if="storeAuth.userTag === null || storeAuth.userTag === undefined" :to="{ name: 'home'}">
@@ -86,7 +85,6 @@ const storeAuth = useAuthStore()
             <h4 style="margin-left: 10px;">5반 유저</h4>
         </div>
       </RouterLink>
-      </template>
 
     </div>
 
