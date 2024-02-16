@@ -1,7 +1,7 @@
 <script setup>
 import { ref,onMounted,watch } from 'vue'
 import {Client} from '@stomp/stompjs';
-const props = defineProps({user:String});
+const props = defineProps({userName:String});
 const items = ref([
     { 'name': '토키1', 'content': 'good day' },
     { 'name': '토키2', 'content': 'bed day' },
@@ -12,11 +12,12 @@ const stompClient = ref(new Client());
 const chat = {
     chatType: "COMMONCHAT",
     sendTo: "ALL",
-    fromUser: "bb",
+    fromUser: "",
     content: " "
   }
+  console.log("dksanlnkamslmf;am;mf;aml;fm;alm",props.userName);
   const chatM=ref("")
-  const chatU=ref("")
+  const chatU=ref(props.userName.name);
 //채팅 열자마자 연결
 const clearMessage =()=>{
     chatM.value = ''

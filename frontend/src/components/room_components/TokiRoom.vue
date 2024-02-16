@@ -171,7 +171,7 @@ const newStream=async()=>{
 stream.value=await navigator.mediaDevices.getUserMedia({ video: true , audio:true }) 
   }
   else if(cha.value=='2'){
-    stream.value=await navigator.mediaDevices.getDisplayMedia({ video: true , audio:true }) 
+    stream.value=await navigator.mediaDevices.getDisplayMedia({ video: true }) 
   }
 }
 
@@ -1071,7 +1071,7 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
       <!-- 채팅 화면 -->
       <v-col v-if="chatBox" id="chatt" cols="3">
         <v-row class="h-100">
-          <v-col><RoomChatComponent/></v-col>
+          <v-col><RoomChatComponent :userName="userInfo"/></v-col>
         </v-row>
       </v-col>
     </v-row>

@@ -12,7 +12,7 @@ console.log(userInfo.value)
 <template>
   <div class="paripant-container">
     <slot name="video"></slot>
-    <span class="toki-name-span">{{ userInfo.name }}</span>
+    <span class="toki-name-span" >{{ userInfo.name }}</span>
   </div>
 </template>
 

@@ -44,7 +44,7 @@ const updateCategoryIndex = (newValue) => {
 
 const roomData = computed(() => ({
     roomName: roomName.value,
-    categoryPk: categoryIndex.value,
+    categoryPk: categoryIndex.value+1,
     tags: tags.value,
     isPrivate: isPrivate.value,
     roomPassword: roomPassword.value,
