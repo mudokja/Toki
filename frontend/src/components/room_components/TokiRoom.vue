@@ -576,7 +576,7 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
             
             <!-- <canvas v-if=recording ref="previewCanvas" controls style="max-width: 100%;" width="100" height="60"></canvas>
      -->
-            <video  ref="recordedVideoElement" controls style="max-width: 100%; " width="500" height="300"></video>
+            <video  ref="recordedVideoElement"  style="max-width: 100%; " width="500" height="300"></video>
           </v-col>
         </v-row>
         <!-- 아래 서브 화면 -->
@@ -836,8 +836,8 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
                   v-bind="props"
                   size="x-large"
                   style="border-radius: 30px; border: 1px solid white;"
-                  @click="toggleRecording">{{ recording ? 'Stop Recording' : 'Start Recording' }}
-                  녹화
+                  @click="toggleRecording">{{ recording ? '해제' : '확대' }}
+                  
                 </v-btn>
                 <v-btn
                   v-else
