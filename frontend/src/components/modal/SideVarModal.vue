@@ -2,8 +2,10 @@
 import { ref, watch, defineProps, defineEmits, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
+import { useUserStore } from '@/stores/user';
 
 const authStore = useAuthStore()
+const userStore = useUserStore()
 
 const isLoggedIn = computed(() => authStore.isAuthenticated)
 

@@ -3,10 +3,11 @@ import RoomComponent from '@/components/room_components/RoomComponent.vue'
 import TokiRoom from '@/components/room_components/TokiRoom.vue';
 import { ref } from 'vue';
 import { onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 const route = useRoute()
+const router = useRouter()
 const roomData = JSON.parse(sessionStorage.getItem('roomData'))
-const roomPk = route.params.roomPk
+
 
 const props = defineProps(
   {
@@ -24,6 +25,11 @@ const enterRoom = () => {
     isRoomEnter.value=false
   }
 
+}
+
+const exitRoom = () => {
+  isRoomEnter.value = false
+  router.push( { name: 'home'})
 }
 
 const isRoomEnter=ref(true)
@@ -50,7 +56,7 @@ onMounted(() => {
             <v-col cols="12">
               <v-img
                 height="290"
-                :src="`https://picsum.photos/900/600?image=${roomPk * 5 + 10}`"
+                :src="`https://picsum.photos/900/600?image=${route.params.roomPk * 5 + 10}`"
               >
               </v-img>
               <v-card-title id="font-check">
@@ -65,7 +71,7 @@ onMounted(() => {
             </v-col>
             <v-col cols="12">
               <v-card-actions>
-                <v-btn color="primary" block @click="isRoomEnter = false">취소</v-btn>
+                <v-btn color="primary" block @click="exitRoom">취소</v-btn>
               </v-card-actions>
             </v-col>
           </v-row>
