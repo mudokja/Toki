@@ -1,5 +1,7 @@
 #Project-toki
 스프링 부트를 이용하여 화상채팅 서비스를 구현
+##SourceCode
+https://i10b205.p.ssafy.io:8989/plugins/gitiles/S10P12B205
 
 ## 프로젝트 소개
 음성채팅, 화상채팅이 가능한 커뮤니티입니다.
@@ -22,7 +24,7 @@
  - **Framework** : Vue3 , vuetify , pinia
  - **Database** : mySql, redis , kurento , coturn
  - **ORM** : JPA
- - **INFRA** : Docker, EC2 , jenkins , nginx , sonaqube  
+ - **INFRA** : Docker, EC2 , jenkins , nginx , sonaqube , gerrit
  - **MORE** : Kurento , Stomp 
 ### 아키텍처
 ![image.png](./image.png)
