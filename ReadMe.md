@@ -18,12 +18,14 @@
 ### 개발 환경
  - 'Java 17'
  - **IDE** : STS 4.1
- - **Framework** : Springboot, Vue3
- - **Database** : mySql, redis
+ - **Framework** : Springboot , 
+ - **Framework** : Vue3 , vuetify , pinia
+ - **Database** : mySql, redis , kurento , coturn
  - **ORM** : JPA
- - **INFRA** : Docker, EC2
-
-
+ - **INFRA** : Docker, EC2 , jenkins , nginx , sonaqube  
+ - **MORE** : Kurento , Stomp 
+### 아키텍처
+![image.png](./image.png)
 
 ## 📌 주요 기능
 #### 로그인 - 
@@ -52,10 +54,10 @@
 - 배지 선택
 - 주제 선택
 - 카메라 연동
-- 화면 변조
-- 음성 변조
+- 화면 확대
+- 녹화
 - 소회의실 만들기
-- 투표, 간단한 게임(사다리, 주사위, 룰렛, 단어맞히기)
+- 간단한 게임(사다리, 주사위, 룰렛, 단어맞히기)
 
 
 #### 배지
