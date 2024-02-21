@@ -8,12 +8,12 @@
 * 24년 1월 8일 ~ 24년 2월 16일
 
 ### 멤버구성
- - 백현우  
- - 정지훈 
- - 김성민 
- - 윤건웅 
- - 김수현
- - 김근형
+ - 백현우 FE: WebRTC , WebSocket , Game
+ - 정지훈 BE: INFRA , WebRTC , WebSocket , SNSLogin 
+ - 김성민 BE: Message , Blacklist , Friend
+ - 윤건웅 FE: MainPage , Login , addModal
+ - 김수현 FE: Profile , RoomPage , Blacklist , Friend
+ - 김근형 BE: Profile , User , Badge
 
 ### 개발 환경
  - 'Java 17'
