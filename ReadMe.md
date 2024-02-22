@@ -83,3 +83,19 @@ https://i10b205.p.ssafy.io:8989/plugins/gitiles/S10P12B205
 - 방 입장 기록 조회
 - 등록된 해시태그 전체 확인
 - 등록된 해시태그 수정
+
+#### 와이어 프레임
+ ![image-1.png](./image-1.png)
+
+#### API 명세서
+![image-3.png](./image-3.png)
+![image-4.png](./image-4.png)
+![image-5.png](./image-5.png)
+![image-6.png](./image-6.png)
+![image-7.png](./image-7.png)
+
+#### 기능 명세서
+![image-2.png](./image-2.png)
+
+#### ERD
+![image-8.png](./image-8.png)
