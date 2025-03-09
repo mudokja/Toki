@@ -1,7 +1,7 @@
-#Project-toki
+# Project-toki
 스프링 부트를 이용하여 화상채팅 서비스를 구현
 
-##SourceCode
+## SourceCode
 https://i10b205.p.ssafy.io:8989/plugins/gitiles/S10P12B205
 
 ## 프로젝트 소개
