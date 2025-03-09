@@ -1,9 +1,10 @@
 package com.toki.backend.config;
 
+import com.toki.backend.auth.OAuth2LoginFailHandler;
 import com.toki.backend.auth.OAuth2LoginSuccessHandler;
 import com.toki.backend.auth.service.CustomOAuth2UserService;
 import com.toki.backend.filters.JwtFilter;
-import com.toki.backend.utils.TokenProvider;
+import com.toki.backend.common.utils.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,7 @@ public class SecurityConfig  {
 
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final OAuth2LoginFailHandler oAuth2LoginFailHandler;
     private final TokenProvider tokenProvider;
     private final CorsConfig corsConfig;
     private static final String[] PERMIT_PATTERNS=List.of(
@@ -48,14 +50,13 @@ public class SecurityConfig  {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PERMIT_PATTERNS).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/v1/auth/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/ws/room")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/**")).permitAll() // 개발시 편하게 하기 위한 설정 반드시 나중에 제거
                         .anyRequest().authenticated())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .oauth2Login((oauth2)->oauth2
                         .successHandler(oAuth2LoginSuccessHandler)
-                        .failureHandler(((request, response, exception) -> {
-                            log.debug("실패 : {}",exception.toString());
-                            response.sendRedirect("http://localhost:5173/");
-                        }))
+                        .failureHandler(oAuth2LoginFailHandler)
                         .userInfoEndpoint((userInfoEndpoint)->
                                 userInfoEndpoint.userService(customOAuth2UserService))
 

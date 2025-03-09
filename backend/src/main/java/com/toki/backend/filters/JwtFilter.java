@@ -1,8 +1,8 @@
 package com.toki.backend.filters;
 
-import com.toki.backend.auth.entity.RefreshToekn;
+import com.toki.backend.auth.entity.RefreshToken;
 import com.toki.backend.auth.repository.RefreshTokenRepository;
-import com.toki.backend.utils.TokenProvider;
+import com.toki.backend.common.utils.TokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -59,8 +59,8 @@ public class JwtFilter extends OncePerRequestFilter {
                     if(StringUtils.hasText(refreshTokenCookie)
                             && tokenProvider.validateRefreshToken(refreshTokenCookie)
                             && tokenProvider.isFindRefreshToken(refreshTokenCookie)) {
-                        RefreshToekn refreshToekn = refreshTokenRepository.findOneByUserPkAndRefreshToken(tokenProvider.parseClaims(refreshTokenCookie).get("userId", String.class),refreshTokenCookie).get();
-                        response.setHeader(AUTHORIZATION_HEADER, tokenProvider.createAccessToken(refreshToekn.getUserPk(),List.of(() -> refreshToekn.getRole().toString()), refreshToekn.getSnsType()));
+                        RefreshToken refreshToken = refreshTokenRepository.findById(refreshTokenCookie).orElseThrow(()->new RuntimeException("존재하지 않는 리프레시 토큰"));
+                        response.setHeader(AUTHORIZATION_HEADER, tokenProvider.createAccessToken(refreshToken.getUserPk(),refreshToken.getUserTag(),List.of(() -> refreshToken.getRole().toString()), refreshToken.getSnsType()));
                     }
                 }
 

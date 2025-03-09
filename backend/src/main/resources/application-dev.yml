@@ -1,0 +1,53 @@
+
+server:
+  port: ${PORT}
+  #ssl
+  ssl:
+    enabled: true
+    key-store: classpath:${KEY-PATH}
+    key-store-password: ${KEY-PASS}
+    key-store-type: PKCS12
+    key-alias: ${KEY-ALIAS}
+
+spring:
+  cache:
+    type: redis
+  config:
+    activate:
+      on-profile: dev
+  redis:
+    host: ${REDISDB-HOST-DEV}
+    password: ${REDISDB-PASSWORD-DEV}
+    port: ${REDISDB-PORT-DEV}
+
+  # Mysql Database 설정
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: 'jdbc:mysql://${MYSQLDB-URL}/${MYSQLDB-NAME-DEV}?useUnicode=true&serverTimezone=Asia/Seoul'
+    username: ${MYSQLDB-USERNAME-DEV}
+    password: ${MYSQLDB-PASSWORD-DEV}
+
+  # JPA 설정
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update        # DB 테이블 전략 (none, create, create-drop, update, validate)
+    properties:
+      hibernate:
+        format_sql: true      #
+        show_sql: true        #
+
+toki:
+  config:
+    cors:
+      allowed-origins: ${CORS-ALLOWED-ORIGINS-DEV}
+
+logging:
+  level:
+    web: debug
+    sql: debug
+
+
+
+
+

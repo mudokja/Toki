@@ -17,6 +17,6 @@ if(name.value==null){
 
 <style scoped>
 #gray {
-    background-color: rgb(70, 70, 70);
+    /* background-color: rgb(70, 70, 70); */
 }
 </style>
