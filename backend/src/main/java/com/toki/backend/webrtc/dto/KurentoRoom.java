@@ -13,7 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
+ * 
+ * Modified Work © Copyright 2024 Toki
+ * 
+ * Modifications:
+ * - Updated the data format to match the requirements of this project.
+ * - Added some methods for project functionality.
  */
+
 
 package com.toki.backend.webrtc.dto;
 
@@ -41,6 +48,8 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * @author Ivan Gracia (izanmail@gmail.com)
  * @since 4.3.1
+ * @author Jung Jihoon (modifier, mudokja@gmail.com)
+ * @version 1.0
  */
 @Getter
 @Slf4j
