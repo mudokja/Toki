@@ -19,7 +19,8 @@ import * as Tone from 'tone';
 //JiHoon Jung <mudokja@gmail.com>
 const props = defineProps({
   userInfo: Object,
-  roomInfo: Object
+  roomInfo: Object,
+  ifnum:String
 })
 const userInfo = ref(props.userInfo)
 const roomInfo = ref(props.roomInfo)
@@ -375,7 +376,7 @@ const recording = ref(false); // 녹화 중인지 여부를 나타내는 상태 
 const url = ref(''); // 녹화된 비디오의 URL
 const blob = ref(''); // Blob 객체를 저장하는 상태 변수
 const recordedChunks = ref([]); // 녹화된 데이터 청크를 저장하는 배열
- // 미디어 스트림 객체
+
 let mediaRecorder; // 미디어 레코더 객체
 // 녹화 시작/중지 토글 함수
 const toggleRecording = async () => {
@@ -385,36 +386,36 @@ const toggleRecording = async () => {
     startRecording();
   }
 };
-const updateVideoStream = async () => {
-  // 1. 새로운 비디오 스트림 얻기
-  const newStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+// const updateVideoStream = async () => {
+//   // 1. 새로운 비디오 스트림 얻기
+//   const newStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 
-  // 2. 기존 참가자의 비디오 스트림 업데이트
-  tokiRoomMembers.value.forEach(participant => {
-    participant.video = newStream;
-    if (participant.rtcPeer) {
-      // WebRTC 연결 재설정
-      participant.rtcPeer.dispose(); // 기존 WebRTC 피어 삭제
-      const options = {
-        localVideo: participant.video,
-        videoStream: newStream,
-        onicecandidate: participant.onicecandidate.bind(participant)
-      };
-      participant.rtcPeer = new kurentoUtil.WebRtcPeer.WebRtcPeerSendonly(options, function (error) {
-        if (error) {
-          return console.error(error);
-        }
-        console.log("참가자", participant);
-        this.generateOffer(participant.offerToReceiveVideo.bind(toRaw(participant)));
-      });
-    }
-  });
-};
+//   // 2. 기존 참가자의 비디오 스트림 업데이트
+//   tokiRoomMembers.value.forEach(participant => {
+//     participant.video = newStream;
+//     if (participant.rtcPeer) {
+//       // WebRTC 연결 재설정
+//       participant.rtcPeer.dispose(); // 기존 WebRTC 피어 삭제
+//       const options = {
+//         localVideo: participant.video,
+//         videoStream: newStream,
+//         onicecandidate: participant.onicecandidate.bind(participant)
+//       };
+//       participant.rtcPeer = new kurentoUtil.WebRtcPeer.WebRtcPeerSendonly(options, function (error) {
+//         if (error) {
+//           return console.error(error);
+//         }
+//         console.log("참가자", participant);
+//         this.generateOffer(participant.offerToReceiveVideo.bind(toRaw(participant)));
+//       });
+//     }
+//   });
+// };
 // 녹화 시작 함수
 const startRecording = async () => {
   try {
     cha.value='2';
-   // if (participant.rtcPeer) {
+    //if (participant.rtcPeer) {
       // WebRTC 연결 재설정
      // participant.rtcPeer.dispose();}
     //participant.rtcPeer.dispose(); 
@@ -480,8 +481,9 @@ const handleStopRecording = () => {
   url.value = window.URL.createObjectURL(blob.value);
   recordedVideoElement.value.src = url.value;
   recording.value = false;
-  previewCtx = previewCanvas.value.getContext('2d');
-  previewCtx.value.clearRect(0, 0, previewCanvas.value.width, previewCanvas.value.height);
+  console.log(url.value)
+  // previewCtx = previewCanvas.value.getContext('2d');
+  // previewCtx.value.clearRect(0, 0, previewCanvas.value.width, previewCanvas.value.height);
 };
 
 // Clean up resources
@@ -552,10 +554,12 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
 </script>
 <template>
    <div>
-    
+    <div background-color="red">
+      <a  :href="url" download="recorded_video.webm" >확대하고 다운해</a>
+    </div>
     <!-- <canvas ref="previewCanvas" controls style="max-width: 100%;" width="100" height="60"></canvas> -->
   </div>    
-  <v-container id="enter" class="h-100" style="min-width: 600px">
+  <v-container id="enter" class="h-100" style="min-width: 2000px">
     
     <v-row class="h-100">
       <!-- 화면 -->
@@ -577,6 +581,9 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
             <!-- <canvas v-if=recording ref="previewCanvas" controls style="max-width: 100%;" width="100" height="60"></canvas>
      -->
             <video  ref="recordedVideoElement"  style="max-width: 100%; " width="500" height="300"></video>
+            <div background-color="red">
+      <a  :href="url" download="recorded_video.webm" >Download Recorded Video</a>
+    </div>
           </v-col>
         </v-row>
         <!-- 아래 서브 화면 -->
@@ -1057,14 +1064,14 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
         </v-row>
 
         <!-- 영상 타이틀 -->
-        <v-row>
+        <!-- <v-row>
           <v-col cols="2">
             <v-sheet>닉네임</v-sheet>
           </v-col>
           <v-col cols="2">
             <v-sheet>화상 채팅 방 제목</v-sheet>
           </v-col>
-        </v-row>
+        </v-row> -->
       </v-col>
 
       
@@ -1092,8 +1099,13 @@ const colOffset = computed(() => isLagerScreen.value ? 0 : 1)
 
 <style scoped>
 #main-screen {
-  background-color: rgb(10, 66, 48);
+    background-color: #063b17; /* 칠판의 배경색을 흰색으로 설정합니다. */
+    border: 30px solid rgb(145, 68, 23); /* 칠판의 테두리를 그립니다. */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* 흰색 칠판에 회색 그림자를 추가합니다. */
+    position: relative; /* 내부 요소의 위치를 상대적으로 설정합니다. */
+    overflow: hidden; /* 내부 컨텐츠가 칠판 영역을 벗어나지 않도록 설정합니다. */
 }
+
 
 #screen {
   background-color: rgb(0, 0, 0);

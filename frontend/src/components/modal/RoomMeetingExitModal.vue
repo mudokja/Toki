@@ -1,7 +1,8 @@
 <script setup>
 import { ref, defineProps } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
+const route = useRoute()
 const router = useRouter()
 
 
@@ -19,7 +20,7 @@ function closeModal() {
 }
 
 function leaveRoom() {
-    router.push({ name: 'roomjoin', params: { roomPk: 1 }})
+    router.push({ name: 'roomjoin', params: { roomPk: route.params.roomId }})
 }
 
 

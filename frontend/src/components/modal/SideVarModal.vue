@@ -1,7 +1,13 @@
 <script setup>
-import { ref, watch, defineProps, defineEmits } from 'vue';
+import { ref, watch, defineProps, defineEmits, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
+import { useUserStore } from '@/stores/user';
+
+const authStore = useAuthStore()
+const userStore = useUserStore()
+
+const isLoggedIn = computed(() => authStore.isAuthenticated)
 
 const props = defineProps({
   drawer: {
@@ -71,7 +77,6 @@ const storeAuth = useAuthStore()
       
       >
       </v-btn>
-
       <RouterLink v-if="storeAuth.userTag === null || storeAuth.userTag === undefined" :to="{ name: 'home'}">
         <img src="@/assets/profile_assets/프로필.png" style="width: 40px; height: 40px; border-radius: 50%; margin-left: 1px;">
         <div>
